@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  database:
+    image: mongo
+    container_name: restaurant-mongo
+    restart: unless-stopped
+    env_file: .env
+    environment: 
+      MONGO
