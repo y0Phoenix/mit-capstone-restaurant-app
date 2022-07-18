@@ -100,5 +100,27 @@ router.post('/update', auth, async (req: any, res) => {
  * @desc deletes the user
  * @body {email: string, password: string}
  */
+router.delete('/', auth, [
+    check('password', 'Password Is Required').not().isEmpty()
+], async (req, res) => {
+    // check the body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(401).json({msgs: errors.array(), error: true});
+
+    try {
+        const {password} = req.body;
+
+        // check the password provided for validation
+        const bool = await bcrypt.compare(password, req.user.password);
+        if (!bool) return res.status(401).json({msgs: [{msg: 'Invalid Credentials'}], error: true});
+
+        // delete user
+        req.user.remove();
+        res.json({msgs: [{msg: 'User Deleted Successfully'}], error: false, isAuthenticated: false});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: 'Server Error U3'}], error: true});
+    }
+})
 
 export default router;
