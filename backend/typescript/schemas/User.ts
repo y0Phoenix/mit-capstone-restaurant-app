@@ -26,11 +26,9 @@ const UserSchema = new mongoose.Schema({
         items: [ItemSchema],
         totalItems: {
             type: Number,
-            required: true
         },
         total: {
             type: Number,
-            required: true
         }
     }
 });

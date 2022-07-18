@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import gravatar from 'gravatar';
+import Cart from '../classes/Cart';
 
 import User from '../schemas/User';
 
@@ -46,7 +47,8 @@ router.post('/', [
             name,
             email,
             password,
-            avatar
+            avatar,
+            cart: new Cart()
         });
 
         // hash password

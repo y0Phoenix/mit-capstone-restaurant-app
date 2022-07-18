@@ -30,11 +30,9 @@ const UserSchema = new mongoose_1.default.Schema({
         items: [Item_1.ItemSchema],
         totalItems: {
             type: Number,
-            required: true
         },
         total: {
             type: Number,
-            required: true
         }
     }
 });

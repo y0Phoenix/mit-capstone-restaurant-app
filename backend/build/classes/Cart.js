@@ -12,10 +12,17 @@ class Cart {
      * @param  {Cart} {Cart}
      * @desc creates a new cart
      */
-    constructor({ items, totalItems, total }) {
-        this.items = items;
-        this.totalItems = totalItems;
-        this.total = total;
+    constructor(cart = null) {
+        if (!cart) {
+            this.items = [];
+            this.totalItems = 0;
+            this.total = 0;
+        }
+        else {
+            this.items = cart.items;
+            this.totalItems = cart.totalItems;
+            this.total = cart.total;
+        }
     }
     ;
 }

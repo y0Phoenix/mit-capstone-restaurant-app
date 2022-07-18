@@ -10,6 +10,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("config"));
 const gravatar_1 = __importDefault(require("gravatar"));
+const Cart_1 = __importDefault(require("../classes/Cart"));
 const User_1 = __importDefault(require("../schemas/User"));
 /**
  * @POST
@@ -41,7 +42,8 @@ router.post('/', [
             name,
             email,
             password,
-            avatar
+            avatar,
+            cart: new Cart_1.default()
         });
         // hash password
         const salt = await bcryptjs_1.default.genSalt(10);
