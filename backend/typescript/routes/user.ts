@@ -78,14 +78,27 @@ router.post('/', [
 /**
  * @POST
  * @desc update the user
+ * @body {name: string, cart: Cart}
  */
-router.post('/update', auth, async (req, res) => {
+router.post('/update', auth, async (req: any, res) => {
     try {
-        
+        const {name} = req.body;
+
+        req.user.name = name;
+
+        req.user.save();
+
+        res.json({msgs: [{msg: 'User Updated Successfully'}], error: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: }]})
+        res.status(500).json({msgs: [{msg: 'Server Error U2'}], error: true});
     }
-})
+});
+
+/**
+ * @DELETE
+ * @desc deletes the user
+ * @body {email: string, password: string}
+ */
 
 export default router;

@@ -11,6 +11,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("config"));
 const gravatar_1 = __importDefault(require("gravatar"));
 const Cart_1 = __importDefault(require("../classes/Cart"));
+const auth_1 = __importDefault(require("../middleware/auth"));
 const User_1 = __importDefault(require("../schemas/User"));
 /**
  * @POST
@@ -67,4 +68,26 @@ router.post('/', [
         res.status(500).json({ msgs: [{ msg: 'Server Error U1' }], error: true });
     }
 });
+/**
+ * @POST
+ * @desc update the user
+ * @body {name: string, cart: Cart}
+ */
+router.post('/update', auth_1.default, async (req, res) => {
+    try {
+        const { name } = req.body;
+        req.user.name = name;
+        req.user.save();
+        res.json({ msgs: [{ msg: 'User Updated Successfully' }], error: false });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ msgs: [{ msg: 'Server Error U2' }], error: true });
+    }
+});
+/**
+ * @DELETE
+ * @desc deletes the user
+ * @body {email: string, password: string}
+ */
 exports.default = router;
