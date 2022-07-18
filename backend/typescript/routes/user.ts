@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import gravatar from 'gravatar';
 import Cart from '../classes/Cart';
+import auth from '../middleware/auth';
 
 import User from '../schemas/User';
 
@@ -73,5 +74,18 @@ router.post('/', [
         res.status(500).json({ msgs: [{msg: 'Server Error U1'}], error: true });
     }
 });
+
+/**
+ * @POST
+ * @desc update the user
+ */
+router.post('/update', auth, async (req, res) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: }]})
+    }
+})
 
 export default router;
