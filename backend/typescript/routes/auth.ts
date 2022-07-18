@@ -35,10 +35,12 @@ router.post('/', [
             if (err) return res.status(500).json({msgs: [{msg: 'Server Error A2'}], error: true, isAuthenicated: false});
             user = await User.findById(user.id).select({password: 0});
             res.json({token, data: user, isAuthenticated: true, error: false, msgs: [{msg: 'Login Successfull'}]});
-        })
+        });
 
     } catch (err) {
         console.error(err);
         res.status(500).json({msgs: [{msg: 'Server Error A1'}], error: true, isAuthenticated: false});
     }
-})
+});
+
+export default router;

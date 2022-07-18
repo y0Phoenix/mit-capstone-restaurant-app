@@ -23,17 +23,16 @@ router.post('/', [
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty())
         return res.status(401).json({ msgs: errors.array(), error: true, isAuthenicated: false });
-    const Invalid = res.status(400).json({ msgs: [{ msg: 'Invalid Credentials' }], error: true, isAuthenticated: false });
     try {
         const { email, password, remember } = req.body;
         // check if user exists with email
         let user = await User_1.default.findOne({ email });
         if (!user)
-            return Invalid;
+            return res.status(400).json({ msgs: [{ msg: 'Invalid Credentials' }], error: true, isAuthenticated: false });;
         // if user exists check password
         const bool = await bcryptjs_1.default.compare(password, user.password);
         if (!bool)
-            return Invalid;
+            return res.status(400).json({ msgs: [{ msg: 'Invalid Credentials' }], error: true, isAuthenticated: false });;
         // if password is correct give client new token
         jsonwebtoken_1.default.sign({ user: { id: user.id } }, config_1.default.get('jwtSecret'), { expiresIn: remember ? '60d' : '1d' }, async (err, token) => {
             if (err)
@@ -47,3 +46,4 @@ router.post('/', [
         res.status(500).json({ msgs: [{ msg: 'Server Error A1' }], error: true, isAuthenticated: false });
     }
 });
+exports.default = router;
