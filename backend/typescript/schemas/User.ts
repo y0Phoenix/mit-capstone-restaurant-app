@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {ItemSchema} from '../interfaces/Item';
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -22,19 +23,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
     cart: {
-        items: [{
-            name: {
-                type: String,
-                required: true
-            },
-            instructions: {
-                type: String,
-            },
-            price: {
-                type: String,
-                required: true
-            }
-        }],
+        items: [ItemSchema],
         totalItems: {
             type: Number,
             required: true

@@ -11,6 +11,11 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("config"));
 const gravatar_1 = __importDefault(require("gravatar"));
 const User_1 = __importDefault(require("../schemas/User"));
+/**
+ * @POST
+ * @desc Creates User
+ * Requires name, email, and password with length of atleast 6
+ */
 router.post('/', [
     (0, express_validator_1.check)('name', 'Name Is Required').not().isEmpty(),
     (0, express_validator_1.check)('email', 'Valid Email Is Required').isEmail(),
@@ -21,23 +26,28 @@ router.post('/', [
         return res.status(400).json({ msgs: errors.array(), error: true });
     const { name, email, password } = req.body;
     try {
+        // check if user exists
         let user = await User_1.default.findOne({ email });
         if (user)
             return res.status(400).json({ msgs: [{ msg: 'User Already Exists With Provided Email' }], error: true });
+        // get avatar
         const avatar = gravatar_1.default.url(email, {
             s: '200',
             r: 'pg',
             d: 'mm'
         });
+        // create user
         user = new User_1.default({
             name,
             email,
             password,
             avatar
         });
+        // hash password
         const salt = await bcryptjs_1.default.genSalt(10);
         user.password = await bcryptjs_1.default.hash(password, salt);
         await user.save();
+        // create JWT token for authentication
         const payload = {
             user: {
                 id: user.id
@@ -55,3 +65,4 @@ router.post('/', [
         res.status(500).json({ msgs: [{ msg: 'Server Error U1' }], error: true });
     }
 });
+exports.default = router;

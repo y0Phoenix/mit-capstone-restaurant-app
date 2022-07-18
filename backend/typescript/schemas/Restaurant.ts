@@ -1,20 +1,12 @@
 import mongoose from "mongoose";
+import {ItemSchema} from '../interfaces/Item';
 
 const RestaurantSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
     },
-    items: [{
-        name: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: String,
-            required: true
-        }
-    }],
+    items: [ItemSchema],
     picture: {
         type: String,
     },

@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db';
+import user from './routes/user';
 
 // initialize app
 const app = express();
@@ -13,11 +14,12 @@ connectDB();
 // http body parser
 app.use(express.json());
 // http policy
-app.use(cors);
+app.use(cors());
 
 app.get('/', (req, res) => res.send('API Running'));
 
 // routers
+app.use('/api/user', user);
 
 // defining the apps port with which to communicate with it
 const PORT = process.env.PORT || 5000;

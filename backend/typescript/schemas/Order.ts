@@ -1,24 +1,12 @@
 import mongoose from "mongoose";
+import {ItemSchema} from '../interfaces/Item';
 
 const OrderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    items: [{
-        name: {
-            type: String,
-            required: true
-        },
-        instructions: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: String,
-            required: true
-        }
-    }],
+    items: [ItemSchema],
     totalItems: {
         type: Number,
         required: true
