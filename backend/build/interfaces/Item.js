@@ -12,7 +12,13 @@ exports.ItemSchema = new mongoose_1.default.Schema({
     instructions: {
         type: String
     },
+    quantity: {
+        type: Number
+    },
     price: {
         type: Number,
+    },
+    priceInCents: {
+        type: Number
     }
 });

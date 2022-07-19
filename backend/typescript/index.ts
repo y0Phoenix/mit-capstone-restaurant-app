@@ -4,6 +4,12 @@ import connectDB from './config/db';
 import user from './routes/user';
 import auth from './routes/auth';
 import restaurant from './routes/restaurant';
+import config from 'config';
+import stripe from 'stripe';
+
+const Stripe = new stripe(config.get('stripeKey'), {apiVersion: null});
+
+export default Stripe;
 
 // initialize app
 const app = express();

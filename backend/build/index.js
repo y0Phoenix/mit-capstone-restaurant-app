@@ -9,6 +9,10 @@ const db_1 = __importDefault(require("./config/db"));
 const user_1 = __importDefault(require("./routes/user"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const restaurant_1 = __importDefault(require("./routes/restaurant"));
+const config_1 = __importDefault(require("config"));
+const stripe_1 = __importDefault(require("stripe"));
+const Stripe = new stripe_1.default(config_1.default.get('stripeKey'), { apiVersion: null });
+exports.default = Stripe;
 // initialize app
 const app = (0, express_1.default)();
 process.env.NODE_CONFIG_DIR = './config';

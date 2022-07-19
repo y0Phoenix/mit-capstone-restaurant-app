@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
         // get all restaurants
         const restaurants = await Restaurant_1.default.find();
         // check if restaurants exist
-        if (!restaurants.length > 0)
+        if (restaurants.length <= 0)
             return res.json({ msgs: [{ msg: 'No Restaurants Exist In Database' }], error: false });
         // if restaurants exist send them back
         res.json({ data: restaurants, error: false });
