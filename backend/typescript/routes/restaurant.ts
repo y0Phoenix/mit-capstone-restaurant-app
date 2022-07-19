@@ -16,7 +16,7 @@ import Restaurant from '../schemas/Restaurant';
 router.get('/', async (req, res) => {
     try {
         // get all restaurants
-        const restaurants = Restaurant.find();
+        const restaurants = await Restaurant.find();
 
         // check if restaurants exist
         if (!restaurants) return res.json({msgs: [{msg: 'No Restaurants Exist In Database'}], error: false});

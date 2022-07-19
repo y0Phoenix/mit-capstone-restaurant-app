@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const db_1 = __importDefault(require("./config/db"));
 const user_1 = __importDefault(require("./routes/user"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const restaurant_1 = __importDefault(require("./routes/restaurant"));
 // initialize app
 const app = (0, express_1.default)();
 process.env.NODE_CONFIG_DIR = './config';
@@ -21,6 +22,7 @@ app.get('/', (req, res) => res.send('API Running'));
 // routers
 app.use('/api/user', user_1.default);
 app.use('/api/auth', auth_1.default);
+app.use('/api/restaurant', restaurant_1.default);
 // defining the apps port with which to communicate with it
 const PORT = process.env.PORT || 5000;
 // listend on a port for communication

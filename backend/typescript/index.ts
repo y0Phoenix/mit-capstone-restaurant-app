@@ -3,6 +3,7 @@ import cors from 'cors';
 import connectDB from './config/db';
 import user from './routes/user';
 import auth from './routes/auth';
+import restaurant from './routes/restaurant';
 
 // initialize app
 const app = express();
@@ -22,6 +23,7 @@ app.get('/', (req, res) => res.send('API Running'));
 // routers
 app.use('/api/user', user);
 app.use('/api/auth', auth);
+app.use('/api/restaurant', restaurant);
 
 // defining the apps port with which to communicate with it
 const PORT = process.env.PORT || 5000;
