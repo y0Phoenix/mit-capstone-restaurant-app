@@ -11,6 +11,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const restaurant_1 = __importDefault(require("./routes/restaurant"));
 const config_1 = __importDefault(require("config"));
 const stripe_1 = __importDefault(require("stripe"));
+const path_1 = __importDefault(require("path"));
 const Stripe = new stripe_1.default(config_1.default.get('stripeKey'), { apiVersion: null });
 exports.default = Stripe;
 // initialize app
@@ -22,7 +23,9 @@ process.env.NODE_CONFIG_DIR = './config';
 app.use(express_1.default.json());
 // http policy
 app.use((0, cors_1.default)());
-app.get('/', (req, res) => res.send('API Running'));
+// public folder
+app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
+app.get('*', (req, res) => res.sendFile(path_1.default.join(__dirname, 'public', 'index.html')));
 // routers
 app.use('/api/user', user_1.default);
 app.use('/api/auth', auth_1.default);

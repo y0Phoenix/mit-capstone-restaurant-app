@@ -6,6 +6,7 @@ import auth from './routes/auth';
 import restaurant from './routes/restaurant';
 import config from 'config';
 import stripe from 'stripe';
+import path from 'path';
 
 const Stripe = new stripe(config.get('stripeKey'), {apiVersion: null});
 
@@ -23,8 +24,10 @@ connectDB();
 app.use(express.json());
 // http policy
 app.use(cors());
+// public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => res.send('API Running'));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 // routers
 app.use('/api/user', user);

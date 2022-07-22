@@ -107,7 +107,8 @@
       "./node_modules",
       "./node_modules/*",
       "./node_modules/@types/node/index.d.ts",
-      "interfaces/"
+      "interfaces/",
+      "public"
     ]
   }
   

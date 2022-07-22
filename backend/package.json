@@ -5,7 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc -p typescript/tsconfig.json",
+    "serverBuild": "npx tsc -p typescript/tsconfig.json",
+    "publicBuild": "npm run build --prefix ./typescript/public",
+    "build": "concurrently \"npm run serverBuild\" \"npm run publicBuild\"",
+    "dev": "concurrently \"npm run serverBuild\" \"npm run publicBuild\" \"npm start\"",
     "start": "nodemon build/index"
   },
   "author": "aarongraybill3@gmail.com",
@@ -30,6 +33,7 @@
     "@types/gravatar": "^1.8.3",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^18.0.6",
+    "concurrently": "^7.3.0",
     "nodemon": "^2.0.19"
   }
 }
