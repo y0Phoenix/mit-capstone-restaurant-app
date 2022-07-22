@@ -33,7 +33,7 @@ router.post('/', [
 
     try {
         // check if user exists
-        let user = await User.findOne({email});
+        let user: any = await User.findOne({email});
         if (user) return res.status(400).json({ msgs: [{msg: 'User Already Exists With Provided Email'}], error: true });
 
         // get avatar
