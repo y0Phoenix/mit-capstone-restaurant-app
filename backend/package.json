@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devServerBuild": "npx tsc -p typescript/tsconfig-dev.json",
+    "devServerBuild": "npx tsc -p typescript/tsconfig.json",
     "devPublicBuild": "npm run build --prefix ./typescript/public",
     "serverStartup": "nodemon build/index",
     "build": "concurrently \"npm run devServerBuild\" \"npm run devPublicBuild\"",

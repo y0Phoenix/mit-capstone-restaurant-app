@@ -10,7 +10,12 @@ import {
     USER_UPDATED_FAIL,
     } from './types';
 import axios from 'axios';
+import { LoginForm } from '../types/User';
 
-export const login = (formData) =>async (dispatch: any) => {
-    
+export const login = (formData: LoginForm) => async (dispatch: any) => {
+    try {
+        const res = await axios.post('/api/admin', formData, )
+    } catch (err) {
+        console.error(err);
+    }
 }

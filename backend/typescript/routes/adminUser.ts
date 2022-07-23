@@ -5,10 +5,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import gravatar from 'gravatar';
-import Cart from '../classes/Cart';
-import auth from '../middleware/auth';
-import Restaurant from '../schemas/Restaurant';
-import User from '../schemas/User';
 import Admin from '../schemas/AdminUser';
 
 /**
@@ -24,9 +20,15 @@ router.post('/', [
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({msgs: errors.array(), error: true, isAuthenticated: false});
 
+    interface Body {
+        name: string,
+        email: string,
+        password: string
+    };
+
     try {
         // if all required props exist create the new user
-        const {name, email, password} = req.body;
+        const {name, email, password}: Body = req.body;
     
         // gravatar
         const avatar = gravatar.url(email, {
@@ -100,3 +102,5 @@ router.post('/login', [
         res.status(500).json({msgs: [{msg: 'Server Error AU2'}], error: false, isAuthenticated: false});
     }
 });
+
+export default router;
