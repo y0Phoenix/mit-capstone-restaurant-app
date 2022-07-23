@@ -19,14 +19,20 @@ router.get('/', async (req, res) => {
         const restaurants = await Restaurant.find();
 
         // check if restaurants exist
-        if (restaurants.length <= 0) return res.json({msgs: [{msg: 'No Restaurants Exist In Database'}], error: false});
+        if (restaurants.length <= 0) return res.json({msgs: [{msg: {
+            title: 'No Data',
+            text: 'No Restaurants Exist In Database',
+            type: 'error'}}], error: false});
 
         // if restaurants exist send them back
         res.json({data: restaurants, error: false});
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: 'Server Error R1'}], error: true});
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error R1',
+            type: 'error'}}], error: true});
     }
 });
 

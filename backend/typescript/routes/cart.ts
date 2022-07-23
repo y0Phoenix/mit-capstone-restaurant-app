@@ -31,7 +31,10 @@ router.post('/', auth, async (req: any, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: 'Server Error C1'}], error: true});
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error C1',
+            type: 'error'}}], error: true});
     }
 });
 

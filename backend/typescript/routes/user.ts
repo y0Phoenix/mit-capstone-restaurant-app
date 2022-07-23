@@ -27,14 +27,17 @@ router.post('/', [
     check('password', 'Valid Password Of 6 Or More Is Required').isLength({min: 6}),
 ], async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ msgs: errors.array(), error: true });
+    if (!errors.isEmpty()) return res.status(400).json({ msgs: errors.array(), error: true, check: true });
 
     const {name, email, password}: CreateBody = req.body;
 
     try {
         // check if user exists
         let user: any = await User.findOne({email});
-        if (user) return res.status(400).json({ msgs: [{msg: 'User Already Exists With Provided Email'}], error: true });
+        if (user) return res.status(400).json({ msgs: [{msg: {
+            title: 'Invalid Credentials',
+            text: 'User Already Exists With Provided Email',
+            type: 'error'}}], error: true });
 
         // get avatar
         const avatar = gravatar.url(email, {
@@ -66,12 +69,18 @@ router.post('/', [
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 3600000}, async (err, token) => {
             if (err) throw err;
             user = await User.findById(user.id).select({password: 0});
-            res.json({msgs: [{ msg: 'User Created Successfully' }], token, data: user, isAuthenticated: true, error: false});
+            res.json({msgs: [{ msg: {
+                title: 'Success',
+                text: 'User Created Successfully',
+                type: 'success'} }], token, data: user, isAuthenticated: true, error: false});
         })
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msgs: [{msg: 'Server Error U1'}], error: true });
+        res.status(500).json({ msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error U1',
+            type: 'error'}}], error: true });
     }
 });
 
@@ -88,10 +97,16 @@ router.post('/update', auth, async (req: any, res) => {
 
         req.user.save();
 
-        res.json({msgs: [{msg: 'User Updated Successfully'}], error: false});
+        res.json({msgs: [{msg: {
+            title: 'Success', 
+            text: 'User Updated Successfully',
+            type: 'success'}}], error: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: 'Server Error U2'}], error: true});
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error', 
+            text: 'Server Error U2',
+            type: 'error'}}], error: true});
     }
 });
 
@@ -105,21 +120,30 @@ router.delete('/', auth, [
 ], async (req, res) => {
     // check the body
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(401).json({msgs: errors.array(), error: true});
+    if (!errors.isEmpty()) return res.status(401).json({msgs: errors.array(), error: true, chech: true});
 
     try {
         const {password} = req.body;
 
         // check the password provided for validation
         const bool = await bcrypt.compare(password, req.user.password);
-        if (!bool) return res.status(401).json({msgs: [{msg: 'Invalid Credentials'}], error: true});
+        if (!bool) return res.status(401).json({msgs: [{msg: {
+            title: 'Invalid Credentials',
+            text: 'Password Was Incorrect',
+            type: 'error'}}], error: true});
 
         // delete user
         req.user.remove();
-        res.json({msgs: [{msg: 'User Deleted Successfully'}], error: false, isAuthenticated: false});
+        res.json({msgs: [{msg: {
+            title: 'Success',
+            text: 'User Deleted Successfully',
+            type: 'success'}}], error: false, isAuthenticated: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: 'Server Error U3'}], error: true});
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error U3',
+            type: 'error'}}], error: true});
     }
 })
 
