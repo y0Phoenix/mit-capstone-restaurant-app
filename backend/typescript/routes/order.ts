@@ -1,23 +1,18 @@
 import express from 'express';
 const router = express.Router();
 import { check, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from 'config';
-import gravatar from 'gravatar';
-import Cart from '../classes/Cart';
-import auth from '../middleware/auth';
 import User from '../schemas/User';
 import Stripe from '../index';
 import Restaurant from '../schemas/Restaurant';
-import {Item} from '../interfaces/Item';
+import adminAuth from '../middleware/adminAuth';
+import Order from '../schemas/Order';
 
 /**
  * @POST 
  * @desc place an order
  */
 router.post('/:restaurant',async (req, res) => {
-    let {items = [], user = null,} = req.body;
+    let {items = [], user = null, instructions = '', delivery = {address: null, bool: false}} = req.body;
     let restaurant: any = req.params.restaurant;
     try {
         // if user isn't guest check the user exists
@@ -60,15 +55,26 @@ router.post('/:restaurant',async (req, res) => {
             success_url: 'http://localhost:3000/paymentsuccess',
             cancel_url: 'http://localhost:3000/canceledpayment'
         });
-        
-        // if session created successfully send the payment url to client
+        // if session created successfully create order in db
+        const order = new Order({
+            user: user == 'guest' ? 'guest' : user._id,
+            items,
+            totalItems: items.length,
+            total: items.reduce((total, item) => total + item.price),
+            instructions,
+            delivery
+        });
+        await order.save();
+
+        // once order is created send payment url to client
         res.json({data: session.url, error: false});
     } catch (err) {
         console.error(err);
         res.status(500).json({msgs: [{msg: {
             title: 'Server Error',
             text: 'Server Error O1',
-            type: 'error'}}]});
+            type: 'error'
+        }}]});
     } 
 });
 
@@ -76,6 +82,93 @@ router.post('/:restaurant',async (req, res) => {
  * @GET
  * @desc get orders
  */
-router.get('/')
+router.get('/', adminAuth, async (req, res) => {
+    try {
+        // get orders
+        const orders = await Order.find();
+        res.json({data: orders, error: false});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error O2',
+            type: 'error'
+        }}]});
+    } 
+});
+
+/**
+ * @POST
+ * @desc update order
+ */
+router.post('/update', adminAuth, async (req, res) => {
+    try {
+        const {order} = req.body;
+
+        // check if order exists
+        let _order = await Order.findById(order._id);
+        if (!order) return res.status(400).json({msgs: [{msg: {
+            title: 'Error',
+            text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
+            type: 'error'
+        }}], error: true});
+
+        // if order exists update it
+        _order.user = order.user;
+        _order.items = order.items;
+        _order.totalItems = order.items.length;
+        _order.total = order.items.reduce((total, item) => total + item.price);
+        _order.instructions = order.instructions;
+        _order.delivery = order.delivery;
+        await _order.save();
+        const orders = await Order.find();
+        res.json({msgs: [{msg: {
+            title: 'Success',
+            text: 'Successfully Updated Order',
+            type: 'success'
+        }}], error: false, data: orders});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error O3',
+            type: 'error'
+        }}]});
+    } 
+});
+
+/**
+ * @DELETE
+ * @desc delete order
+ */
+router.delete('/:id', adminAuth, async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // check if order exists
+        const order = await Order.findById(id);
+        if (!order) return res.status(400).json({msgs: [{msg: {
+            title: 'Error',
+            text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
+            type: 'error'
+        }}], error: true});
+
+        // if order exists remove it
+        order.remove();
+        const orders = await Order.find();
+        res.json({msgs: [{msg: {
+            title: 'Success',
+            text: `Successfully Deleted Order ${order.id}`,
+            type: 'success'
+        }}], error: false, data: orders});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error O4',
+            type: 'error'
+        }}]});
+    }
+});
 
 export default router;
