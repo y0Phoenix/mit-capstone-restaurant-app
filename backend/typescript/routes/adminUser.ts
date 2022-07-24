@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import gravatar from 'gravatar';
 import Admin from '../schemas/AdminUser';
+import adminAuth from '../middleware/adminAuth';
 
 /**
  * @POST 
@@ -114,6 +115,32 @@ router.post('/login', [
         res.status(500).json({msgs: [{msg: {
             title: 'Server Error',
             text: 'Server Error AU2',
+            type: 'error'}}], error: false, isAuthenticated: false});
+    }
+});
+
+/**
+ * @POST 
+ * @desc update admin user
+ */
+router.post('/update', adminAuth, async (req: any, res) => {
+    try {
+        const {name} = req.body;
+
+        req.user.name = name
+
+        await req.user.save();
+
+        res.json({msgs: [{ msg: {
+            title: 'Success',
+            text: 'User Updated Successfully',
+            type: 'success'
+        } }], error: false, isAuthenticated: true});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error AU3',
             type: 'error'}}], error: false, isAuthenticated: false});
     }
 });
