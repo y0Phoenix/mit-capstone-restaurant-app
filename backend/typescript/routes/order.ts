@@ -70,4 +70,12 @@ router.post('/:restaurant',async (req, res) => {
             text: 'Server Error O1',
             type: 'error'}}]});
     } 
-})
+});
+
+/**
+ * @GET
+ * @desc get orders
+ */
+router.get('/')
+
+export default router;

@@ -115,4 +115,37 @@ router.post('/update', adminAuth, async (req, res) => {
     }
 });
 
+/**
+ * @DELETE
+ * @desc delete a restaurant
+ */
+router.delete('/:id', adminAuth, async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // check if restaurant exists
+        let restaurant = await Restaurant.findById(id);
+        if (!restaurant) return res.status(400).json({msgs: [{msg: {
+            title: 'Error',
+            text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
+            type: 'error'
+        }}], error: true});
+
+        // if restaurant exists delete it
+        await restaurant.remove();
+        const restaurants = await Restaurant.find();
+        res.json({msgs: [{msg: {
+            title: 'Success',
+            text: `Successfully Removed ${restaurant.name}`,
+            type: 'success'
+        }}], error: false, data: restaurants});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs: [{msg: {
+            title: 'Server Error',
+            text: 'Server Error R4',
+            type: 'error'}}], error: true});
+    }
+});
+
 export default router;
