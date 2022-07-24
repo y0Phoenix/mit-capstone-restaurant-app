@@ -20,7 +20,7 @@ export const login = (formData: LoginForm) => async (dispatch: ThunkDispatch<Sta
         const res = await axios.post('/api/admin', formData);
 
         // check res for msgs
-        const msgs = res.data.msgs;
+        const msgs = res.data?.msgs;
         if (msgs) {
              
         }
@@ -29,7 +29,7 @@ export const login = (formData: LoginForm) => async (dispatch: ThunkDispatch<Sta
             payload: res.data
         });
     } catch (err: any) {
-        const msgs = err.response.data.msgs;
+        const msgs = err.response.data?.msgs;
         if(msgs) {
 
         }
@@ -47,7 +47,7 @@ export const register = (formData: RegisterForm) => async (dispatch: ThunkDispat
         const res = await axios.post('/api/admin', formData);
 
         // check for msgs
-        const msgs = res.data.msgs;
+        const msgs = res.data?.msgs;
         if (msgs) {
 
         }
@@ -57,7 +57,7 @@ export const register = (formData: RegisterForm) => async (dispatch: ThunkDispat
         });
 
     } catch (err: any) {
-        const msgs = err.response.data.msgs;
+        const msgs = err.response.data?.msgs;
         if(msgs) {
 
         }

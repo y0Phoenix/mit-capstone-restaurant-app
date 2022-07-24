@@ -15,7 +15,7 @@ export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefi
         const res = await axios.get('/api/restaurant');
 
         // check for msgs
-        const msgs = res.data.msgs;
+        const msgs = res.data?.msgs;
         if (msgs) {
 
         }
@@ -25,7 +25,7 @@ export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefi
         });
 
     } catch (err: any) {
-        const msgs = err.response.data.msgs;
+        const msgs = err.response.data?.msgs;
         if(msgs) {
 
         }
@@ -48,7 +48,7 @@ export const updateRestaurants = (restaurant: Restaurant) => async (dispatch: Th
         });
 
         // check for msgs
-        const msgs = res.data.msgs;
+        const msgs = res.data?.msgs;
         if (msgs) {
 
         }
@@ -57,7 +57,7 @@ export const updateRestaurants = (restaurant: Restaurant) => async (dispatch: Th
             payload: res.data
         });
     } catch (err: any) {
-        const msgs = err.response.data.msgs;
+        const msgs = err.response.data?.msgs;
         if(msgs) {
 
         }

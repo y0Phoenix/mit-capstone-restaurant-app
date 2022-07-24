@@ -14,3 +14,8 @@ export interface Delivery {
     bool: boolean,
     address: string | null
 };
+
+export interface OrderAction {
+    type: string,
+    payload: Order[] | null
+};
