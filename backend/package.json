@@ -10,6 +10,7 @@
     "serverStartup": "nodemon build/index",
     "build": "concurrently \"npm run devServerBuild\" \"npm run devPublicBuild\"",
     "dev": "concurrently \"npm run devServerBuild\" \"npm run devPublicBuild\" \"npm run serverStartup\"",
+    "devClient": "npm run dev --prefix ./typescript/public",
     "startServerBuild": "npx tsc -p typescript/tsconfig-production.json",
     "startPublicBuild": "npm run build --prefix ./typescript/public",
     "start": "concurrently \"npm run startServerBuild\" \"npm run startPublicBuild\" \"npm run serverStartup\""
