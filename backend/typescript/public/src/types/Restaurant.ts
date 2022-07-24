@@ -7,4 +7,14 @@ export interface Restaurant {
     items: Item[],
     desc: string,
     date: Date
+};
+
+export interface RestaurantAction {
+    type: string,
+    payload: RestaurntPayload | null
+};
+
+export interface RestaurntPayload {
+    data: Restaurant[],
+    error: boolean
 }
