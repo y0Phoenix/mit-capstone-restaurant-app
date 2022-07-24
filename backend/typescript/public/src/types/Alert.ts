@@ -18,4 +18,8 @@ export interface SetAlertPayload {
     title: string,
     text: string,
     type: string
+};
+
+export interface RemoveAlertAction {
+    type: string
 }
