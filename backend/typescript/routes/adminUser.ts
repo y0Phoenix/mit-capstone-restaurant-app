@@ -53,7 +53,7 @@ router.post('/', [
         // create JWT for authorization
         jwt.sign({admin: {id: admin.id}}, config.get('jwtSecret'), {expiresIn: '1d'}, async (err, token) => {
             if (err) throw err;
-            admin = await Admin.findById(admin.id).select({password: 0});
+            admin = await Admin.findById(admin.id).select({password: 0, token: 0});
             admin.token = token;
             await admin.save();
             res.json({msgs: [{msg: {
@@ -104,7 +104,7 @@ router.post('/login', [
         // if password is correct generate new token for user and send to the client
         jwt.sign({admin: {id: admin.id}}, config.get('jwtSecret'), {expiresIn: remeber ? '60d' : '1d'}, async (err, token) => {
             if (err) throw err;
-            admin = await Admin.findById(admin.id).select({password: 0});
+            admin = await Admin.findById(admin.id).select({password: 0, token: 0});
             admin.token = token
             await admin.save()
             res.json({data: admin, error: false, isAuthenticated: true});

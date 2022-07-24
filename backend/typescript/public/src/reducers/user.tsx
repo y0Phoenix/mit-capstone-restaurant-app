@@ -16,6 +16,8 @@ const initialState: UserState = {
     name: '',
     email: '',
     id: '',
+    avatar: '',
+    date: 0,
     isAuthenticated: false
 };
 

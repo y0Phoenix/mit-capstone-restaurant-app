@@ -10,9 +10,11 @@ import {
     USER_UPDATED_FAIL,
     } from './types';
 import axios, { AxiosError } from 'axios';
-import { LoginForm } from '../types/User';
+import { LoginAction, LoginForm, RegisterAction, RegisterForm } from '../types/User';
+import { ThunkDispatch } from 'redux-thunk';
+import State from '../types/State';
 
-export const login = (formData: LoginForm) => async (dispatch: any) => {
+export const login = (formData: LoginForm) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
@@ -31,6 +33,38 @@ export const login = (formData: LoginForm) => async (dispatch: any) => {
         if(msgs) {
 
         }
+        dispatch({
+            type: LOGIN_FAIL,
+            payload: null
+        });
         console.error(err);
     }
-}
+};
+
+export const register = (formData: RegisterForm) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
+    try {
+        // send request to API
+        const res = await axios.post('/api/admin', formData);
+
+        // check for msgs
+        const msgs = res.data.msgs;
+        if (msgs) {
+
+        }
+        dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err: any) {
+        const msgs = err.response.data.msgs;
+        if(msgs) {
+
+        }
+        dispatch({
+            type: REGISTER_FAIL,
+            payload: null
+        });
+        console.error(err);
+    }
+};

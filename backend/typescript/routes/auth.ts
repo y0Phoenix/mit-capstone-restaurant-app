@@ -39,7 +39,7 @@ router.post('/', [
                 title: 'Server Error',
                 text: 'Server Error A2',
                 type: 'error'}}], error: true, isAuthenicated: false});
-            user = await User.findById(user.id).select({password: 0});
+            user = await User.findById(user.id).select({password: 0, token: 0});
             res.json({token, data: user, isAuthenticated: true, error: false});
         });
 
