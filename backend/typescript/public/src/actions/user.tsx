@@ -18,11 +18,11 @@ import { setAlert } from './alert';
 export const login = (formData: LoginForm, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {
         // send request to API
-        const res = await axios.post('/api/admin', formData);
+        const res = await axios.post('/api/admin/login', formData);
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(setAlert(msgs));
+        if (msgs) setAlert(msgs);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
@@ -45,7 +45,7 @@ export const register = (formData: RegisterForm, setAlert: Function) => async (d
 
         // check for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(setAlert(msgs));
+        if (msgs) setAlert(msgs);
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data

@@ -13,7 +13,6 @@ import adminAuth from '../middleware/adminAuth';
  * @desc Create new Admin User
  */
 router.post('/', [
-    check('name', 'Username Required').not().isEmpty(),
     check('email', 'Valid Email Required').isEmail(),
     check('password', 'Valid Password of Atleast 6 Characters Required').isLength({min: 6}),
 ], async (req, res) => {

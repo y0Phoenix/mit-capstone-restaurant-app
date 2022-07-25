@@ -18,7 +18,10 @@ export default function(state = initialState, action: SetAlertAction) {
         case SET_ALERT:
             console.log(payload);
             let Msg = ``;
-            if (Array.isArray(payload)) payload.forEach(msg => Msg += `${msg}\n`);
+            if (Array.isArray(payload)) payload.forEach(msg => {
+                if (typeof msg.msg == 'string') return Msg += `${msg.msg}\n`;
+                Msg += `${msg.msg.text}\n`
+            });
             state = {title: payload.title, text: Msg, type: payload.type, show: true};
             return state;
         case REMOVE_ALERT:
