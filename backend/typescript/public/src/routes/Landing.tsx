@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import pic from '../../pictures/logo_50.png';
 import { Link } from 'react-router-dom';
+import State from '../types/State';
+import { connect, ConnectedProps } from 'react-redux';
+import { setAlert } from '../actions/alert';
+import { login } from '../actions/user';
 
-const Landing = () => {
+const connector = connect(null, {setAlert, login});
+type Props = ConnectedProps<typeof connector>;
+
+const Landing: FC<Props> = ({setAlert, login}) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,8 +23,8 @@ const Landing = () => {
     remember
   } = formData;
 
-  const onsubmit = (e: any) => {};
-  const onchange = (e: any) => {};
+  const onsubmit = (e: any) => login(formData, setAlert);
+  const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.name !== 'remember' ? e.target.value : e.target.checked});
   return (
     <div className='landing'>
       <Card style={{width: '425px', height: '750px'}}>
@@ -48,7 +55,7 @@ const Landing = () => {
                 <InputGroup.Text id='basic-addon2'>atleat 6 characters</InputGroup.Text>
               </InputGroup>
               <div className='remember-me'>
-                <input type={'checkbox'} checked={remember} name='remeber' onChange={e => onchange(e)}></input>
+                <input type={'checkbox'} checked={remember} name='remember' onChange={e => onchange(e)}></input>
                 <small>
                   Remeber Me
                 </small>
@@ -72,4 +79,4 @@ const Landing = () => {
   )
 }
 
-export default Landing
+export default connector(Landing);

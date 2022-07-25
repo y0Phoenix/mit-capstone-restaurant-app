@@ -13,26 +13,23 @@ import axios, { AxiosError } from 'axios';
 import { LoginAction, LoginForm, RegisterAction, RegisterForm } from '../types/User';
 import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
+import { setAlert } from './alert';
 
-export const login = (formData: LoginForm) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
+export const login = (formData: LoginForm, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) {
-             
-        }
+        if (msgs) dispatch(SA(msgs));
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
         });
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) {
-
-        }
+        if(msgs) dispatch(SA(msgs));
         dispatch({
             type: LOGIN_FAIL,
             payload: null
@@ -41,16 +38,14 @@ export const login = (formData: LoginForm) => async (dispatch: ThunkDispatch<Sta
     }
 };
 
-export const register = (formData: RegisterForm) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
+export const register = (formData: RegisterForm, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
 
         // check for msgs
         const msgs = res.data?.msgs;
-        if (msgs) {
-
-        }
+        if (msgs) dispatch(SA(msgs));
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
@@ -58,9 +53,7 @@ export const register = (formData: RegisterForm) => async (dispatch: ThunkDispat
 
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) {
-
-        }
+        if(msgs) dispatch(SA(msgs));
         dispatch({
             type: REGISTER_FAIL,
             payload: null
