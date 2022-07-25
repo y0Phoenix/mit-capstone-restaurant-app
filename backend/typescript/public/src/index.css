@@ -8,7 +8,7 @@
   margin: auto;
   display: flex;
   justify-content: center;
-  padding: 100px;
+  padding: 75px;
 }
 .landing-pic {
   size: 50%;
@@ -25,4 +25,5 @@ a {
   justify-content: center;
   gap: 5px;
   flex-direction: row;
+  margin-bottom: 05px;
 }
