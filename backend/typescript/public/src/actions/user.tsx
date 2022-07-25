@@ -15,7 +15,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
 import { setAlert } from './alert';
 
-export const login = (formData: LoginForm, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
+export const login = (formData: LoginForm, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
@@ -38,7 +38,7 @@ export const login = (formData: LoginForm, SA: typeof setAlert) => async (dispat
     }
 };
 
-export const register = (formData: RegisterForm, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
+export const register = (formData: RegisterForm, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);

@@ -10,7 +10,7 @@ import State from '../types/State';
 import { Restaurant, RestaurantAction } from '../types/Restaurant';
 import { setAlert } from './alert';
 
-export const getRestaurants = (SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
+export const getRestaurants = (SA: Function) => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
     try {
         // send request to API
         const res = await axios.get('/api/restaurant');
@@ -34,7 +34,7 @@ export const getRestaurants = (SA: typeof setAlert) => async (dispatch: ThunkDis
     }
 };
 
-export const updateRestaurants = (restaurant: Restaurant, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
+export const updateRestaurants = (restaurant: Restaurant, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
     try {
         const token: any = localStorage.getItem('token')
         // send request to API

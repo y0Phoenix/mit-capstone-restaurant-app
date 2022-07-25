@@ -12,7 +12,7 @@ import State from '../types/State';
 import { Order, OrderAction } from '../types/Order';
 import { setAlert } from './alert';
 
-export const getOrders = (SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const getOrders = (SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API
@@ -40,7 +40,7 @@ export const getOrders = (SA: typeof setAlert) => async (dispatch: ThunkDispatch
     }
 };
 
-export const deleteOrder = (id: string, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const deleteOrder = (id: string, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API
@@ -68,7 +68,7 @@ export const deleteOrder = (id: string, SA: typeof setAlert) => async (dispatch:
     }
 };
 
-export const updateOrder = (order: Order, SA: typeof setAlert) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const updateOrder = (order: Order, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API

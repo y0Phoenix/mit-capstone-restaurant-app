@@ -23,7 +23,9 @@ const Landing: FC<Props> = ({setAlert, login}) => {
     remember
   } = formData;
 
-  const onsubmit = (e: any) => login(formData, setAlert);
+  const onsubmit = (e: any) => {
+    e.preventDefault();
+    login(formData, setAlert)};
   const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.name !== 'remember' ? e.target.value : e.target.checked});
   return (
     <div className='landing'>

@@ -19,7 +19,7 @@ export interface UserRes {
 export interface LoginForm {
     email: string,
     password: string,
-    remeber: boolean
+    remember: boolean
 };
 
 export interface LoginAction {
