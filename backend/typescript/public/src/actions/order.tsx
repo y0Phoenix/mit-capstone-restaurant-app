@@ -12,7 +12,7 @@ import State from '../types/State';
 import { Order, OrderAction } from '../types/Order';
 import { setAlert } from './alert';
 
-export const getOrders = (SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const getOrders = (setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API
@@ -24,14 +24,14 @@ export const getOrders = (SA: Function) => async (dispatch: ThunkDispatch<State,
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(SA(msgs));
+        if (msgs) dispatch(setAlert(msgs));
         dispatch({
             type: GET_ORDER,
             payload: res.data
         })
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(SA(msgs));
+        if(msgs) dispatch(setAlert(msgs));
         dispatch({
             type: GET_ORDER_FAIL,
             payload: null
@@ -40,7 +40,7 @@ export const getOrders = (SA: Function) => async (dispatch: ThunkDispatch<State,
     }
 };
 
-export const deleteOrder = (id: string, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const deleteOrder = (id: string, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API
@@ -52,14 +52,14 @@ export const deleteOrder = (id: string, SA: Function) => async (dispatch: ThunkD
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(SA(msgs));
+        if (msgs) dispatch(setAlert(msgs));
         dispatch({
             type: DELETE_ORDER,
             payload: res.data
         })
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(SA(msgs));
+        if(msgs) dispatch(setAlert(msgs));
         dispatch({
             type: DELETE_ORDER_FAIL,
             payload: null
@@ -68,7 +68,7 @@ export const deleteOrder = (id: string, SA: Function) => async (dispatch: ThunkD
     }
 };
 
-export const updateOrder = (order: Order, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
+export const updateOrder = (order: Order, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, OrderAction>) => {
     try {
         const token: any = localStorage.getItem('token');
         // make req to API
@@ -82,7 +82,7 @@ export const updateOrder = (order: Order, SA: Function) => async (dispatch: Thun
 
         // check for msgs 
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(SA(msgs));
+        if (msgs) dispatch(setAlert(msgs));
 
         dispatch({
             type: ORDER_UPDATE,
@@ -90,7 +90,7 @@ export const updateOrder = (order: Order, SA: Function) => async (dispatch: Thun
         });
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(SA(msgs));
+        if(msgs) dispatch(setAlert(msgs));
         dispatch({
             type: ORDER_UPDATE_FAIL,
             payload: null

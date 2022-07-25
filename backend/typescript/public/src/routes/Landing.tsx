@@ -17,6 +17,7 @@ const Landing: FC<Props> = ({setAlert, login}) => {
     password: '',
     remember: false
   });
+  const [passType, setPassType] = useState('password');
   const {
     email,
     password,
@@ -27,6 +28,7 @@ const Landing: FC<Props> = ({setAlert, login}) => {
     e.preventDefault();
     login(formData, setAlert)};
   const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.name !== 'remember' ? e.target.value : e.target.checked});
+  const toggleShowPass = () => passType == 'password' ? setPassType('text') : setPassType('password');
   return (
     <div className='landing'>
       <Card style={{width: '425px', height: '750px'}}>
@@ -52,8 +54,13 @@ const Landing: FC<Props> = ({setAlert, login}) => {
                   placeholder='Password'
                   value={password}
                   name='password'
-                  onChange={e => onchange(e)}>
+                  type={passType}
+                  onChange={e => onchange(e)}
+                >
                 </Form.Control>
+                <Button variant='secondary' id='button-addon2' onClick={() => toggleShowPass()}>
+                  <i className='fa-solid fa-eye'></i>
+                </Button>
                 <InputGroup.Text id='basic-addon2'>atleat 6 characters</InputGroup.Text>
               </InputGroup>
               <div className='remember-me'>

@@ -28,9 +28,16 @@ router.post('/', [
     };
 
     try {
-        // if all required props exist create the new user
+        // if all required props check if user already exists
         const {name, email, password}: Body = req.body;
-    
+
+        let admin: any = await Admin.findOne({email});
+        if (admin) return res.status(400).json({msgs: [{msg: {
+            title: 'Invalid Credentials',
+            text: 'User With Specified Email Aldready Exists',
+            type: 'error'
+        }}], error: true});
+
         // gravatar
         const avatar = gravatar.url(email, {
             s: '200',
@@ -43,24 +50,23 @@ router.post('/', [
         const hashedPassword = await bcrypt.hash(password, salt);
     
         // create user
-        let admin: any = new Admin({
+        admin = new Admin({
             name,
             email,
             password: hashedPassword,
             avatar,
             token: ''
         });
-    
         // create JWT for authorization
         jwt.sign({admin: {id: admin.id}}, config.get('jwtSecret'), {expiresIn: '1d'}, async (err, token) => {
             if (err) throw err;
-            admin = await Admin.findById(admin.id).select({password: 0, token: 0});
             admin.token = token;
             await admin.save();
+            admin = await Admin.findById(admin.id).select({password: 0, token: 0});
             res.json({msgs: [{msg: {
                 title: 'Succecc',
                 text: `Admin ${admin.name} Created Successfully`,
-                type: 'success'}}], data: admin, error: false, isAuthenticated: true});
+                type: 'success'}}], token, data: admin, error: false, isAuthenticated: true});
         });
 
     } catch (err) {

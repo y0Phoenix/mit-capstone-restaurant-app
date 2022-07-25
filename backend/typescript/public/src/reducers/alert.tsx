@@ -16,6 +16,7 @@ export default function(state = initialState, action: SetAlertAction) {
     const {type, payload} = action;
     switch (type) {
         case SET_ALERT:
+            console.log(payload);
             let Msg = ``;
             if (Array.isArray(payload)) payload.forEach(msg => Msg += `${msg}\n`);
             state = {title: payload.title, text: Msg, type: payload.type, show: true};

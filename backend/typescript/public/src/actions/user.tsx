@@ -15,21 +15,21 @@ import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
 import { setAlert } from './alert';
 
-export const login = (formData: LoginForm, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
+export const login = (formData: LoginForm, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(SA(msgs));
+        if (msgs) dispatch(setAlert(msgs));
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
         });
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(SA(msgs));
+        if(msgs) setAlert(msgs);
         dispatch({
             type: LOGIN_FAIL,
             payload: null
@@ -38,14 +38,14 @@ export const login = (formData: LoginForm, SA: Function) => async (dispatch: Thu
     }
 };
 
-export const register = (formData: RegisterForm, SA: Function) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
+export const register = (formData: RegisterForm, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, RegisterAction>) => {
     try {
         // send request to API
         const res = await axios.post('/api/admin', formData);
 
         // check for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(SA(msgs));
+        if (msgs) dispatch(setAlert(msgs));
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
@@ -53,7 +53,7 @@ export const register = (formData: RegisterForm, SA: Function) => async (dispatc
 
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(SA(msgs));
+        if(msgs) setAlert(msgs);
         dispatch({
             type: REGISTER_FAIL,
             payload: null
