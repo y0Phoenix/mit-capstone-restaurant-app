@@ -19,7 +19,7 @@ export default async (req, res, next) => {
         const decoded: any = jwt.verify(token, config.get('jwtSecret'));
         
         // check if user exists from id inside decoded token
-        const admin = await Admin.findById(decoded.user.id);
+        const admin = await Admin.findById(decoded.admin.id);
         if (!admin) return res.status(401).json({msgs: [{msg: {
             title: 'Auth Denied',
             text: 'Token Not Valid, Auth Denied',

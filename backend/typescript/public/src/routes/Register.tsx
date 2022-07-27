@@ -1,17 +1,23 @@
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import pic from '../../pictures/logo_50.png';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';
 import { register } from '../actions/user';
+import State from '../types/State';
 
-const connector = connect(null, {setAlert, register});
+const mapStateToProps = (state: State) => ({
+  isAuthenticated: state.user.isAuthenticated
+});
+
+const connector = connect(mapStateToProps, {setAlert, register});
 type Props = ConnectedProps<typeof connector>;
 
 import React, {useState} from 'react'
 
-const Register: React.FC<Props> = ({setAlert, register}) => {
+const Register: React.FC<Props> = ({setAlert, register, isAuthenticated}) => {
+  if (isAuthenticated) return <Navigate to={'/home'} />;
     const [formData, setFormData] = useState({
         email: '',
         name: '',

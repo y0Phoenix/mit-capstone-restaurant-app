@@ -2,16 +2,21 @@ import React, { FC, useState } from 'react'
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import pic from '../../pictures/logo_50.png';
-import { Link } from 'react-router-dom';
-import State from '../types/State';
+import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';
 import { login } from '../actions/user';
+import State from '../types/State';
 
-const connector = connect(null, {setAlert, login});
+const mapStateToProps = (state: State) => ({
+  isAuthenticated: state.user.isAuthenticated
+});
+
+const connector = connect(mapStateToProps, {setAlert, login});
 type Props = ConnectedProps<typeof connector>;
 
-const Landing: FC<Props> = ({setAlert, login}) => {
+const Landing: FC<Props> = ({setAlert, login, isAuthenticated}) => {
+  if (isAuthenticated) return <Navigate to={'/home'} />;
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -86,6 +91,6 @@ const Landing: FC<Props> = ({setAlert, login}) => {
       </Card>
     </div>
   )
-}
+};
 
 export default connector(Landing);

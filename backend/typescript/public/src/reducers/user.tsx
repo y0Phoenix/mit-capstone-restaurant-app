@@ -1,11 +1,11 @@
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    USER_LOADED,
-    AUTH_ERROR,
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    LOAD_USER,
+    LOAD_USER_FAIL,
     USER_UPDATED,
     USER_UPDATED_FAIL,
     } from '../actions/types';
@@ -27,7 +27,7 @@ export default function (state = initialState, action: any) {
     switch (type) {
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-        case USER_LOADED:
+        case LOAD_USER:
             setAuthToken(payload.data.token);
             state = {...state, name: payload.data.name, email: payload.data.email, id: payload.data._id, isAuthenticated: payload.isAuthenticated};
             return state;
@@ -36,12 +36,12 @@ export default function (state = initialState, action: any) {
             return state;
         case REGISTER_FAIL:
         case USER_UPDATED_FAIL:
-        case AUTH_ERROR:
+        case LOAD_USER_FAIL:
         case LOGIN_FAIL:
         case LOGOUT:
             localStorage.removeItem('token');
             setAuthToken(null);
-            state = initialState;
+            state = {...initialState, isAuthenticated: false};
             return state;
         default:
             return state

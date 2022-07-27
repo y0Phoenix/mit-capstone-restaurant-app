@@ -6,6 +6,8 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT,
+    LOAD_USER,
+    LOAD_USER_FAIL,
     USER_UPDATED,
     USER_UPDATED_FAIL,
     } from './types';
@@ -14,6 +16,22 @@ import { LoginAction, LoginForm, RegisterAction, RegisterForm } from '../types/U
 import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
 import { setAlert } from './alert';
+
+export const loadUser = () => async (dispatch: ThunkDispatch<State, undefined, any>) => {
+    try {
+        // make req to API
+        const res = await axios.post('/api/auth/admin');
+        dispatch({
+            type: LOAD_USER,
+            payload: res.data
+        });
+    } catch (err: any) {
+        dispatch({
+            type: LOAD_USER_FAIL,
+            payload: null
+        });
+    }
+};
 
 export const login = (formData: LoginForm, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, LoginAction>) => {
     try {

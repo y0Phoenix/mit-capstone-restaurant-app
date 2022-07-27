@@ -1,10 +1,5 @@
 import express from 'express';
 const router = express.Router();
-import { check, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from 'config';
-import gravatar from 'gravatar';
 import Cart from '../classes/Cart';
 import auth from '../middleware/auth';
 
