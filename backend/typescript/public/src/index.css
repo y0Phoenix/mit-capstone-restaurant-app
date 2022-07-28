@@ -35,3 +35,13 @@ a {
   flex-direction: row;
   margin-bottom: 05px;
 }
+.home {
+  padding: 100px 200px;
+}
+.sidebar-body {
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-account {
+  justify-self: flex-end;
+}

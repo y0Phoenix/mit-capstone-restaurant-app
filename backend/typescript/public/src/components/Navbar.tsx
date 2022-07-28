@@ -26,13 +26,13 @@ const Navbar = () => {
                 </Link>
             </Nav.Link>
         </Nav.Item>
-        <Nav.Item>
+        {/* <Nav.Item>
             <Nav.Link eventKey={'account'}>
                 <Link to={'/account'} className='link'>
                     Account Management <i className='fa-solid fa-user'></i>
                 </Link>
             </Nav.Link>
-        </Nav.Item>
+        </Nav.Item> */}
     </Nav>
   )
 }

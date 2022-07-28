@@ -17,7 +17,7 @@ export const getRestaurants = (setAlert: Function) => async (dispatch: ThunkDisp
 
         // check for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(setAlert(msgs));
+        if (msgs) setAlert(msgs);
         dispatch({
             type: GET_RESTAURANT,
             payload: res.data
@@ -25,7 +25,7 @@ export const getRestaurants = (setAlert: Function) => async (dispatch: ThunkDisp
 
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(setAlert(msgs));
+        if(msgs) setAlert(msgs);
         dispatch({
             type: GET_RESTAURANT_FAIL,
             payload: null
@@ -46,14 +46,14 @@ export const updateRestaurants = (restaurant: Restaurant, setAlert: Function) =>
 
         // check for msgs
         const msgs = res.data?.msgs;
-        if (msgs) dispatch(setAlert(msgs));
+        if (msgs) setAlert(msgs);
         dispatch({
             type: RESTAURANT_UPDATE,
             payload: res.data
         });
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) dispatch(setAlert(msgs));
+        if(msgs) setAlert(msgs);
         dispatch({
             type: RESTAURANT_UPDATE_FAIL,
             payload: null
@@ -61,3 +61,27 @@ export const updateRestaurants = (restaurant: Restaurant, setAlert: Function) =>
         console.error(err);
     }
 };
+
+export const deleteRestaurant = (id: string, setAlert: Function) => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
+    try {
+        // send req to API 
+        const res = await axios.delete(`/api/restaurant/${id}`);
+
+        // check res for msgs
+        const msgs = res.data?.msgs;
+        if (msgs) setAlert(msgs);
+
+        dispatch({
+            type: RESTAURANT_UPDATE,
+            payload: res.data
+        });
+    } catch (err: any) {
+        const msgs = err.response.data?.msgs;
+        if(msgs) setAlert(msgs);
+        dispatch({
+            type: RESTAURANT_UPDATE_FAIL,
+            payload: null
+        });
+        console.error(err);
+    }
+}

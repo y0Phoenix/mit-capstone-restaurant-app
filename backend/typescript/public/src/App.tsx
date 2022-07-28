@@ -10,6 +10,9 @@ import { loadUser } from './actions/user';
 import setAuthToken from './utils/setAuthToken';
 import Sidebar from './components/Sidebar';
 import State from './types/State';
+import Restaurants from './routes/Restaurants';
+import Order from './routes/Order';
+import Account from './routes/Account';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -29,6 +32,9 @@ function App() {
               <Route path='/register' element={<Register/>}/>
               <Route element={<ProtectedRoutes/>}>
                 <Route path='/home' element={<Home />}/>
+                <Route path='/restaurants' element={<Restaurants />}/>
+                <Route path='/orders' element={<Order />}/>
+                <Route path='/account' element={<Account />}/>
               </Route>
             </Routes>
           </div>

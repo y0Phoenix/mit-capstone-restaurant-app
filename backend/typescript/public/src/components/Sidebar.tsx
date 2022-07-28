@@ -1,22 +1,28 @@
 import React, { useState } from 'react'
-import { Button, Offcanvas } from 'react-bootstrap'
+import { Button, Dropdown, DropdownButton, Offcanvas, SplitButton } from 'react-bootstrap'
 import { connect, ConnectedProps } from 'react-redux';
 import State from '../types/State'
 import Navbar from './Navbar';
+import {logout} from '../actions/user';
+import { Link } from 'react-router-dom';
 
 const mapStateToProps = (state: State) => ({
-    isAuthenticated: state.user.isAuthenticated
+    isAuthenticated: state.user.isAuthenticated,
+    user: state.user
 });
 
-const connecter = connect(mapStateToProps);
+const connecter = connect(mapStateToProps, {logout});
 
 type Props = ConnectedProps<typeof connecter>;
 
-const Sidebar: React.FC<Props> = ({isAuthenticated}) => {
+const Sidebar: React.FC<Props> = ({isAuthenticated, user, logout}) => {
     if (!isAuthenticated) return null;
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const account = (
+        <Link to={'/account'}></Link>
+    )
     return (
         <>
             <button className='sidebar' onClick={handleShow}>
@@ -29,7 +35,22 @@ const Sidebar: React.FC<Props> = ({isAuthenticated}) => {
                     </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Navbar />
+                    <div className='sidebar-body'>
+                        <Navbar />
+                        <div className='sidebar-account'>
+                            <SplitButton variant='outline-secondary' title={user.name} href={'/account'}>
+                                <Dropdown.Item>
+                                    <Link to={'/account'} className='link'>
+                                        Edit Account <i className='fa-solid fa-user-pen'></i>
+                                    </Link>
+                                </Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Item onClick={logout}>
+                                    Logout <i className='fa-solid fa-right-from-bracket'></i>
+                                </Dropdown.Item>
+                            </SplitButton>
+                        </div>
+                    </div>
                 </Offcanvas.Body>
             </Offcanvas>
         </>

@@ -29,7 +29,7 @@ export default function (state = initialState, action: any) {
         case LOGIN_SUCCESS:
         case LOAD_USER:
             setAuthToken(payload.data.token);
-            state = {...state, name: payload.data.name, email: payload.data.email, id: payload.data._id, isAuthenticated: payload.isAuthenticated};
+            state = {...state, name: payload.data.name, email: payload.data.email, id: payload.data._id, avatar: payload.data.avatar, isAuthenticated: payload.isAuthenticated};
             return state;
         case USER_UPDATED:
             state = {...state, isAuthenticated: true};

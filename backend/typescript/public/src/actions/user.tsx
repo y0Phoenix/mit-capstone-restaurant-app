@@ -79,3 +79,9 @@ export const register = (formData: RegisterForm, setAlert: Function) => async (d
         console.error(err);
     }
 };
+
+export const logout = () => (dispatch: ThunkDispatch<State, undefined, any>) => {
+    dispatch({
+        type: LOGOUT
+    });
+}
