@@ -6,7 +6,7 @@ export interface UserState {
     id: string,
     avatar: string,
     date: number,
-    isAuthenticated: boolean
+    isAuthenticated: boolean | null
 };
 
 export interface UserRes {

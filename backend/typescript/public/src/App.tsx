@@ -8,8 +8,8 @@ import ProtectedRoutes from './utils/ProtectedRoutes';
 import Home from './routes/Home';
 import { loadUser } from './actions/user';
 import setAuthToken from './utils/setAuthToken';
-import { UserState } from './types/User';
-import Redirect from './utils/Redirect';
+import Sidebar from './components/Sidebar';
+import State from './types/State';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -17,21 +17,21 @@ function App() {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
-  const {pathname} = window.location;
 
   return (
     <Provider store={store}>
       <Router>
         <>
-            <div className='main'>
-              <Routes>
-                <Route path='/' element={<Landing/>}/>
-                <Route path='/register' element={<Register/>}/>
-                <Route element={<ProtectedRoutes/>}>
-                  <Route path='/home' element={<Home />}/>
-                </Route>
-              </Routes>
-            </div>
+          <Sidebar />
+          <div className='main'>
+            <Routes>
+              <Route path='/' element={<Landing/>}/>
+              <Route path='/register' element={<Register/>}/>
+              <Route element={<ProtectedRoutes/>}>
+                <Route path='/home' element={<Home />}/>
+              </Route>
+            </Routes>
+          </div>
         </>
       </Router>
     </Provider>

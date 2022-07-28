@@ -17,7 +17,9 @@ type Props = ConnectedProps<typeof connector>;
 import React, {useState} from 'react'
 
 const Register: React.FC<Props> = ({setAlert, register, isAuthenticated}) => {
-  if (isAuthenticated) return <Navigate to={'/home'} />;
+  if (isAuthenticated) {
+    return <Navigate to={'/home'} />;
+  }
     const [formData, setFormData] = useState({
         email: '',
         name: '',

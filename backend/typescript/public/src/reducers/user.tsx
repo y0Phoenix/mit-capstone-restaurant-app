@@ -18,7 +18,7 @@ const initialState: UserState = {
     id: '',
     avatar: '',
     date: 0,
-    isAuthenticated: false
+    isAuthenticated: null
 };
 
 export default function (state = initialState, action: any) {

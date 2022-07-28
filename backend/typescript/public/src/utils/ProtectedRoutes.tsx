@@ -19,6 +19,7 @@ interface Props extends ReduxProps {
 };
 
 const ProtectedRoutes: React.FC<Props> = ({isAuthenticated, pathname}) =>  {
+  if (isAuthenticated === null) return <Outlet />;
   return (
     <>
       {isAuthenticated ? <Outlet /> : <Navigate to={'/'}/>}
