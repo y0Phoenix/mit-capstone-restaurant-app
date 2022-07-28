@@ -42,50 +42,48 @@ const Landing: FC<Props> = ({setAlert, login, isAuthenticated}) => {
           <Card.Title>Login To Your Admin Dashboard</Card.Title>
           <br></br>
           <form autoComplete='off' onSubmit={e => onsubmit(e)}>
-            <Card.Text>
-              <InputGroup className='mb-3'>
-                <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
-                <Form.Control
-                  placeholder='Email'
-                  value={email}
-                  name='email'
-                  onChange={e => onchange(e)}>
-                </Form.Control>
-                <InputGroup.Text id='basic-addon2'>@example.com</InputGroup.Text>
-              </InputGroup>
-              <InputGroup className='mb-3'>
-                <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
-                <Form.Control
-                  placeholder='Password'
-                  value={password}
-                  name='password'
-                  type={passType}
-                  onChange={e => onchange(e)}
-                >
-                </Form.Control>
-                <Button variant='secondary' id='button-addon2' onClick={() => toggleShowPass()}>
-                  <i className='fa-solid fa-eye'></i>
-                </Button>
-                <InputGroup.Text id='basic-addon2'>atleat 6 characters</InputGroup.Text>
-              </InputGroup>
-              <div className='remember-me'>
-                <input type={'checkbox'} checked={remember} name='remember' onChange={e => onchange(e)}></input>
+            <InputGroup className='mb-3'>
+              <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
+              <Form.Control
+                placeholder='Email'
+                value={email}
+                name='email'
+                onChange={e => onchange(e)}>
+              </Form.Control>
+              <InputGroup.Text id='basic-addon2'>@example.com</InputGroup.Text>
+            </InputGroup>
+            <InputGroup className='mb-3'>
+              <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
+              <Form.Control
+                placeholder='Password'
+                value={password}
+                name='password'
+                type={passType}
+                onChange={e => onchange(e)}
+              >
+              </Form.Control>
+              <Button variant='secondary' id='button-addon2' onClick={() => toggleShowPass()}>
+                <i className='fa-solid fa-eye'></i>
+              </Button>
+              <InputGroup.Text id='basic-addon2'>atleat 6 characters</InputGroup.Text>
+            </InputGroup>
+            <div className='remember-me'>
+              <input type={'checkbox'} checked={remember} name='remember' onChange={e => onchange(e)}></input>
+              <small>
+                Remeber Me
+              </small>
+            </div>
+            <div className='link'>
+              <Link to={'/register'} className='link'>
                 <small>
-                  Remeber Me
+                  Or Create Account
                 </small>
-              </div>
-              <div className='link'>
-                <Link to={'/register'} className='link'>
-                  <small>
-                    Or Create Account
-                  </small>
-                </Link>
-              </div>
-              <br></br>
-              <motion.button className='btn btn-dark' whileHover={{scale: 1.07}} type='submit'>
-                Login
-              </motion.button>
-            </Card.Text>
+              </Link>
+            </div>
+            <br></br>
+            <motion.button className='btn btn-dark' whileHover={{scale: 1.07}} type='submit'>
+              Login
+            </motion.button>
           </form>
         </Card.Body>
       </Card>

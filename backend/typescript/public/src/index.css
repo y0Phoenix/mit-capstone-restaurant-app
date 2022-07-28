@@ -20,6 +20,12 @@ a {
   text-decoration: none;
   color: black;
 }
+.light {
+  color: white;
+}
+.light:hover {
+  color: white;
+}
 .sidebar {
   width: 65px;
   height: 65px;
@@ -44,4 +50,18 @@ a {
 }
 .sidebar-account {
   justify-self: flex-end;
+}
+.restaurant-list {
+  display: flex;
+  justify-content: space-between;
+}
+.restaurant-list-items {
+  display: flex;
+}
+.restaurants {
+  display: flex;
+  justify-content: center;
+}
+.restaurants-container {
+  width: 1250px;
 }
