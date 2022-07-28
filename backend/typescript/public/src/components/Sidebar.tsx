@@ -19,9 +19,9 @@ const Sidebar: React.FC<Props> = ({isAuthenticated}) => {
     const handleShow = () => setShow(true);
     return (
         <>
-            <Button variant='primary' onClick={handleShow}>
+            <button className='sidebar' onClick={handleShow}>
                 <i className='fa-solid fa-bars'></i>
-            </Button>
+            </button>
             <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>
