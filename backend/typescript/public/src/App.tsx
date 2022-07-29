@@ -28,21 +28,23 @@ function App() {
     <Provider store={store}>
       <Router>
         <>
-          <AlertComp />
           <Sidebar />
-          <Modal />
           <div className='main'>
-            <Routes>
-              <Route path='/' element={<Landing/>}/>
-              <Route path='/register' element={<Register/>}/>
-              <Route element={<ProtectedRoutes/>}>
-                <Route path='/home' element={<Home />}/>
-                <Route path='/restaurants' element={<Restaurants />}/>
-                <Route path='/restaurant/:id' element={<RestaurantPage />}/>
-                <Route path='/orders' element={<Order />}/>
-                <Route path='/account' element={<Account />}/>
-              </Route>
-            </Routes>
+            <AlertComp />
+            <Modal />
+            <div className="z-one">
+              <Routes>
+                <Route path='/' element={<Landing/>}/>
+                <Route path='/register' element={<Register/>}/>
+                <Route element={<ProtectedRoutes/>}>
+                  <Route path='/home' element={<Home />}/>
+                  <Route path='/restaurants' element={<Restaurants />}/>
+                  <Route path='/restaurant/:id' element={<RestaurantPage />}/>
+                  <Route path='/orders' element={<Order />}/>
+                  <Route path='/account' element={<Account />}/>
+                </Route>
+              </Routes>
+            </div>
           </div>
         </>
       </Router>

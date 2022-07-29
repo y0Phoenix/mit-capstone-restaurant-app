@@ -19,9 +19,11 @@ type Props = ConnectedProps<typeof connector>;
 
 const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setAlert, getRestaurants}) => {
 	const [search, setSearch] = useState('');
+	const [rests, setRests] = useState(restaurants);
 	useEffect(() => {
 		if (user.isAuthenticated) getRestaurants();
-	}, [user]);
+		setRests(restaurants);
+	}, [user, restaurants]);
 	const handleDelete = (id: string, name: string) => {
 		// show modal that confirms whether the user really wants to delete
 		// clientConfirm({
@@ -33,6 +35,11 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 	const handleSearch = (e: any = null) => {
 		e && e.preventDefault();
 		console.log(`handle search ${search}`)
+		const regex = new RegExp(search, 'gi');
+		setRests(restaurants.filter(rest => {
+			const bool = regex.test(rest.name);
+			return bool ? rest : null;
+		}))
 	}
 	return (
 		<div className="restaurants">
@@ -53,7 +60,7 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 							</InputGroup>
 						</form>
 						<ListGroup>
-							{restaurants.map((restaurant: Restaurant, i: number) => (
+							{rests.map((restaurant: Restaurant, i: number) => (
 								<Fragment key={i}>
 									<ListGroup.Item as={'div'}>
 										<div className='flex-horizontal space-between'>
