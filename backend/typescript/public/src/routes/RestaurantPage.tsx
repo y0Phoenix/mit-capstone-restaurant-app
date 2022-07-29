@@ -12,7 +12,7 @@ import { ConfirmModalPayload } from '../types/Modal';
 import {v4 as uuid} from 'uuid';
 
 const mapStateToProps = (state: State) => ({
-    restaurants: state.restaurant,
+    restaurant: state.restaurant,
     user: state.user
 })
 
@@ -50,7 +50,8 @@ interface FormData {
     items: Item[]
 }
 
-const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, updateRestaurant, setAlert, addRestaurant, filterRestaurants, setModal}) => {
+const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, updateRestaurant, setAlert, addRestaurant, filterRestaurants, setModal}) => {
+    const {restaurants, filtered} = restaurant
     const [formData, setFormData] = useState<FormData>({
         name: '',
         desc: '',
@@ -67,17 +68,17 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
             name: name,
             desc: desc,
             items: items,
-            _id: restaurant._id,
-            picture: restaurant.picture,
-            date: restaurant.date
+            _id: _restaurant._id,
+            picture: _restaurant.picture,
+            date: _restaurant.date
         }));
     }
     const removeItem = ({id}: ConfirmModalPayload) => setFormData({...formData, items: items.filter(item => {
         if (item.id === id) return null;
         return item;
     })});
-    let restaurant: Restaurant = new Restaurant({init: true});
-    if (restaurants.length > 0 && !pathname.includes('new')) restaurant = restaurants[0];
+    let _restaurant: Restaurant = new Restaurant({init: true});
+    if (filtered && !pathname.includes('new')) _restaurant = filtered[0];
     useEffect(() => {
         if (restaurants.length <= 0) getRestaurants();
     }, [])
@@ -90,12 +91,12 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
         save.current.disabled = false;
     }, [formData]);
     useEffect(() => {
-        setFormData({...formData, name: restaurant.name, desc: restaurant.desc, items: restaurant.items})
-    }, [restaurant])
+        setFormData({...formData, name: _restaurant.name, desc: _restaurant.desc, items: _restaurant.items})
+    }, [_restaurant])
     useEffect(() => {
         if (user.isAuthenticated) {
             const id = pathname.replace('/restaurant/', '');
-            filterRestaurants(id, restaurants);
+            filterRestaurants({id: id, state: restaurant});
         }
     }, [pathname, user]);
     return (
@@ -118,7 +119,7 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                             )
                         }
                         <Card.Title>
-                            {pathname.includes('new') ? 'New Restaurant' : restaurant.name}
+                            {pathname.includes('new') ? 'New Restaurant' : _restaurant.name}
                         </Card.Title>
                     </Card.Header>
                     <Card.Body>
