@@ -11,6 +11,11 @@ export interface Order {
     delivery: Delivery
 };
 
+export interface OrderState {
+    orders: Order[],
+    filtered?: Order[]
+}
+
 export interface Delivery {
     bool: boolean,
     address: string | null

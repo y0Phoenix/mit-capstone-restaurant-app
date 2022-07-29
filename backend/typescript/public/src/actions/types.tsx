@@ -1,3 +1,6 @@
+import { OrderState } from "../types/Order";
+import { RestaurantState } from "../types/Restaurant";
+
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const USER_LOADED = 'USER_LOADED';
@@ -21,7 +24,16 @@ export const DELETE_ORDER_FAIL = 'GET_ORDER_FAIL';
 export const DELETE_ORDER = 'GET_ORDER_FAIL';
 export const ORDER_UPDATE = 'ORDER_UPDATE';
 export const ORDER_UPDATE_FAIL = 'ORDER_UPDATE_FAIL';
+export const FILTER_ORDERS = 'FILTER_ORDERS';
+export const FILTER_ORDERS_FAIL = 'FILTER_ORDERS_FAIL';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const SET_MODAL = 'SET_MODAL';
 export const RESET_MODAL = 'RESET_MODAL';
+
+export interface FilterOptions {
+    id?: string,
+    name?: string,
+    restaurantState?: RestaurantState,
+    orderState?: OrderState
+};

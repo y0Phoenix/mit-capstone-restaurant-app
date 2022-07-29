@@ -1,37 +1,39 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { Tab, Row, Col, ListGroup, Card, InputGroup, Button, FormControl } from 'react-bootstrap'
-import { connect, ConnectedProps } from 'react-redux';
-import State from '../types/State'
-import { deleteRestaurant, filterRestaurants, getRestaurants } from '../actions/restaurant';
-import { setAlert } from '../actions/alert';
-import { Restaurant } from '../types/Restaurant';
-import { motion } from 'framer-motion';
+import React, {useState, useEffect, Fragment} from 'react'
+import { getOrders, filterOrders } from '../actions/order';
 import { Link } from 'react-router-dom';
+import State from '../types/State';
+import {connect, ConnectedProps} from 'react-redux';
+import { ListGroup, Card, InputGroup, Button, FormControl } from 'react-bootstrap'
+import { Order } from '../types/Order';
 
 const mapStateToProps = (state: State) => ({
-  restaurant: state.restaurant,
-  user: state.user
-});
+    order: state.order,
+})
 
-const connector = connect(mapStateToProps, {deleteRestaurant, setAlert, getRestaurants, filterRestaurants});
+const connector = connect(mapStateToProps, {getOrders, filterOrders});
 
 type Props = ConnectedProps<typeof connector>;
 
+interface AddItemProps extends Props {
+    setState: React.Dispatch<React.SetStateAction<FormData>>,
+    formData: FormData
+};
+
 interface RestsProps {
-	rest: Restaurant, 
+	order: Order, 
 	i: number
 }
 
-const Rests: React.FC<RestsProps> = ({rest, i}) => (
+const Rests: React.FC<RestsProps> = ({order, i}) => (
 	<Fragment key={i}>
 		<ListGroup.Item as={'div'}>
 			<div className='flex-horizontal space-between'>
 				<div className="flex-horizontal gap-lg">
-					<div>{rest.name}</div>
-					<div>{rest.desc}</div>
+					<div>{order.user}</div>
+					<div>{order.instructions}</div>
 				</div>
 				<div className='flex-horizontal'>
-					<Link to={`/restaurant/${rest._id}`} className='link light btn btn-dark'>
+					<Link to={`/restaurant/${order._id}`} className='link light btn btn-dark'>
 						<i className="fa-solid fa-pen-to-square"></i>
 					</Link>
 					<Button variant='dark'>
@@ -43,10 +45,10 @@ const Rests: React.FC<RestsProps> = ({rest, i}) => (
 	</Fragment>
 );
 
-const Restaurants: React.FC<Props> = ({user, restaurant, deleteRestaurant, setAlert, getRestaurants, filterRestaurants}) => {
-	const [search, setSearch] = useState('');
+const Orders: React.FC<Props> = ({order, getOrders, filterOrders}) => {
+    const [search, setSearch] = useState('');
 	useEffect(() => {
-		getRestaurants();
+		getOrders();
 	}, [])
 	const handleDelete = (id: string, name: string) => {
 		// show modal that confirms whether the user really wants to delete
@@ -59,13 +61,13 @@ const Restaurants: React.FC<Props> = ({user, restaurant, deleteRestaurant, setAl
 	const handleSearch = (e: any = null) => {
 		e.preventDefault();
 		console.log(`handle search ${search}`, e);
-		filterRestaurants({name: search, restaurantState: restaurant});
+		filterOrders({name: search, orderState: order});
 	}
 	return (
 		<div className="restaurants">
 			<div className="restaurants-container">
 				<Card>
-					<Card.Header>Restaurants</Card.Header>
+					<Card.Header>Orders</Card.Header>
 					<Card.Body>
 						<form onSubmit={(e: any) => handleSearch(e)}>
 							<InputGroup>
@@ -81,22 +83,20 @@ const Restaurants: React.FC<Props> = ({user, restaurant, deleteRestaurant, setAl
 						</form>
 						<ListGroup>
 							{
-								restaurant.filtered ? 
+								order.filtered ? 
 									(
-										restaurant.filtered.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i}/>)
+										order.filtered.map((order: Order, i: number) => <Rests order={order} i={i}/>)
 									)
 									:
 									(
-										restaurant.restaurants.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i}/>)
+										order.orders.map((order: Order, i: number) => <Rests order={order} i={i}/>)
 									)}
 						</ListGroup>
-						<Card.Footer>
-							<Button variant='dark'>
-								<Link to={'/restaurant/new'} className='link light'>
-									Add Restaurant <i className="fa-solid fa-utensils"></i>
-								</Link>
-							</Button>
-						</Card.Footer>
+                        {order.orders.length <= 0 && 
+                            <Card.Footer>
+                                No Orders Found
+                            </Card.Footer>
+                        }
 					</Card.Body>
 				</Card>
 			</div>
@@ -104,4 +104,4 @@ const Restaurants: React.FC<Props> = ({user, restaurant, deleteRestaurant, setAl
 	)
 }
 
-export default connector(Restaurants);
+export default connector(Orders);

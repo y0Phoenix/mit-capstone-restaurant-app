@@ -96,7 +96,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
     useEffect(() => {
         if (user.isAuthenticated) {
             const id = pathname.replace('/restaurant/', '');
-            filterRestaurants({id: id, state: restaurant});
+            filterRestaurants({id: id, restaurantState: restaurant});
         }
     }, [pathname, user]);
     return (

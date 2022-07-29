@@ -16,6 +16,7 @@ import Account from './routes/Account';
 import RestaurantPage from './routes/RestaurantPage';
 import Modal from './components/Modal/Modal';
 import AlertComp from './components/AlertComp';
+import Orders from './routes/Orders';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -40,7 +41,7 @@ function App() {
                   <Route path='/home' element={<Home />}/>
                   <Route path='/restaurants' element={<Restaurants />}/>
                   <Route path='/restaurant/:id' element={<RestaurantPage />}/>
-                  <Route path='/orders' element={<Order />}/>
+                  <Route path='/orders' element={<Orders />}/>
                   <Route path='/account' element={<Account />}/>
                 </Route>
               </Routes>
