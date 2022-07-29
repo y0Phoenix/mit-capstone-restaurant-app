@@ -10,6 +10,11 @@ interface NewRestaurantPayload {
     init?: boolean
 }
 
+export interface RestaurantState {
+    filtered?: Restaurant[],
+    restaurants: Restaurant[]
+}
+
 export class Restaurant {
     name: string = '';
     _id: string = '';

@@ -3,11 +3,13 @@ import {
     GET_RESTAURANT_FAIL,
     RESTAURANT_UPDATE,
     RESTAURANT_UPDATE_FAIL,
+    FILTER_RESTAURANTS,
+    FILTER_RESTAURANTS_FAIL,
 } from './types';
 import axios from 'axios';
 import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
-import { Restaurant, RestaurantAction } from '../types/Restaurant';
+import { Restaurant, RestaurantAction, RestaurantState } from '../types/Restaurant';
 import { setAlert } from './alert';
 import Alert from '../../../classes/Alert';
 
@@ -81,11 +83,27 @@ export const deleteRestaurant = (id: string) => async (dispatch: ThunkDispatch<S
         console.error(err);
     }
 }
-export const filterRestaurants = (id: string, restaurants: Restaurant[]) => (dispatch: ThunkDispatch<State, undefined, any>) => {
+
+export interface FilterOptions {
+    id?: string,
+    name?: string,
+    state: RestaurantState
+};
+
+export const filterRestaurants = ({name, id, state}: FilterOptions) => (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
-        const rests = restaurants.filter(rest => rest._id === id ? rest : null)
+        if (name) {
+            const regex = new RegExp(name, 'gi')
+            var rests = state.restaurants.filter(rest => regex.test(rest.name) ? rest : null)
+        }
+        else if (id) {
+            var rests = state.restaurants.filter(rest => rest._id === id ? rest : null)
+        }
+        else {
+            rests = state.restaurants;
+        }
         dispatch({
-            type: RESTAURANT_UPDATE,
+            type: FILTER_RESTAURANTS,
             payload: rests
         });
     } catch (err: any) {
@@ -98,7 +116,7 @@ export const filterRestaurants = (id: string, restaurants: Restaurant[]) => (dis
             }
         })));
         dispatch({
-            type: RESTAURANT_UPDATE_FAIL,
+            type: FILTER_RESTAURANTS_FAIL,
             payload: null
         });
         console.error(err);
