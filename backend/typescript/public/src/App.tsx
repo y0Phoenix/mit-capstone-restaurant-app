@@ -15,6 +15,7 @@ import Order from './routes/Order';
 import Account from './routes/Account';
 import RestaurantPage from './routes/RestaurantPage';
 import Modal from './components/Modal/Modal';
+import AlertComp from './components/AlertComp';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -27,6 +28,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <>
+          <AlertComp />
           <Sidebar />
           <Modal />
           <div className='main'>

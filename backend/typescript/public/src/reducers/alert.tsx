@@ -18,11 +18,15 @@ export default function(state = initialState, action: SetAlertAction) {
         case SET_ALERT:
             console.log(payload);
             let Msg = ``;
+            let title = ``;
+            let Type = [``];
             if (Array.isArray(payload)) payload.forEach(msg => {
                 if (typeof msg.msg == 'string') return Msg += `${msg.msg}\n`;
-                Msg += `${msg.msg.text}\n`
+                Msg += `${msg.msg.text}\n`;
+                title = msg.msg.title
+                Type = msg.msg.type;
             });
-            state = {title: payload.title, text: Msg, type: payload.type, show: true};
+            state = {title: title, text: Msg, type: Type, show: true};
             return state;
         case REMOVE_ALERT:
             state = {title: '', text: '', type: [''], show: false}
