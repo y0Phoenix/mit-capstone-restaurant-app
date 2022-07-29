@@ -51,7 +51,16 @@ router.post('/', adminAuth, [
 ], async (req, res) => {
     // check req for errors
     const errors = validationResult(req)
-    if (!errors.isEmpty()) return res.status(400).json({ msgs: errors.array(), error: true, check: true });
+    if (!errors.isEmpty()) return res.status(400).json({ msgs: new Alert({
+        options: {
+            variant: 'error',
+            type: 'modal'
+        },
+        validator: {
+            bool: true,
+            payload: errors.array()
+        }
+    }), error: true, check: true });
 
     try {
         const {name, desc, picture = '', items = []} = req.body;

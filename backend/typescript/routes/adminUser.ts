@@ -19,7 +19,16 @@ router.post('/', [
 ], async (req, res) => {
     // chech for missing props
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({msgs: errors.array(), error: true, isAuthenticated: false, check: true});
+    if (!errors.isEmpty()) return res.status(400).json({msgs: new Alert({
+        options: {
+            variant: 'error',
+            type: 'modal'
+        },
+        validator: {
+            bool: true,
+            payload: errors.array()
+        }
+    }), error: true, isAuthenticated: false, check: true});
 
     interface Body {
         name: string,
@@ -99,7 +108,16 @@ router.post('/login', [
 ], async (req, res) => {
     // chech for missing props
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({msgs: errors.array(), error: true, isAuthenticated: false, check: true});
+    if (!errors.isEmpty()) return res.status(400).json({msgs: new Alert({
+            options: {
+                variant: 'error',
+                type: 'modal'
+            },
+            validator: {
+                bool: true,
+                payload: errors.array()
+            }
+        }), error: true, isAuthenticated: false, check: true});
 
     try {
         // if all props exists attempt to login user

@@ -28,7 +28,16 @@ router.post('/', [
     check('password', 'Valid Password Of 6 Or More Is Required').isLength({min: 6}),
 ], async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ msgs: errors.array(), error: true, check: true });
+    if (!errors.isEmpty()) return res.status(400).json({ msgs: new Alert({
+        options: {
+            variant: 'error',
+            type: 'modal'
+        },
+        validator: {
+            bool: true,
+            payload: errors.array()
+        }
+    }), error: true, check: true });
 
     const {name, email, password}: CreateBody = req.body;
 
@@ -142,7 +151,16 @@ router.delete('/', auth, [
 ], async (req, res) => {
     // check the body
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(401).json({msgs: errors.array(), error: true, chech: true});
+    if (!errors.isEmpty()) return res.status(401).json({msgs: new Alert({
+        options: {
+            variant: 'error',
+            type: 'modal'
+        },
+        validator: {
+            bool: true,
+            payload: errors.array()
+        }
+    }), error: true, chech: true});
 
     try {
         const {password} = req.body;

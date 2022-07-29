@@ -21,7 +21,16 @@ router.post('/', [
 ], async (req, res) => {
     // check body for errors
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(401).json({msgs: errors.array(), error: true, isAuthenicated: false, check: true});
+    if (!errors.isEmpty()) return res.status(401).json({msgs: new Alert({
+        options: {
+            variant: 'error',
+            type: 'modal'
+        },
+        validator: {
+            bool: true,
+            payload: errors.array()
+        }
+    }), error: true, isAuthenicated: false, check: true});
 
     try {
         const {email, password, remember} = req.body;
