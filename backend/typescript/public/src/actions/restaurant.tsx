@@ -93,7 +93,10 @@ export const filterRestaurants = (id: string, restaurants: Restaurant[]) => (dis
         dispatch(setAlert(new Alert({
             title: 'Error',
             text: 'Something Went Wrong While Getting Restaurant',
-            type: ['error', 'modal']
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
         })));
         dispatch({
             type: RESTAURANT_UPDATE_FAIL,

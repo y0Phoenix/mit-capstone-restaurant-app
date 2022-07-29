@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { check, validationResult } from 'express-validator';
+import Alert from '../classes/Alert';
 import adminAuth from '../middleware/adminAuth';
 import Restaurant from '../schemas/Restaurant';
 
@@ -15,20 +16,28 @@ router.get('/', async (req, res) => {
         const restaurants = await Restaurant.find();
 
         // check if restaurants exist
-        if (restaurants.length <= 0) return res.json({msgs: [{msg: {
+        if (restaurants.length <= 0) return res.json({msgs: {msg: new Alert({
             title: 'No Data',
             text: 'No Restaurants Exist In Database',
-            type: 'error'}}], error: false});
+            options: {
+                variant: 'warning',
+                type: 'alert'
+            }
+        })}, error: false});
 
         // if restaurants exist send them back
         res.json({data: restaurants, error: false});
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error R1',
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
     }
 });
 
@@ -49,11 +58,14 @@ router.post('/', adminAuth, [
 
         // if no errors in req check if restaurant already exists
         let restaurant = await Restaurant.findOne({name});
-        if (restaurant) return res.status(400).json({msgs: [{msg: {
+        if (restaurant) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Invalid Input',
             text: `Restaurant ${name} Already Exists`,
-            type: 'error'
-        }}], error: true});
+            options: {
+                variant: 'error',
+                type: 'alert'
+            }
+        })}, error: true});
 
         // if restaurant doesn't exist yet create it
         restaurant = new Restaurant({
@@ -64,17 +76,24 @@ router.post('/', adminAuth, [
         });
         await restaurant.save();
         const restaurants = await Restaurant.find();
-        res.json({msgs: [{msg: {
+        res.json({msgs: {msg: new Alert({
             title: 'Success',
             text: 'Restaurant Created Successfully',
-            type: 'success'
-        }}], error: false, data: restaurants});
+            options: {
+                variant: 'success',
+                type: 'alert'
+            }
+        })}, error: false, data: restaurants});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error R2',
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
     }
 });
 
@@ -88,11 +107,14 @@ router.post('/update', adminAuth, async (req, res) => {
 
         // check if restaurant exists
         let _restaurant = await Restaurant.findById(_id);
-        if (!_restaurant) return res.status(400).json({msgs: [{msg: {
+        if (!_restaurant) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Error',
             text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
-            type: 'error'
-        }}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // if restaurant exists update it
         _restaurant.name = name;
@@ -101,17 +123,24 @@ router.post('/update', adminAuth, async (req, res) => {
         _restaurant.desc = desc;
         await _restaurant.save();
         const restaurants = await Restaurant.find();
-        res.json({msgs: [{msg: {
+        res.json({msgs: {msg: new Alert({
             title: 'Success',
             text: 'Restaurant Updated Successfully',
-            type: 'success'
-        }}], error: false, data: restaurants});
+            options: {
+                variant: 'success',
+                type: 'alert'
+            }
+        })}, error: false, data: restaurants});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error R3',
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
     }
 });
 
@@ -125,26 +154,36 @@ router.delete('/:id', adminAuth, async (req, res) => {
 
         // check if restaurant exists
         let restaurant = await Restaurant.findById(id);
-        if (!restaurant) return res.status(400).json({msgs: [{msg: {
+        if (!restaurant) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Error',
             text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
-            type: 'error'
-        }}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // if restaurant exists delete it
         await restaurant.remove();
         const restaurants = await Restaurant.find();
-        res.json({msgs: [{msg: {
+        res.json({msgs: {msg: new Alert({
             title: 'Success',
             text: `Successfully Removed ${restaurant.name}`,
-            type: 'success'
-        }}], error: false, data: restaurants});
+            options: {
+                variant: 'success',
+                type: 'alert'
+            }
+        })}, error: false, data: restaurants});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error R4',
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
     }
 });
 

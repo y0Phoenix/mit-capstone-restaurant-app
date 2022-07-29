@@ -1,4 +1,6 @@
-export interface Alert {
+import Alert from "../../../classes/Alert"
+
+export interface AlertState {
     title: string,
     text: string,
     type: string[],
@@ -7,13 +9,7 @@ export interface Alert {
 
 export interface SetAlertAction {
     type: string,
-    payload: SetAlertPayload
-};
-
-export interface SetAlertPayload {
-    title: string,
-    text: string,
-    type: string[]
+    payload: Alert
 };
 
 export interface RemoveAlertAction {

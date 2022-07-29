@@ -1,11 +1,11 @@
-import { SetAlertAction, Alert } from "../types/Alert";
+import { SetAlertAction, AlertState } from "../types/Alert";
 import {
     SET_ALERT,
     REMOVE_ALERT
 } from '../actions/types';
 
 
-const initialState: Alert = {
+const initialState: AlertState = {
     title: '',
     text: '',
     type: [''],

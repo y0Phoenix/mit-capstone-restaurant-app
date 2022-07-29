@@ -6,6 +6,7 @@ import Stripe from '../index';
 import Restaurant from '../schemas/Restaurant';
 import adminAuth from '../middleware/adminAuth';
 import Order from '../schemas/Order';
+import Alert from '../classes/Alert';
 
 /**
  * @POST 
@@ -17,23 +18,35 @@ router.post('/:restaurant',async (req, res) => {
     try {
         // if user isn't guest check the user exists
         if (user !== 'guest') user = await User.findById(user);
-        if (!user) return res.status(400).json({msgs: [{msg: {
+        if (!user) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: `Oops An Error Occured O2`,
-            type: 'error'}}], isAuthenticted: false, error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, isAuthenticted: false, error: true});
 
         // check items
-        if (items.length <= 0) return res.status(400).json({msgs: [{msg: {
+        if (items.length <= 0) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: `Oops An Error Occured O3`,
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // get restaurant
         restaurant = await Restaurant.findById(restaurant);
-        if (!restaurant) return res.status(400).json({msgs: [{msg: {
+        if (!restaurant) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: `Oops An Error Occured O4`,
-            type: 'error'}}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // if user exists initiate stripe payment session
         const session = await Stripe.checkout.sessions.create({
@@ -70,11 +83,14 @@ router.post('/:restaurant',async (req, res) => {
         res.json({data: session.url, error: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error O1',
-            type: 'error'
-        }}]});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}});
     } 
 });
 
@@ -89,11 +105,14 @@ router.get('/', adminAuth, async (req, res) => {
         res.json({data: orders, error: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error O2',
-            type: 'error'
-        }}]});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}});
     } 
 });
 
@@ -107,11 +126,14 @@ router.post('/update', adminAuth, async (req, res) => {
 
         // check if order exists
         let _order = await Order.findById(order._id);
-        if (!order) return res.status(400).json({msgs: [{msg: {
+        if (!order) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Error',
-            text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
-            type: 'error'
-        }}], error: true});
+            text: `Order Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // if order exists update it
         _order.user = order.user;
@@ -122,18 +144,24 @@ router.post('/update', adminAuth, async (req, res) => {
         _order.delivery = order.delivery;
         await _order.save();
         const orders = await Order.find();
-        res.json({msgs: [{msg: {
+        res.json({msgs: {msg: new Alert({
             title: 'Success',
             text: 'Successfully Updated Order',
-            type: 'success'
-        }}], error: false, data: orders});
+            options: {
+                variant: 'success',
+                type: 'alert'
+            }
+        })}, error: false, data: orders});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error O3',
-            type: 'error'
-        }}]});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}});
     } 
 });
 
@@ -147,27 +175,36 @@ router.delete('/:id', adminAuth, async (req, res) => {
 
         // check if order exists
         const order = await Order.findById(id);
-        if (!order) return res.status(400).json({msgs: [{msg: {
+        if (!order) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Error',
             text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
-            type: 'error'
-        }}], error: true});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true});
 
         // if order exists remove it
         order.remove();
         const orders = await Order.find();
-        res.json({msgs: [{msg: {
+        res.json({msgs: {msg: new Alert({
             title: 'Success',
             text: `Successfully Deleted Order ${order.id}`,
-            type: 'success'
-        }}], error: false, data: orders});
+            options: {
+                variant: 'success',
+                type: 'alert'
+            }
+        })}, error: false, data: orders});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error O4',
-            type: 'error'
-        }}]});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}});
     }
 });
 

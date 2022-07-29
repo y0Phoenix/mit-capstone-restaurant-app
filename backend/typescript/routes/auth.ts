@@ -8,6 +8,7 @@ import User from '../schemas/User';
 import auth from '../middleware/auth';
 import adminAuth from '../middleware/adminAuth';
 import Admin from '../schemas/AdminUser';
+import Alert from '../classes/Alert';
 
 /**
  * @POST
@@ -26,34 +27,50 @@ router.post('/', [
         const {email, password, remember} = req.body;
         // check if user exists with email
         let user: any = await User.findOne({email});
-        if (!user) return res.status(400).json({msgs: [{msg: {
+        if (!user) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Invalid Credentials',
             text: 'Email or Password Invalid',
-            type: 'error'}}], error: true, isAuthenticated: false});;
+            options: {
+                variant: "error",
+                type: 'alert'
+            }
+        })}, error: true, isAuthenticated: false});;
 
         // if user exists check password
         const bool = await bcrypt.compare(password, user.password);
-        if (!bool) return res.status(400).json({msgs: [{msg: {
+        if (!bool) return res.status(400).json({msgs: {msg: new Alert({
             title: 'Invalid Credentials',
             text: 'Email or Password Invalid',
-            type: 'error'}}], error: true, isAuthenticated: false});;
+            options: {
+                variant: 'error',
+                type: 'alert'
+            }
+        })}, error: true, isAuthenticated: false});;
 
         // if password is correct give client new token
         jwt.sign({user: {id: user.id}}, config.get('jwtSecret'), {expiresIn: remember ? '60d' : '1d'}, async (err, token) => {
-            if (err) return res.status(500).json({msgs: [{msg: {
+            if (err) return res.status(500).json({msgs: {msg: new Alert({
                 title: 'Server Error',
                 text: 'Server Error A2',
-                type: 'error'}}], error: true, isAuthenicated: false});
+                options: {
+                    variant: 'error',
+                    type: 'modal'
+                }
+            })}, error: true, isAuthenicated: false});
             user = await User.findById(user.id).select({password: 0, token: 0});
             res.json({token, data: user, isAuthenticated: true, error: false});
         });
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: [{msg: {
+        res.status(500).json({msgs: {msg: new Alert({
             title: 'Server Error',
             text: 'Server Error A1',
-            type: 'error'}}], error: true, isAuthenticated: false});
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true, isAuthenticated: false});
     }
 });
 
@@ -67,11 +84,14 @@ router.post('/load', auth, async (req: any, res) => {
         res.json({data: user, error: false, isAuthenticated: true});
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ msgs: [{ msg: {
+        res.status(500).json({ msgs: { msg: new Alert({
             title: 'Server Error',
             text: 'Server Error A2',
-            type: 'error'
-        }}], error: true, isAuthenticated: false });
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })}, error: true, isAuthenticated: false });
     }
 });
 /**
@@ -84,11 +104,14 @@ router.post('/admin',adminAuth, async (req: any, res) => {
         res.json({data: admin, error: false, isAuthenticated: true});
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ msgs: [{ msg: {
+        res.status(500).json({ msgs: { msg: new Alert({
             title: 'Server Error',
             text: 'Server Error A3',
-            type: 'error'
-        }}], error: true, isAuthenticated: false });
+            options: {
+                variant: "error",
+                type: 'modal'
+            }
+        })}, error: true, isAuthenticated: false });
     }
 });
 

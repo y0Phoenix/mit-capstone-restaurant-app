@@ -1,10 +1,13 @@
 export default class Alert {
     title: string;
     text: string;
-    type: string[];
-    constructor({title, text, type}: Alert) {
+    options: {
+        variant: 'error' | 'success' | 'warning',
+        type: 'modal' | 'alert'
+    };
+    constructor({title, text, options}: Alert) {
         this.title = title;
         this.text = text;
-        this.type = type
+        this.options = options
     }
 }
