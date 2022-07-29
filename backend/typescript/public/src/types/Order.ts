@@ -18,7 +18,7 @@ export interface OrderState {
 
 export interface Delivery {
     bool: boolean,
-    address: string | null
+    address?: string
 };
 
 export interface OrderAction {

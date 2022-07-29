@@ -1,11 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Tab, Row, Col, ListGroup, Card, InputGroup, Button, FormControl } from 'react-bootstrap'
+import { ListGroup, Card, InputGroup, Button, FormControl } from 'react-bootstrap'
 import { connect, ConnectedProps } from 'react-redux';
 import State from '../types/State'
 import { deleteRestaurant, filterRestaurants, getRestaurants } from '../actions/restaurant';
 import { setAlert } from '../actions/alert';
 import { Restaurant } from '../types/Restaurant';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const mapStateToProps = (state: State) => ({
@@ -43,7 +42,7 @@ const Rests: React.FC<RestsProps> = ({rest, i}) => (
 	</Fragment>
 );
 
-const Restaurants: React.FC<Props> = ({user, restaurant, deleteRestaurant, setAlert, getRestaurants, filterRestaurants}) => {
+const Restaurants: React.FC<Props> = ({restaurant, deleteRestaurant, getRestaurants, filterRestaurants}) => {
 	const [search, setSearch] = useState('');
 	useEffect(() => {
 		getRestaurants();

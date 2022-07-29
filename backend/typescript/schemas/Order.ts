@@ -39,6 +39,10 @@ const OrderSchema = new mongoose.Schema({
     valid: {
         type: Boolean,
         dafault: false  
+    },
+    restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
 });
 

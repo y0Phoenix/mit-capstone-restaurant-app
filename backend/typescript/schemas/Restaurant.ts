@@ -17,6 +17,10 @@ const RestaurantSchema = new mongoose.Schema({
     },
     desc: {
         type: String
+    },
+    sales: {
+        type: Number,
+        default: 0
     }
 });
 

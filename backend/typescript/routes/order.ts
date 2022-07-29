@@ -57,6 +57,7 @@ router.post('/:restaurant',async (req, res) => {
             total: items.reduce((total, item) => total + item.price),
             instructions,
             delivery,
+            restaurant
         });
         jwt.sign({user: {id: user,}, type: 'paymentSuccess'}, config.get('jwtSecret'), {expiresIn: '1h'}, (err, token) => {
             if (err) throw err;
@@ -135,7 +136,20 @@ router.put('/:token/:canceled', adminAuth, async (req, res) => {
 
         // if order exists and calceled is false validate order
         order.valid = true;
-        await order.save();
+        const restaurant = await Restaurant.findById(order.restaurant);
+        if (!restaurant) {
+            await order.remove();
+            return res.json({msgs: new Alert({
+                title: 'Error',
+                text: 'Error While Processing Payment',
+                options: {
+                    variant: 'error',
+                    type: 'modal'
+                }
+            }), error: false});
+        }
+        restaurant.sales = restaurant.sales + order.total;
+        
         res.json({msgs: new Alert({
             title: 'Payment Successfull',
             text: 'Your Order Will Be Ready In About 25-30 Minutes',
@@ -144,6 +158,8 @@ router.put('/:token/:canceled', adminAuth, async (req, res) => {
                 type: 'modal'
             }
         }), error: false});
+        await restaurant.save();
+        await order.save();
     } catch (err) {
         console.error(err);
         res.status(500).json({msgs:  new Alert({
