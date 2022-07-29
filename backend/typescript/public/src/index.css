@@ -62,8 +62,15 @@
 .flex-horizontal {
   display: flex;
 }
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
 .space-between {justify-content: space-between;}
 .center {justify-content: center;}
+.gap-sm {gap: 5px;}
+.gap-md {gap: 10px;}
+.gap-lg {gap: 20px;}
 .restaurants {
   display: flex;
   justify-content: center;

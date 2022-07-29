@@ -4,6 +4,7 @@ import State from '../../types/State'
 import { resetModal } from '../../actions/modal';
 import { updateRestaurant } from '../../actions/restaurant';
 import ModalItem from './ModalItem';
+import ModalConfirm from './ModalConfirm';
 
 const mapStateToProps = (state: State) => ({
     modal: state.modal
@@ -16,6 +17,7 @@ type Props = ConnectedProps<typeof connector>;
 const Modal: React.FC<Props> = ({modal, resetModal, updateRestaurant}) => (
     <>
         <ModalItem updateRestaurant={updateRestaurant} state={modal.item} resetModal={resetModal}/>
+        <ModalConfirm state={modal.confirm} resetModal={resetModal}/>
     </>
 );
 

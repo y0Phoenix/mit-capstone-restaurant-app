@@ -5,7 +5,8 @@ export interface Item {
     instrutions?: string,
     quantity?: number,
     price: number,
-    priceInCents: number
+    priceInCents: number,
+    id: string
 }
 
 export const ItemSchema = new mongoose.Schema({
@@ -23,5 +24,8 @@ export const ItemSchema = new mongoose.Schema({
     },
     priceInCents: {
         type: Number
+    },
+    id: {
+        type: String
     }
 });

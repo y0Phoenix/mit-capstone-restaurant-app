@@ -10,6 +10,14 @@ const initialState : Modal = {
         name: '',
         price: 0,
         priceInCents: 0,
+        id: ''
+    },
+    confirm: {
+        title: '',
+        text: '',
+        type: '',
+        show: false,
+        callback: () => {}
     }
 }
 

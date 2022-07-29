@@ -8,6 +8,8 @@ import { setAlert } from '../actions/alert'
 import { Restaurant } from '../types/Restaurant'
 import { setModal } from '../actions/modal'
 import { Item } from '../../../interfaces/Item'
+import { ConfirmModalPayload } from '../types/Modal';
+import {v4 as uuid} from 'uuid';
 
 const mapStateToProps = (state: State) => ({
     restaurants: state.restaurant,
@@ -30,7 +32,8 @@ let additem: React.FC<AddItemProps> = ({setModal, restaurant}) => (
             name: '',
             price: 0,
             priceInCents: 0,
-            restaurant: restaurant
+            restaurant: restaurant,
+            id: ''
         }
     })}>
         Add Item <i className="fa-solid fa-pen-to-square"></i>
@@ -55,9 +58,22 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
     const {pathname} = useLocation();
     const save = useRef<HTMLButtonElement>(null);
     const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.value});
-    const onchangeJSON = (e: any) => setFormData({...formData, ...JSON.parse(e.target.value)});
-    const onsubmit = () => addRestaurant(new Restaurant({name, desc, items}));
-    const removeItem = (name: string) => setFormData({...formData, items: items.filter(item => item.name !== name ? null : item)});
+    const onchangeJSON = (e: any) => setFormData(JSON.parse(e.target.value));
+    const onsubmit = () => {
+        if (pathname.includes('new')) return addRestaurant(new Restaurant({name, desc, items}));
+        updateRestaurant(new Restaurant({
+            name: name,
+            desc: desc,
+            items: items,
+            _id: restaurant._id,
+            picture: restaurant.picture,
+            date: restaurant.date
+        }));
+    }
+    const removeItem = ({id}: ConfirmModalPayload) => setFormData({...formData, items: items.filter(item => {
+        if (item.id === id) return null;
+        return item;
+    })});
     let restaurant: Restaurant = new Restaurant({init: true});
     if (restaurants.length > 0 && !pathname.includes('new')) restaurant = restaurants[0];
     useEffect(() => {
@@ -99,7 +115,9 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                                 </div>
                             )
                         }
-                        Restaurant {pathname.includes('new') ? 'New' : restaurant.name}
+                        <Card.Title>
+                            {pathname.includes('new') ? 'New Restaurant' : restaurant.name}
+                        </Card.Title>
                     </Card.Header>
                     <Card.Body>
                     <Row md={2}>
@@ -109,13 +127,17 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                                     <Card.Header>Items</Card.Header>
                                     <Card.Body>
                                         <ListGroup>
-                                            {restaurant.items.length > 0 ? restaurant.items.map((item, i) => (
+                                            {formData.items.length > 0 && formData.items.map((item, i) => (
                                                 <Fragment key={i}>
                                                     <ListGroup.Item>
                                                         <div className="flex-horizontal space-between">
-                                                            <div className="flex-horizontal">
-                                                                {item.name}    
-                                                                {item.price}    
+                                                            <div className="flex-horizontal gap-lg">
+                                                                <div>
+                                                                    {item.name}    
+                                                                </div>
+                                                                <div>
+                                                                    {item.price}    
+                                                                </div>
                                                             </div>    
                                                             <div className="flex-horizontal">
                                                                 <Button variant='outine-secondary' onClick={() => setModal({
@@ -125,19 +147,37 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                                                                         price: item.price,
                                                                         priceInCents: item.priceInCents,
                                                                         show: true,
-                                                                        restaurant: restaurant
+                                                                        restaurant: restaurant,
+                                                                        id: item.id
                                                                     }
                                                                 })}>
                                                                     <i className="fa-solid fa-pen-to-square"></i>
                                                                 </Button>
-                                                                <Button variant='outine-secondary'>
+                                                                <Button variant='outine-secondary' onClick={() => {
+                                                                    setModal({
+                                                                        type: 'confirm',
+                                                                        confirm: {
+                                                                            title: 'Confirm Delete',
+                                                                            text: `Confirm Deletion Of ${item.name}`,
+                                                                            type: 'warning',
+                                                                            show: true,
+                                                                            callback: removeItem,
+                                                                            payload: {
+                                                                                id: item.id
+                                                                            }
+                                                                        }
+                                                                    })
+                                                                    console.log(item);
+                                                                }}>
                                                                     <i className="fa-solid fa-x"></i>
                                                                 </Button>
                                                             </div>    
                                                         </div>
                                                     </ListGroup.Item>
                                                 </Fragment>
-                                            )) : <AddItem restaurant={restaurant}/>}
+                                            ))}
+                                            <br></br>
+                                            {!pathname.includes('new') && <AddItem restaurant={restaurant}/>}
                                         </ListGroup>
                                     </Card.Body>
                                 </Card>

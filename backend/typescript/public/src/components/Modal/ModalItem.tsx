@@ -7,6 +7,7 @@ import { resetModal } from '../../actions/modal'
 import { ItemModal } from '../../types/Modal'
 import { Restaurant } from '../../types/Restaurant'
 import State from '../../types/State'
+import {v4 as uuid} from 'uuid';
 
 interface Props {
     state: ItemModal,
@@ -18,15 +19,18 @@ const ModalItem: React.FC<Props> = ({resetModal, state, updateRestaurant}) => {
     const [formData, setFormData] = useState<Item>({
         name: '',
         price: 0,
-        priceInCents: 0
+        priceInCents: 0,
+        id: ''
     });
     const {name, price, priceInCents} = formData;
     var restaurant = new Restaurant({init: true});
     restaurant = state.restaurant ? {...state?.restaurant} : restaurant;
     const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.value});
+    // change priceInCents when price changes
     useEffect(() => {
         setFormData({...formData, priceInCents: price * 100});
     }, [price]);
+    // change formData when editing item instead of new item
     useEffect(() => {
         setFormData({...formData, name: state.name, price: state.price, priceInCents: state.priceInCents});
     }, [state])
@@ -72,13 +76,31 @@ const ModalItem: React.FC<Props> = ({resetModal, state, updateRestaurant}) => {
                             restaurant.items?.push({
                                 name,
                                 price,
-                                priceInCents
+                                priceInCents,
+                                id: uuid()
                             });
                             updateRestaurant(restaurant);
+                            resetModal();
                         }}>
                             Add Item
                         </Button>
-                        <Button variant='primary' type='submit'>Add Another</Button>
+                        <Button variant='primary' type='submit' onClick={() => {
+                            restaurant.items?.push({
+                                name,
+                                price,
+                                priceInCents,
+                                id: uuid()
+                            });
+                            updateRestaurant(restaurant);
+                            setFormData({
+                                name: '',
+                                price: 0,
+                                priceInCents: 0,
+                                id: ''
+                            })
+                        }}>
+                            Add Another
+                        </Button>
                     </div>
                 </Modal.Body>
             </Modal>
