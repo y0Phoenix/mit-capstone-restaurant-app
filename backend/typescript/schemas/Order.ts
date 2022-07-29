@@ -31,6 +31,14 @@ const OrderSchema = new mongoose.Schema({
             type: String,
             default: ''
         }
+    },
+    token: {
+        type: String,
+        unique: true
+    },
+    valid: {
+        type: Boolean,
+        dafault: false  
     }
 });
 

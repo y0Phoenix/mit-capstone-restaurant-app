@@ -7,10 +7,12 @@ import Restaurant from '../schemas/Restaurant';
 import adminAuth from '../middleware/adminAuth';
 import Order from '../schemas/Order';
 import Alert from '../classes/Alert';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
 /**
  * @POST 
- * @desc place an order
+ * @desc init place an order
  */
 router.post('/:restaurant',async (req, res) => {
     let {items = [], user = null, instructions = '', delivery = {address: null, bool: false}} = req.body;
@@ -47,7 +49,19 @@ router.post('/:restaurant',async (req, res) => {
                 type: 'modal'
             }
         }), error: true});
-
+        
+        const order = new Order({
+            user: user == 'guest' ? 'guest' : user._id,
+            items,
+            totalItems: items.length,
+            total: items.reduce((total, item) => total + item.price),
+            instructions,
+            delivery,
+        });
+        jwt.sign({user: {id: user,}, type: 'paymentSuccess'}, config.get('jwtSecret'), {expiresIn: '1h'}, (err, token) => {
+            if (err) throw err;
+            order.token = token;
+        });
         // if user exists initiate stripe payment session
         const session = await Stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -65,17 +79,9 @@ router.post('/:restaurant',async (req, res) => {
                     quantity: item.quantity
                 }
             }),
-            success_url: 'http://localhost:3000/paymentsuccess',
-            cancel_url: 'http://localhost:3000/canceledpayment'
-        });
-        // if session created successfully create order in db
-        const order = new Order({
-            user: user == 'guest' ? 'guest' : user._id,
-            items,
-            totalItems: items.length,
-            total: items.reduce((total, item) => total + item.price),
-            instructions,
-            delivery
+            // if session created successfully create order in db
+            success_url: `http://localhost:3000/paymentsuccess/${order.token}`,
+            cancel_url: `http://localhost:3000/canceledpayment/${order.token}`
         });
         await order.save();
 
@@ -95,6 +101,63 @@ router.post('/:restaurant',async (req, res) => {
 });
 
 /**
+ * @POST
+ * @desc finish placing order
+ */
+router.put('/:token/:canceled', adminAuth, async (req, res) => {
+    try {
+        const token = req.params.token;
+        const canceled = JSON.parse(req.params.canceled);
+
+        // attempt to find order with token
+        const order = await Order.findOne({token});
+        if (!order) return res.status(404).json({msgs: new Alert({
+            title: 'Error',
+            text: 'Order Not Found Try Again Later',
+            options: {
+                type: 'modal',
+                variant: 'error'
+            }
+        }), error: true});
+
+        // if order exists and canceled is true cancel it
+        if (canceled) {
+            await order.remove();
+            return res.json({msgs: new Alert({
+                title: 'Canceled',
+                text: 'Payment Canceled',
+                options: {
+                    variant: 'warning',
+                    type: 'modal'
+                }
+            }), error: false});
+        }
+
+        // if order exists and calceled is false validate order
+        order.valid = true;
+        await order.save();
+        res.json({msgs: new Alert({
+            title: 'Payment Successfull',
+            text: 'Your Order Will Be Ready In About 25-30 Minutes',
+            options: {
+                variant: 'success',
+                type: 'modal'
+            }
+        }), error: false});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({msgs:  new Alert({
+            title: 'Server Error',
+            text: 'Server Error O2',
+            options: {
+                variant: 'error',
+                type: 'modal'
+            }
+        })});
+    } 
+})
+
+/**
  * @GET
  * @desc get orders
  */
@@ -107,7 +170,7 @@ router.get('/', adminAuth, async (req, res) => {
         console.error(err);
         res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
-            text: 'Server Error O2',
+            text: 'Server Error O3',
             options: {
                 variant: 'error',
                 type: 'modal'
@@ -156,7 +219,7 @@ router.post('/update', adminAuth, async (req, res) => {
         console.error(err);
         res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
-            text: 'Server Error O3',
+            text: 'Server Error O4',
             options: {
                 variant: 'error',
                 type: 'modal'
@@ -199,7 +262,7 @@ router.delete('/:id', adminAuth, async (req, res) => {
         console.error(err);
         res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
-            text: 'Server Error O4',
+            text: 'Server Error O5',
             options: {
                 variant: 'error',
                 type: 'modal'
