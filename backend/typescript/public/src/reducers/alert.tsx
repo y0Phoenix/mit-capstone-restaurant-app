@@ -8,7 +8,7 @@ import {
 const initialState: Alert = {
     title: '',
     text: '',
-    type: '',
+    type: [''],
     show: false
 };
 
@@ -25,7 +25,7 @@ export default function(state = initialState, action: SetAlertAction) {
             state = {title: payload.title, text: Msg, type: payload.type, show: true};
             return state;
         case REMOVE_ALERT:
-            state = {title: '', text: '', type: '', show: false}
+            state = {title: '', text: '', type: [''], show: false}
             return state;
         default:
             return state

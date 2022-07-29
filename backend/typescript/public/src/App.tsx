@@ -13,6 +13,8 @@ import State from './types/State';
 import Restaurants from './routes/Restaurants';
 import Order from './routes/Order';
 import Account from './routes/Account';
+import RestaurantPage from './routes/RestaurantPage';
+import Modal from './components/Modal/Modal';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -26,6 +28,7 @@ function App() {
       <Router>
         <>
           <Sidebar />
+          <Modal />
           <div className='main'>
             <Routes>
               <Route path='/' element={<Landing/>}/>
@@ -33,6 +36,7 @@ function App() {
               <Route element={<ProtectedRoutes/>}>
                 <Route path='/home' element={<Home />}/>
                 <Route path='/restaurants' element={<Restaurants />}/>
+                <Route path='/restaurant/:id' element={<RestaurantPage />}/>
                 <Route path='/orders' element={<Order />}/>
                 <Route path='/account' element={<Account />}/>
               </Route>

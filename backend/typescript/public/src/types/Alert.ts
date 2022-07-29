@@ -1,23 +1,19 @@
 export interface Alert {
     title: string,
     text: string,
-    type: string,
+    type: string[],
     show: boolean
 };
 
 export interface SetAlertAction {
     type: string,
-    payload: {
-        title: string,
-        text: string
-        type: string
-    }
+    payload: SetAlertPayload
 };
 
 export interface SetAlertPayload {
     title: string,
     text: string,
-    type: string
+    type: string[]
 };
 
 export interface RemoveAlertAction {

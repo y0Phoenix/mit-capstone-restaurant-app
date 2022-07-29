@@ -2,8 +2,8 @@ import mongoose from "mongoose"
 
 export interface Item {
     name: string,
-    instrutions: string,
-    quantity: number,
+    instrutions?: string,
+    quantity?: number,
     price: number,
     priceInCents: number
 }

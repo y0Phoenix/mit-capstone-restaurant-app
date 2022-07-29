@@ -49,7 +49,7 @@ router.post('/', adminAuth, [
 
         // if no errors in req check if restaurant already exists
         let restaurant = await Restaurant.findOne({name});
-        if (!restaurant) return res.status(400).json({msgs: [{msg: {
+        if (restaurant) return res.status(400).json({msgs: [{msg: {
             title: 'Invalid Input',
             text: `Restaurant ${name} Already Exists`,
             type: 'error'
@@ -84,10 +84,10 @@ router.post('/', adminAuth, [
  */
 router.post('/update', adminAuth, async (req, res) => {
     try {
-        const {restaurant} = req.body;
+        const {_id, date, desc, items, name, picture} = req.body;
 
         // check if restaurant exists
-        let _restaurant = await Restaurant.findById(restaurant._id);
+        let _restaurant = await Restaurant.findById(_id);
         if (!_restaurant) return res.status(400).json({msgs: [{msg: {
             title: 'Error',
             text: `Restaurant Doesn't Exist This Is Likely A Problem On Our End Try Again Later`,
@@ -95,10 +95,10 @@ router.post('/update', adminAuth, async (req, res) => {
         }}], error: true});
 
         // if restaurant exists update it
-        _restaurant.name = restaurant.name;
-        _restaurant.items = restaurant.items;
-        _restaurant.picture = restaurant.picture;
-        _restaurant.desc = restaurant.desc;
+        _restaurant.name = name;
+        _restaurant.items = items;
+        _restaurant.picture = picture;
+        _restaurant.desc = desc;
         await _restaurant.save();
         const restaurants = await Restaurant.find();
         res.json({msgs: [{msg: {

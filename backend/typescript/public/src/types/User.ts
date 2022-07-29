@@ -3,7 +3,7 @@ import { Msg } from "./Msg"
 export interface UserState {
     name: string,
     email: string,
-    id: string,
+    _id: string,
     avatar: string,
     date: number,
     isAuthenticated: boolean | null

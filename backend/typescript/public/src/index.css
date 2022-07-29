@@ -13,8 +13,16 @@
 .landing-pic {
   size: 50%;
 }
-a {
-  text-decoration: none;
+.corner {
+  position: absolute;
+}
+.top-right {
+  right: 0;
+  top: 0;
+}
+.top-left {
+  left: 0;
+  top: 0
 }
 .link {
   text-decoration: none;
@@ -51,17 +59,19 @@ a {
 .sidebar-account {
   justify-self: flex-end;
 }
-.restaurant-list {
-  display: flex;
-  justify-content: space-between;
-}
-.restaurant-list-items {
+.flex-horizontal {
   display: flex;
 }
+.space-between {justify-content: space-between;}
+.center {justify-content: center;}
 .restaurants {
   display: flex;
   justify-content: center;
 }
 .restaurants-container {
   width: 1250px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
+.relative {position: relative;}

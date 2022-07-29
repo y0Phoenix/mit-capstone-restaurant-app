@@ -23,18 +23,22 @@ connectDB();
 
 // http body parser
 app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
 // http policy
 app.use(cors());
 // public folder
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 // routers
 app.use('/api/user', user);
 app.use('/api/auth', auth);
 app.use('/api/restaurant', restaurant);
 app.use('/api/admin', adminUser);
+
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+
 
 // defining the apps port with which to communicate with it
 const PORT = process.env.PORT || 5000;

@@ -1,6 +1,7 @@
 import { Item } from "../../../interfaces/Item";
 
 export interface Order {
+    _id: string,
     user: string,
     items: Item[],
     totalItems: number,

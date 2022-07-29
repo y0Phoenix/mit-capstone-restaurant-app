@@ -1,5 +1,7 @@
 import { stat } from 'fs';
 import {
+    GET_RESTAURANT,
+    GET_RESTAURANT_FAIL,
     RESTAURANT_UPDATE,
     RESTAURANT_UPDATE_FAIL
 } from '../actions/types';
@@ -12,9 +14,12 @@ export default function (state = initialState, action: any) {
 
     switch (type) {
         case RESTAURANT_UPDATE:
-            state = [...state, payload];
+        case GET_RESTAURANT:
+            state = initialState;
+            state = [...state, ...payload];
             return state;
         case RESTAURANT_UPDATE_FAIL:
+        case GET_RESTAURANT_FAIL:
             state = initialState;
             return state
         default:

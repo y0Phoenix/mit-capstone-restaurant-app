@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Tab, Row, Col, ListGroup, Card, InputGroup, Button, FormControl } from 'react-bootstrap'
 import { connect, ConnectedProps } from 'react-redux';
 import State from '../types/State'
@@ -9,18 +9,19 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const mapStateToProps = (state: State) => ({
-  restaurants: state.restaurant
+  restaurants: state.restaurant,
+  user: state.user
 });
 
 const connector = connect(mapStateToProps, {deleteRestaurant, setAlert, getRestaurants});
 
 type Props = ConnectedProps<typeof connector>;
 
-const Restaurants: React.FC<Props> = ({restaurants, deleteRestaurant, setAlert, getRestaurants}) => {
+const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setAlert, getRestaurants}) => {
 	const [search, setSearch] = useState('');
 	useEffect(() => {
-		getRestaurants(setAlert)
-	}, []);
+		if (user.isAuthenticated) getRestaurants();
+	}, [user]);
 	const handleDelete = (id: string, name: string) => {
 		// show modal that confirms whether the user really wants to delete
 		// clientConfirm({
@@ -52,17 +53,19 @@ const Restaurants: React.FC<Props> = ({restaurants, deleteRestaurant, setAlert, 
 							</InputGroup>
 						</form>
 						<ListGroup>
-							{restaurants.map((restaurant: Restaurant) => (
-								<>
-									<ListGroup.Item>
-										<div className='restaurant-list'>
-											<div className="restaurant-list-items">
+							{restaurants.map((restaurant: Restaurant, i: number) => (
+								<Fragment key={i}>
+									<ListGroup.Item as={'div'}>
+										<div className='flex-horizontal space-between'>
+											<div className="flex-horizontal">
 												<div>{restaurant.name}</div>
 												<div>{restaurant.desc}</div>
 											</div>
-											<div id='restaurant-list-items'>
+											<div className='flex-horizontal'>
 												<Button variant='dark'>
-													<i className="fa-solid fa-pen-to-square"></i>
+													<Link to={`/restaurant/${restaurant._id}`} className='link light'>
+														<i className="fa-solid fa-pen-to-square"></i>
+													</Link>
 												</Button> 
 												<Button variant='dark'>
 													<i className="fa-solid fa-x"></i>
@@ -70,7 +73,7 @@ const Restaurants: React.FC<Props> = ({restaurants, deleteRestaurant, setAlert, 
 											</div>
 										</div>
 									</ListGroup.Item>
-								</>
+								</Fragment>
 							))}
 						</ListGroup>
 						<Card.Footer>
