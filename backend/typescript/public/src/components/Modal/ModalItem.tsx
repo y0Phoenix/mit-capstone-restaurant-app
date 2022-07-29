@@ -12,10 +12,9 @@ import {v4 as uuid} from 'uuid';
 interface Props {
     state: ItemModal,
     resetModal: () => void,
-    updateRestaurant: (restaurant: Restaurant) => void
 };
 
-const ModalItem: React.FC<Props> = ({resetModal, state, updateRestaurant}) => {
+const ModalItem: React.FC<Props> = ({resetModal, state}) => {
     const [formData, setFormData] = useState<Item>({
         name: '',
         price: 0,
@@ -23,8 +22,7 @@ const ModalItem: React.FC<Props> = ({resetModal, state, updateRestaurant}) => {
         id: ''
     });
     const {name, price, priceInCents} = formData;
-    var restaurant = new Restaurant({init: true});
-    restaurant = state.restaurant ? {...state?.restaurant} : restaurant;
+    const items = state.stateData?.items && [...state.stateData.items];
     const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.value});
     // change priceInCents when price changes
     useEffect(() => {
@@ -73,25 +71,25 @@ const ModalItem: React.FC<Props> = ({resetModal, state, updateRestaurant}) => {
                     </InputGroup>
                     <div className={`flex-horizontal space-between`}>
                         <Button variant='primary' onClick={() => {
-                            restaurant.items?.push({
+                            items?.push({
                                 name,
                                 price,
                                 priceInCents,
                                 id: uuid()
                             });
-                            updateRestaurant(restaurant);
+                            state.setState({...state.stateData, items: items});
                             resetModal();
                         }}>
                             Add Item
                         </Button>
                         <Button variant='primary' type='submit' onClick={() => {
-                            restaurant.items?.push({
+                            items?.push({
                                 name,
                                 price,
                                 priceInCents,
                                 id: uuid()
                             });
-                            updateRestaurant(restaurant);
+                            state.setState({...state.stateData, items: items});
                             setFormData({
                                 name: '',
                                 price: 0,

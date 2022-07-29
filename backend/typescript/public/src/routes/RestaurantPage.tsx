@@ -21,10 +21,11 @@ const connector = connect(mapStateToProps, {getRestaurants, updateRestaurant, se
 type Props = ConnectedProps<typeof connector>;
 
 interface AddItemProps extends Props {
-    restaurant: Restaurant
+    setState: React.Dispatch<React.SetStateAction<FormData>>,
+    formData: FormData
 };
 
-let additem: React.FC<AddItemProps> = ({setModal, restaurant}) => (
+let additem: React.FC<AddItemProps> = ({setModal, setState, formData}) => (
     <Button variant='primary' onClick={() => setModal({
         type: 'item',
         item: {
@@ -32,8 +33,9 @@ let additem: React.FC<AddItemProps> = ({setModal, restaurant}) => (
             name: '',
             price: 0,
             priceInCents: 0,
-            restaurant: restaurant,
-            id: ''
+            id: '',
+            setState: setState,
+            stateData: formData
         }
     })}>
         Add Item <i className="fa-solid fa-pen-to-square"></i>
@@ -147,8 +149,9 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                                                                         price: item.price,
                                                                         priceInCents: item.priceInCents,
                                                                         show: true,
-                                                                        restaurant: restaurant,
-                                                                        id: item.id
+                                                                        id: item.id,
+                                                                        setState: setFormData,
+                                                                        stateData: formData
                                                                     }
                                                                 })}>
                                                                     <i className="fa-solid fa-pen-to-square"></i>
@@ -177,7 +180,7 @@ const RestaurantPage: React.FC<Props> = ({restaurants, user, getRestaurants, upd
                                                 </Fragment>
                                             ))}
                                             <br></br>
-                                            {!pathname.includes('new') && <AddItem restaurant={restaurant}/>}
+                                            {!pathname.includes('new') && <AddItem setState={setFormData} formData={formData}/>}
                                         </ListGroup>
                                     </Card.Body>
                                 </Card>

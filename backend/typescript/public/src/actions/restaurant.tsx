@@ -83,8 +83,7 @@ export const deleteRestaurant = (id: string) => async (dispatch: ThunkDispatch<S
 }
 export const filterRestaurants = (id: string, restaurants: Restaurant[]) => (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
-        const regex = new RegExp(id, 'gi');
-        const rests = restaurants.filter(rest => regex.test(rest._id) ? rest : null)
+        const rests = restaurants.filter(rest => rest._id === id ? rest : null)
         dispatch({
             type: RESTAURANT_UPDATE,
             payload: rests

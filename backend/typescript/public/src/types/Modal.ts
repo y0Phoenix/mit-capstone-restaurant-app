@@ -1,3 +1,4 @@
+import React from "react";
 import { Item } from "../../../interfaces/Item";
 import { Restaurant } from "./Restaurant";
 
@@ -6,13 +7,20 @@ export interface Modal {
     confirm: ConfirmModal
 }
 
+interface FormData {
+    name: string,
+    desc: string,
+    items: Item[]
+}
+
 export interface ItemModal {
     show: boolean
     name: string,
     price: number,
     priceInCents: number,
-    restaurant?: Restaurant,
-    id: string
+    id: string,
+    setState: React.Dispatch<React.SetStateAction<FormData>>,
+    stateData: FormData
 };
 
 export interface ConfirmModalPayload {

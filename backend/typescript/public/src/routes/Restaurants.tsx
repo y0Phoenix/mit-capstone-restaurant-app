@@ -21,9 +21,12 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 	const [search, setSearch] = useState('');
 	const [rests, setRests] = useState(restaurants);
 	useEffect(() => {
-		if (user.isAuthenticated) getRestaurants();
-		setRests(restaurants);
+		if (user.isAuthenticated && restaurants.length <= 0) getRestaurants();
+		if (rests.length <= 0) setRests(restaurants);
 	}, [user, restaurants]);
+	useEffect(() => {
+		console.log('re-rednder')
+	}, [])
 	const handleDelete = (id: string, name: string) => {
 		// show modal that confirms whether the user really wants to delete
 		// clientConfirm({
@@ -33,13 +36,14 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 		// }, deleteRestaurant, {id});
 	};
 	const handleSearch = (e: any = null) => {
-		e && e.preventDefault();
-		console.log(`handle search ${search}`)
+		e.preventDefault();
+		console.log(`handle search ${search}`, e)
 		const regex = new RegExp(search, 'gi');
-		setRests(restaurants.filter(rest => {
+		const _rests = restaurants.filter(rest => {
 			const bool = regex.test(rest.name);
 			return bool ? rest : null;
-		}))
+		})
+		setRests(_rests);
 	}
 	return (
 		<div className="restaurants">
@@ -49,14 +53,14 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 					<Card.Body>
 						<form onSubmit={(e: any) => handleSearch(e)}>
 							<InputGroup>
-							<FormControl 
-								placeholder='search...'
-								value={search}
-								onChange={(e:any) => setSearch(e.target.value)}
-							/>
-							<InputGroup.Text id='basic-addon2' onClick={handleSearch}>
-								<i className='fa-solid fa-magnifying-glass'></i>
-							</InputGroup.Text>
+								<FormControl 
+									placeholder='search...'
+									value={search}
+									onChange={(e:any) => setSearch(e.target.value)}
+								/>
+								<InputGroup.Text id='basic-addon2' as='button' className='btn btn-secondary' type='button' onClick={handleSearch}>
+									<i className='fa-solid fa-magnifying-glass'></i>
+								</InputGroup.Text>
 							</InputGroup>
 						</form>
 						<ListGroup>
@@ -64,16 +68,14 @@ const Restaurants: React.FC<Props> = ({user, restaurants, deleteRestaurant, setA
 								<Fragment key={i}>
 									<ListGroup.Item as={'div'}>
 										<div className='flex-horizontal space-between'>
-											<div className="flex-horizontal">
+											<div className="flex-horizontal gap-lg">
 												<div>{restaurant.name}</div>
 												<div>{restaurant.desc}</div>
 											</div>
 											<div className='flex-horizontal'>
-												<Button variant='dark'>
-													<Link to={`/restaurant/${restaurant._id}`} className='link light'>
-														<i className="fa-solid fa-pen-to-square"></i>
-													</Link>
-												</Button> 
+												<Link to={`/restaurant/${restaurant._id}`} className='link light btn btn-dark'>
+													<i className="fa-solid fa-pen-to-square"></i>
+												</Link>
 												<Button variant='dark'>
 													<i className="fa-solid fa-x"></i>
 												</Button> 

@@ -19,9 +19,9 @@ export default class Alert {
             this.validator = validator;
             return;
         }
-        this.title = title;
-        this.text = text;
-        this.options = options
+        this.title = title ? title : '';
+        this.text = text ? text : '';
+        this.options = options;
     }
 }
 
