@@ -25,14 +25,14 @@ router.post('/', auth, async (req: any, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
             text: 'Server Error C1',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true});
+        }), error: true});
     }
 });
 

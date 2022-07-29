@@ -8,7 +8,10 @@ import {
 const initialState: AlertState = {
     title: '',
     text: '',
-    type: [''],
+    options: {
+        variant: 'error',
+        type: 'alert'
+    },
     show: false
 };
 
@@ -17,19 +20,10 @@ export default function(state = initialState, action: SetAlertAction) {
     switch (type) {
         case SET_ALERT:
             console.log(payload);
-            let Msg = ``;
-            let title = ``;
-            let Type = [``];
-            if (Array.isArray(payload)) payload.forEach(msg => {
-                if (typeof msg.msg == 'string') return Msg += `${msg.msg}\n`;
-                Msg += `${msg.msg.text}\n`;
-                title = msg.msg.title
-                Type = msg.msg.type;
-            });
-            state = {title: title, text: Msg, type: Type, show: true};
+            state = {title: payload.title, text: payload.text, options: payload.options, validator: payload?.validator, show: true};
             return state;
         case REMOVE_ALERT:
-            state = {title: '', text: '', type: [''], show: false}
+            state = initialState;
             return state;
         default:
             return state

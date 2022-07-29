@@ -17,7 +17,7 @@ export class Restaurant {
     items: Item[] = [];
     desc: string = '';
     date: number = 0;
-    constructor({name, _id, picture, items = [], desc, date, init}: NewRestaurantPayload) {
+    constructor({name, _id, picture, items, desc, date, init}: NewRestaurantPayload) {
         if (init == true) {
             this.name = '';
             this._id = '';
@@ -30,7 +30,7 @@ export class Restaurant {
         this.name = name ? name : '';
         this._id = _id ? _id : '';
         this.picture = picture ? picture : '';
-        this.items = items !== [] ? items : [];
+        this.items = items ? items : [];
         this.desc = desc ? desc : '';
         this.date = date ? date : Date.now();
     }

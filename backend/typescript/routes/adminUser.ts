@@ -41,14 +41,14 @@ router.post('/', [
         const {name, email, password}: Body = req.body;
 
         let admin: any = await Admin.findOne({email});
-        if (admin) return res.status(400).json({msgs: {msg: new Alert({
+        if (admin) return res.status(400).json({msgs: new Alert({
             title: 'Invalid Credentials',
             text: 'User With Specified Email Aldready Exists',
             options: {
                 variant: 'error',
                 type: 'alert'
             }
-        })}, error: true});
+        }), error: true});
 
         // gravatar
         const avatar = gravatar.url(email, {
@@ -75,26 +75,26 @@ router.post('/', [
             admin.token = token;
             await admin.save();
             admin = await Admin.findById(admin.id).select({password: 0, token: 0});
-            res.json({msgs: {msg: new Alert({
+            res.json({msgs:  new Alert({
                 title: 'Success',
                 text: `Admin ${admin.name} Created Successfully`,
                 options: {
                     variant: 'success',
                     type: 'alert'
                 }
-            })}, token, data: admin, error: false, isAuthenticated: true});
+            }), token, data: admin, error: false, isAuthenticated: true});
         });
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
             text: 'Server Error AU1',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true, isAuthenticated: false});
+        }), error: true, isAuthenticated: false});
     }
 });
 
@@ -125,25 +125,25 @@ router.post('/login', [
 
         // check if user with email exists
         let admin: any = await Admin.findOne({email});
-        if (!admin) return res.status(401).json({msgs: {msg: new Alert({
+        if (!admin) return res.status(401).json({msgs:  new Alert({
             title: 'Invalid Credentials',
             text: 'No User With Specified Email',
             options: {
                 variant: "error",
                 type: 'alert'
             }
-        })}, error: true, isAuthenticated: false});
+        }), error: true, isAuthenticated: false});
 
         // if user exists check password
         const bool = await bcrypt.compare(password, admin.password);
-        if (!bool) return res.status(401).json({msgs: {msg: new Alert({
+        if (!bool) return res.status(401).json({msgs:  new Alert({
             title: 'Invalid Credentials',
             text: 'Email or Password Invalid',
             options: {
                 variant: 'error',
                 type: 'alert'
             }
-        })}, error: true, isAuthenticated: false});
+        }), error: true, isAuthenticated: false});
 
         // if password is correct generate new token for user and send to the client
         jwt.sign({admin: {id: admin.id}}, config.get('jwtSecret'), {expiresIn: remeber ? '60d' : '1d'}, async (err, token) => {
@@ -155,14 +155,14 @@ router.post('/login', [
         })
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
             text: 'Server Error AU2',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: false, isAuthenticated: false});
+        }), error: false, isAuthenticated: false});
     }
 });
 
@@ -188,14 +188,14 @@ router.post('/update', adminAuth, async (req: any, res) => {
         })}, error: false, isAuthenticated: true});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
             text: 'Server Error AU3',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: false, isAuthenticated: false});
+        }), error: false, isAuthenticated: false});
     }
 });
 

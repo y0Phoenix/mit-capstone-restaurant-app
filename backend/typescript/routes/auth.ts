@@ -36,50 +36,50 @@ router.post('/', [
         const {email, password, remember} = req.body;
         // check if user exists with email
         let user: any = await User.findOne({email});
-        if (!user) return res.status(400).json({msgs: {msg: new Alert({
+        if (!user) return res.status(400).json({msgs:  new Alert({
             title: 'Invalid Credentials',
             text: 'Email or Password Invalid',
             options: {
                 variant: "error",
                 type: 'alert'
             }
-        })}, error: true, isAuthenticated: false});;
+        }), error: true, isAuthenticated: false});;
 
         // if user exists check password
         const bool = await bcrypt.compare(password, user.password);
-        if (!bool) return res.status(400).json({msgs: {msg: new Alert({
+        if (!bool) return res.status(400).json({msgs:  new Alert({
             title: 'Invalid Credentials',
             text: 'Email or Password Invalid',
             options: {
                 variant: 'error',
                 type: 'alert'
             }
-        })}, error: true, isAuthenticated: false});;
+        }), error: true, isAuthenticated: false});;
 
         // if password is correct give client new token
         jwt.sign({user: {id: user.id}}, config.get('jwtSecret'), {expiresIn: remember ? '60d' : '1d'}, async (err, token) => {
-            if (err) return res.status(500).json({msgs: {msg: new Alert({
+            if (err) return res.status(500).json({msgs:  new Alert({
                 title: 'Server Error',
                 text: 'Server Error A2',
                 options: {
                     variant: 'error',
                     type: 'modal'
                 }
-            })}, error: true, isAuthenicated: false});
+            }), error: true, isAuthenicated: false});
             user = await User.findById(user.id).select({password: 0, token: 0});
             res.json({token, data: user, isAuthenticated: true, error: false});
         });
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs:  new Alert({
             title: 'Server Error',
             text: 'Server Error A1',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true, isAuthenticated: false});
+        }), error: true, isAuthenticated: false});
     }
 });
 

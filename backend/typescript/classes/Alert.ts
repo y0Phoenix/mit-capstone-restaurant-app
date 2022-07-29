@@ -5,13 +5,18 @@ export default class Alert {
         variant: 'error' | 'success' | 'warning',
         type: 'modal' | 'alert'
     };
+    validator?: {
+        bool: boolean,
+        payload: ValidatorPayload[]
+    }
     constructor({title, text, options, validator}: AlertPayload) {
         if (validator?.bool) {
             this.title = 'Invalid Input';
             let msg = ``;
-            validator.payload.forEach(_msg => msg += `${_msg.msg}\n`);
+            validator.payload.forEach(_msg => msg += `<div>${_msg.msg}</div>`);
             this.text = msg;
             this.options = options;
+            this.validator = validator;
             return;
         }
         this.title = title;
@@ -22,16 +27,14 @@ export default class Alert {
 
 type AlertOmit = Omit<Alert, 'text' | 'title'>;
 
+interface ValidatorPayload {
+    location?: string,
+    msg?: string,
+    param?: string,
+    value?: string
+}
+
 interface AlertPayload extends AlertOmit {
     text?: string,
     title?: string,
-    validator?: {
-        bool: boolean,
-        payload: {
-            location?: string,
-            msg?: string,
-            param?: string,
-            value?: string
-        }[]
-    }
 }

@@ -44,14 +44,14 @@ router.post('/', [
     try {
         // check if user exists
         let user: any = await User.findOne({email});
-        if (user) return res.status(400).json({ msgs: {msg: new Alert({
+        if (user) return res.status(400).json({ msgs: new Alert({
             title: 'Invalid Credentials',
             text: 'User Already Exists With Provided Email',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true });
+        }), error: true });
 
         // get avatar
         const avatar = gravatar.url(email, {
@@ -95,14 +95,14 @@ router.post('/', [
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msgs: {msg: new Alert({
+        res.status(500).json({ msgs: new Alert({
             title: 'Server Error',
             text: 'Server Error U1',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true });
+        }), error: true });
     }
 });
 
@@ -119,17 +119,17 @@ router.post('/update', auth, async (req: any, res) => {
 
         req.user.save();
 
-        res.json({msgs: {msg: new Alert({
+        res.json({msgs: new Alert({
             title: 'Success', 
             text: 'User Updated Successfully',
             options: {
                 variant: 'success',
                 type: 'alert'
             }}
-        )}, error: false});
+        ), error: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs: new Alert({
             title: 'Server Error', 
             text: 'Server Error U2',
             options: {
@@ -137,7 +137,7 @@ router.post('/update', auth, async (req: any, res) => {
                 type: 'modal'
             }
         }
-        )}, error: true});
+        ), error: true});
     }
 });
 
@@ -167,35 +167,35 @@ router.delete('/', auth, [
 
         // check the password provided for validation
         const bool = await bcrypt.compare(password, req.user.password);
-        if (!bool) return res.status(401).json({msgs: {msg: new Alert({
+        if (!bool) return res.status(401).json({msgs: new Alert({
             title: 'Invalid Credentials',
             text: 'Password Was Incorrect',
             options: {
                 variant: 'error',
                 type: 'alert'
             }
-        })}, error: true});
+        }), error: true});
 
         // delete user
         req.user.remove();
-        res.json({msgs: {msg: new Alert({
+        res.json({msgs: new Alert({
             title: 'Success',
             text: 'User Deleted Successfully',
             options: {
                 variant: 'success',
                 type: 'modal'
             }
-        })}, error: false, isAuthenticated: false});
+        }), error: false, isAuthenticated: false});
     } catch (err) {
         console.error(err);
-        res.status(500).json({msgs: {msg: new Alert({
+        res.status(500).json({msgs: new Alert({
             title: 'Server Error',
             text: 'Server Error U3',
             options: {
                 variant: 'error',
                 type: 'modal'
             }
-        })}, error: true});
+        }), error: true});
     }
 })
 
