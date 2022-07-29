@@ -6,8 +6,9 @@ import State from "../../types/State";
 import { setModal } from "../../actions/modal";
 import { Order } from "../../types/Order";
 import {v4 as uuid} from 'uuid';
+import { deleteOrder } from "../../actions/order";
 
-const connector = connect(null, {setModal});
+const connector = connect(null, {setModal, deleteOrder});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -16,7 +17,7 @@ interface Props extends ReduxProps {
     i: number
 };
 
-const RecentOrders: React.FC<Props> = ({order, i, setModal}) => {
+const RecentOrders: React.FC<Props> = ({order, i, setModal, deleteOrder}) => {
 	const navigate = useNavigate();
 	return (
 		<Fragment key={i}>
@@ -46,7 +47,19 @@ const RecentOrders: React.FC<Props> = ({order, i, setModal}) => {
 						<Link to={`/order/${order._id}`} className='link light btn btn-dark'>
 							<i className="fa-solid fa-pen-to-square"></i>
 						</Link>
-						<Button variant='dark'>
+						<Button variant='dark' onClick={() => setModal({
+                            type: 'confirm',
+                            confirm: {
+                                show: true,
+                                title: 'Confirm Deletion',
+                                text: `Are You Sure You Want To Delete ${order.user} Order`,
+                                callback: deleteOrder,
+                                payload: {
+                                    id: order._id
+                                },
+                                type: 'danger'
+                            }
+                        })}>
 							<i className="fa-solid fa-x"></i>
 						</Button> 
 					</div>

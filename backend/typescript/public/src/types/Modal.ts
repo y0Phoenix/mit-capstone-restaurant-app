@@ -31,7 +31,7 @@ export interface ConfirmModal {
     show: boolean,
     title: string,
     text: string,
-    type: string,
+    type: 'warning' | 'danger',
     callback: Function,
     payload?: ConfirmModalPayload
 }

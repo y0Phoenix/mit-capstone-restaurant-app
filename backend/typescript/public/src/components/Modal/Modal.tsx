@@ -16,7 +16,7 @@ type Props = ConnectedProps<typeof connector>;
 
 const Modal: React.FC<Props> = ({modal, resetModal, updateRestaurant}) => (
     <>
-        <ModalItem updateRestaurant={updateRestaurant} state={modal.item} resetModal={resetModal}/>
+        <ModalItem state={modal.item} resetModal={resetModal}/>
         <ModalConfirm state={modal.confirm} resetModal={resetModal}/>
     </>
 );

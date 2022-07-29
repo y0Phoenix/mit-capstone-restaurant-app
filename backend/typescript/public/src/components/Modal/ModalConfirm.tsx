@@ -10,7 +10,9 @@ interface Props {
 const ModalConfirm: React.FC<Props> = ({state, resetModal}) => {
     return (
         <Modal show={state.show} size='sm' onHide={resetModal}>
-            <Modal.Header closeButton onHide={resetModal}>
+            <Modal.Header closeButton onHide={resetModal} style={{
+                                backgroundColor: state.type == 'danger' ? 'red' : 'yellow'
+                            }}>
                 <Modal.Title>{state.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
