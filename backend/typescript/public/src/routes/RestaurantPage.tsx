@@ -65,7 +65,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
     const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.value});
     const onchangeJSON = (e: any) => setFormData(JSON.parse(e.target.value));
     const onsubmit = () => {
-        if (pathname.includes('new')) return addRestaurant(new Restaurant({name, desc, items}));
+        if (pathname.includes('new')) return addRestaurant(new Restaurant({name, desc, items}), navigate);
         updateRestaurant(new Restaurant({
             name: name,
             desc: desc,

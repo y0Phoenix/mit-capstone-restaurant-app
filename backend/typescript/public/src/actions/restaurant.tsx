@@ -14,6 +14,7 @@ import { Restaurant, RestaurantAction, RestaurantState } from '../types/Restaura
 import { setAlert } from './alert';
 import Alert from '../../../classes/Alert';
 import moment from 'moment';
+import { NavigateFunction } from 'react-router-dom';
 
 export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
     try {
@@ -69,7 +70,7 @@ export const deleteRestaurant = (id: string) => async (dispatch: ThunkDispatch<S
 
         // check res for msgs
         const msgs = res.data?.msgs;
-        if (msgs) setAlert(msgs);
+        if (msgs) dispatch(setAlert(msgs));
 
         dispatch({
             type: RESTAURANT_UPDATE,
@@ -77,7 +78,7 @@ export const deleteRestaurant = (id: string) => async (dispatch: ThunkDispatch<S
         });
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
-        if(msgs) setAlert(msgs);
+        if(msgs) dispatch(setAlert(msgs));
         dispatch({
             type: RESTAURANT_UPDATE_FAIL,
             payload: null
@@ -126,7 +127,7 @@ export const filterRestaurants = ({name, id, sales, restaurantState}: FilterOpti
     }
 };
 
-export const addRestaurant = (formData: Restaurant) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
+export const addRestaurant = (formData: Restaurant, navigate: NavigateFunction) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
         // make req to API
         const res = await axios.post('/api/restaurant', formData);
@@ -139,6 +140,8 @@ export const addRestaurant = (formData: Restaurant) => async (dispatch: ThunkDis
             type: GET_RESTAURANT,
             payload: res.data.data
         });
+        const [restaurant] = res.data.data.filter((rest: Restaurant) => rest.name == formData.name ? rest : null);
+        navigate(`/restaurant/${restaurant._id}`);
     } catch (err: any) {
         const msgs = err.response.data?.msgs;
         if(msgs) setAlert(msgs);
