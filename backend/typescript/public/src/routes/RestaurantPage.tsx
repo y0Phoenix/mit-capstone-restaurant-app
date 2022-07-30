@@ -131,25 +131,21 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                                     <Card.Header>Items</Card.Header>
                                     <Card.Body>
                                         <ListGroup>
-                                            <form onSubmit={(e) => {
-                                                e.preventDefault();
-                                                const regex = new RegExp(search, 'gi');
-                                                setFormData({...formData, items: _restaurant.items.filter((item => regex.test(item.name) ? item : null))});
-                                            }}>
-                                                <ListGroup.Item as={'div'}>
-                                                    <InputGroup>
-                                                        <InputGroup.Text as='button' id='basic-addon2' className='btn btn-secondary'>
-                                                            <i className='fa-solid fa-magnifying-glass'></i>
-                                                        </InputGroup.Text>
-                                                        <FormControl 
-                                                            placeholder='search...'
-                                                            value={search}
-                                                            onChange={(e) => setSearch(e.target.value)}
-                                                        />
-                                                    </InputGroup>
-                                                </ListGroup.Item>
-                                            </form>
-                                            {formData.items.length > 0 && formData.items.map((item, i) => (
+                                            <ListGroup.Item as={'div'}>
+                                                <InputGroup>
+                                                    <InputGroup.Text as='button' id='basic-addon2' className='btn btn-secondary'>
+                                                        <i className='fa-solid fa-magnifying-glass'></i>
+                                                    </InputGroup.Text>
+                                                    <FormControl 
+                                                        placeholder='search...'
+                                                        onChange={(e) => {
+                                                            const regex = new RegExp(e.target.value, 'gi');
+                                                            setFormData({...formData, items: _restaurant.items.filter((item => regex.test(item.name) ? item : null))})
+                                                        }}
+                                                    />
+                                                </InputGroup>
+                                            </ListGroup.Item>
+                                            {items.length > 0 && items.map((item, i) => (
                                                 <Fragment key={i}>
                                                     <ListGroup.Item>
                                                         <div className="flex-horizontal space-between">
