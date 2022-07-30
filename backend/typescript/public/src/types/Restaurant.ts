@@ -1,4 +1,5 @@
 import {Item} from '../../../interfaces/Item';
+import {v4 as uuid} from 'uuid';
 
 interface NewRestaurantPayload {
     name?: string,
@@ -26,7 +27,7 @@ export class Restaurant {
     sales: number = 0;
     constructor({name, _id, picture, items, desc, date, init, sales}: NewRestaurantPayload) {
         if (init == true) {
-            this.name = '';
+            this.name = uuid();
             this._id = '';
             this.picture = '';
             this.items = [];

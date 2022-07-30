@@ -6,6 +6,7 @@ import { deleteRestaurant, filterRestaurants, getRestaurants } from '../actions/
 import { setAlert } from '../actions/alert';
 import { Restaurant } from '../types/Restaurant';
 import { Link } from 'react-router-dom';
+import { randomUUID } from 'crypto';
 
 const mapStateToProps = (state: State) => ({
   restaurant: state.restaurant,
@@ -22,7 +23,7 @@ interface RestsProps {
 }
 
 const Rests: React.FC<RestsProps> = ({rest, i}) => (
-	<Fragment key={i}>
+	<Fragment>
 		<ListGroup.Item as={'div'}>
 			<div className='flex-horizontal space-between'>
 				<div className="flex-horizontal gap-lg">
@@ -46,15 +47,7 @@ const Restaurants: React.FC<Props> = ({restaurant, deleteRestaurant, getRestaura
 	const [search, setSearch] = useState('');
 	useEffect(() => {
 		getRestaurants();
-	}, [])
-	const handleDelete = (id: string, name: string) => {
-		// show modal that confirms whether the user really wants to delete
-		// clientConfirm({
-		// 	title: 'Confirm Delete',
-		// 	text: `Are You Sure You Want To Delete ${name}`,
-		// 	type: 'warning'
-		// }, deleteRestaurant, {id});
-	};
+	}, []);
 	const handleSearch = (e: any = null) => {
 		e.preventDefault();
 		console.log(`handle search ${search}`, e);
@@ -82,11 +75,11 @@ const Restaurants: React.FC<Props> = ({restaurant, deleteRestaurant, getRestaura
 							{
 								restaurant.filtered ? 
 									(
-										restaurant.filtered.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i}/>)
+										restaurant.filtered.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i} key={i}/>)
 									)
 									:
 									(
-										restaurant.restaurants.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i}/>)
+										restaurant.restaurants.map((restaurant: Restaurant, i: number) => <Rests rest={restaurant} i={i} key={i}/>)
 									)}
 						</ListGroup>
 						<Card.Footer>

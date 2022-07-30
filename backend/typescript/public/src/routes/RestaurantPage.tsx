@@ -52,13 +52,13 @@ interface FormData {
 
 const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, updateRestaurant, setAlert, addRestaurant, filterRestaurants, setModal, deleteRestaurant}) => {
     const navigate = useNavigate();
-    const {restaurants, filtered} = restaurant
+    const {restaurants, filtered} = restaurant;
+    const [_restaurant, setRestaurant] = useState(new Restaurant({init: true}));
     const [formData, setFormData] = useState<FormData>({
         name: '',
         desc: '',
         items: []
     });
-    const [search, setSearch] = useState('');
     const {name, desc, items} = formData;
     const {pathname} = useLocation();
     const save = useRef<HTMLButtonElement>(null);
@@ -79,11 +79,19 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
         if (item.id === id) return null;
         return item;
     })});
-    let _restaurant: Restaurant = new Restaurant({init: true});
-    if (filtered && !pathname.includes('new')) _restaurant = filtered[0];
+    // on re-render effect
     useEffect(() => {
-        if (restaurants.length <= 0) getRestaurants();
-    }, [])
+        if (restaurants.length <= 0 && !pathname.includes('new')) getRestaurants();
+        else {
+            let _restaurant: Restaurant = new Restaurant({init: true});
+            const state = {...restaurant, restaurants: [...restaurants, _restaurant]};
+            filterRestaurants({
+                name: _restaurant.name,
+                restaurantState: state
+            });
+        }
+    }, []);
+    // on formData change effect
     useEffect(() => {
         if (!save.current) return;
         if (formData.name == '' && formData.desc == '' && formData.items.length == 0) {
@@ -92,9 +100,14 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
         }
         save.current.disabled = false;
     }, [formData]);
+    // on local restaurant variable change effect
     useEffect(() => {
-        setFormData({...formData, name: _restaurant.name, desc: _restaurant.desc, items: _restaurant.items})
-    }, [_restaurant])
+        if (filtered && filtered?.length > 0) {
+            setRestaurant(filtered[0]);
+            setFormData({...formData, name: pathname.includes('new') ? '' : filtered[0].name, desc: filtered[0].desc, items: filtered[0].items})
+        }
+    }, [filtered]);
+    // on pathname or user change effect
     useEffect(() => {
         if (user.isAuthenticated) {
             const id = pathname.replace('/restaurant/', '');
@@ -144,86 +157,96 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                     </Card.Header>
                     <Card.Body>
                     <Row md={2}>
-                        {!pathname.includes('new') &&
-                            <Col xs={6}>
-                                <Card>
-                                    <Card.Header>Items</Card.Header>
-                                    <Card.Body>
-                                        <ListGroup>
-                                            <ListGroup.Item as={'div'}>
-                                                <InputGroup>
-                                                    <InputGroup.Text as='button' id='basic-addon2' className='btn btn-secondary'>
-                                                        <i className='fa-solid fa-magnifying-glass'></i>
-                                                    </InputGroup.Text>
-                                                    <FormControl 
-                                                        placeholder='search...'
-                                                        onChange={(e) => {
-                                                            const regex = new RegExp(e.target.value, 'gi');
-                                                            setFormData({...formData, items: _restaurant.items.filter((item => regex.test(item.name) ? item : null))})
-                                                        }}
-                                                    />
-                                                </InputGroup>
-                                            </ListGroup.Item>
-                                            {items.length > 0 && items.map((item, i) => (
-                                                <Fragment key={i}>
-                                                    <ListGroup.Item>
-                                                        <div className="flex-horizontal space-between">
-                                                            <div className="flex-horizontal gap-lg">
-                                                                <div>
-                                                                    {item.name}    
-                                                                </div>
-                                                                <div>
-                                                                    {item.price}    
-                                                                </div>
-                                                            </div>    
-                                                            <div className="flex-horizontal">
-                                                                <Button variant='outine-secondary' onClick={() => setModal({
-                                                                    type: 'item',
-                                                                    item: {
-                                                                        name: item.name,
-                                                                        price: item.price,
-                                                                        priceInCents: item.priceInCents,
-                                                                        show: true,
-                                                                        id: item.id,
-                                                                        setState: setFormData,
-                                                                        stateData: formData
-                                                                    }
-                                                                })}>
-                                                                    <i className="fa-solid fa-pen-to-square"></i>
-                                                                </Button>
-                                                                <Button variant='outine-secondary' onClick={() => {
-                                                                    setModal({
-                                                                        type: 'confirm',
-                                                                        confirm: {
-                                                                            title: 'Confirm Delete',
-                                                                            text: `Confirm Deletion Of ${item.name}`,
-                                                                            type: 'warning',
+                        <Col xs={6}>
+                            <Card>
+                                <Card.Header>Items</Card.Header>
+                                <Card.Body>
+                                    <ListGroup>
+                                        <ListGroup.Item as={'div'}>
+                                            <InputGroup>
+                                                <InputGroup.Text as='button' id='basic-addon2' className='btn btn-secondary'>
+                                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                                </InputGroup.Text>
+                                                <FormControl 
+                                                    placeholder='search...'
+                                                    onChange={(e) => {
+                                                        const regex = new RegExp(e.target.value, 'gi');
+                                                        setFormData({...formData, items: _restaurant.items.filter((item => regex.test(item.name) ? item : null))})
+                                                    }}
+                                                />
+                                            </InputGroup>
+                                        </ListGroup.Item>
+                                        {items.length > 0 ? 
+                                            (
+                                                items.map((item, i) => (
+                                                    <Fragment key={i}>
+                                                        <ListGroup.Item>
+                                                            <div className="flex-horizontal space-between">
+                                                                <div className="flex-horizontal gap-lg">
+                                                                    <div>
+                                                                        {item.name}    
+                                                                    </div>
+                                                                    <div>
+                                                                        {item.price}    
+                                                                    </div>
+                                                                </div>    
+                                                                <div className="flex-horizontal">
+                                                                    <Button variant='outine-secondary' onClick={() => setModal({
+                                                                        type: 'item',
+                                                                        item: {
+                                                                            name: item.name,
+                                                                            price: item.price,
+                                                                            priceInCents: item.priceInCents,
                                                                             show: true,
-                                                                            callbacks: {
-                                                                                generic: removeItem,
-                                                                            },
-                                                                            payload: {
-                                                                                id: item.id
-                                                                            }
+                                                                            id: item.id,
+                                                                            setState: setFormData,
+                                                                            stateData: formData
                                                                         }
-                                                                    })
-                                                                    console.log(item);
-                                                                }}>
-                                                                    <i className="fa-solid fa-x"></i>
-                                                                </Button>
-                                                            </div>    
-                                                        </div>
-                                                    </ListGroup.Item>
-                                                </Fragment>
-                                            ))}
-                                            <br></br>
-                                            {!pathname.includes('new') && <AddItem setState={setFormData} formData={formData}/>}
-                                        </ListGroup>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        }
-                        <Col md={pathname.includes('new') ? 12 : 6}>
+                                                                    })}>
+                                                                        <i className="fa-solid fa-pen-to-square"></i>
+                                                                    </Button>
+                                                                    <Button variant='outine-secondary' onClick={() => {
+                                                                        setModal({
+                                                                            type: 'confirm',
+                                                                            confirm: {
+                                                                                title: 'Confirm Delete',
+                                                                                text: `Confirm Deletion Of ${item.name}`,
+                                                                                type: 'warning',
+                                                                                show: true,
+                                                                                callbacks: {
+                                                                                    generic: removeItem,
+                                                                                },
+                                                                                payload: {
+                                                                                    id: item.id
+                                                                                }
+                                                                            }
+                                                                        })
+                                                                        console.log(item);
+                                                                    }}>
+                                                                        <i className="fa-solid fa-x"></i>
+                                                                    </Button>
+                                                                </div>    
+                                                            </div>
+                                                        </ListGroup.Item>
+                                                    </Fragment>
+                                                ))
+                                            )
+                                            : 
+                                            (
+                                                <>
+                                                    <br></br>
+                                                    <>No Items</>
+                                                    <br></br>
+                                                </>
+                                            )
+                                    }
+                                        <br></br>
+                                        <AddItem setState={setFormData} formData={formData}/>
+                                    </ListGroup>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col md={6}>
                             <Card>
                                 <Card.Header>Details</Card.Header>
                                 <Card.Body>
@@ -242,7 +265,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                                             placeholder='description'
                                             value={desc}
                                             name='desc'
-                                            onChange={(e: any) => onchange(e)}
+                                            onChange={(e: any) => {onchange(e)}}
                                         />
                                     </InputGroup>
                                 </Card.Body>
