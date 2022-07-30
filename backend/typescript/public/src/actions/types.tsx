@@ -34,6 +34,8 @@ export const RESET_MODAL = 'RESET_MODAL';
 export interface FilterOptions {
     id?: string,
     name?: string,
+    sales?: boolean,
+    date?: boolean,
     restaurantState?: RestaurantState,
     orderState?: OrderState
 };

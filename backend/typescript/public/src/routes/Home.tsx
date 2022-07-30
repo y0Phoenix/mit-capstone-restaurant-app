@@ -13,6 +13,7 @@ import {v4 as uuid} from 'uuid';
 import { setModal } from '../actions/modal';
 import { SetModalPayload } from '../types/Modal';
 import RecentOrders from '../components/Home/RecentOrders';
+import TopRestaurants from '../components/Home/TopRestaurants';
 
 const mapStateToProps = (state: State) => ({
 	user: state.user,
@@ -50,6 +51,9 @@ const Home: React.FC<Props> = ({user, restaurant, order, filterOrders, filterRes
 							<Card.Header>
 								<Card.Title>Top Restaurants</Card.Title>
 							</Card.Header>
+							<Card.Body>
+								<TopRestaurants />
+							</Card.Body>
 						</Card>
 					</Col>
 					<Col md={1} lg={12}>

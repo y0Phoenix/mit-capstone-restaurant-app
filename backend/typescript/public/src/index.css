@@ -91,3 +91,6 @@
   height: fit-content;
   z-index: 100;
 }
+.pointer {
+  cursor: pointer;
+}

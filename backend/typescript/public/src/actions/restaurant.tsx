@@ -13,6 +13,7 @@ import State from '../types/State';
 import { Restaurant, RestaurantAction, RestaurantState } from '../types/Restaurant';
 import { setAlert } from './alert';
 import Alert from '../../../classes/Alert';
+import moment from 'moment';
 
 export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {
     try {
@@ -85,7 +86,7 @@ export const deleteRestaurant = (id: string) => async (dispatch: ThunkDispatch<S
     }
 }
 
-export const filterRestaurants = ({name, id, restaurantState}: FilterOptions) => (dispatch: ThunkDispatch<State, undefined, any>) => {
+export const filterRestaurants = ({name, id, sales, restaurantState}: FilterOptions) => (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
         if (name) {
             const regex = new RegExp(name, 'gi')
@@ -93,6 +94,13 @@ export const filterRestaurants = ({name, id, restaurantState}: FilterOptions) =>
         }
         else if (id) {
             var rests = restaurantState?.restaurants.filter(rest => rest._id === id ? rest : null)
+        }
+        else if (sales) {
+            var rests = restaurantState?.restaurants.sort((a, b) => {
+                if (a.sales > b.sales) return 1;
+                return -1
+            });
+            rests?.splice(3);
         }
         else {
             rests = restaurantState?.restaurants;

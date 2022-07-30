@@ -7,7 +7,8 @@ interface NewRestaurantPayload {
     items?: Item[],
     desc?: string,
     date?: number,
-    init?: boolean
+    init?: boolean,
+    sales?: number
 }
 
 export interface RestaurantState {
@@ -22,7 +23,8 @@ export class Restaurant {
     items: Item[] = [];
     desc: string = '';
     date: number = 0;
-    constructor({name, _id, picture, items, desc, date, init}: NewRestaurantPayload) {
+    sales: number = 0;
+    constructor({name, _id, picture, items, desc, date, init, sales}: NewRestaurantPayload) {
         if (init == true) {
             this.name = '';
             this._id = '';
@@ -37,6 +39,7 @@ export class Restaurant {
         this.picture = picture ? picture : '';
         this.items = items ? items : [];
         this.desc = desc ? desc : '';
+        this.sales = sales ? sales : 0;
         this.date = date ? date : Date.now();
     }
 };
