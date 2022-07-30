@@ -53,7 +53,9 @@ const RecentOrders: React.FC<Props> = ({order, i, setModal, deleteOrder}) => {
                                 show: true,
                                 title: 'Confirm Deletion',
                                 text: `Are You Sure You Want To Delete ${order.user} Order`,
-                                callback: deleteOrder,
+                                callbacks: {
+									generic: deleteOrder
+								},
                                 payload: {
                                     id: order._id
                                 },

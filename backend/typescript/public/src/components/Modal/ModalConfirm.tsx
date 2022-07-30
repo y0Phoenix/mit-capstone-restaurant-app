@@ -20,7 +20,8 @@ const ModalConfirm: React.FC<Props> = ({state, resetModal}) => {
                     <h5>{state.text}</h5>
                     <div className='flex-horizontal space-between'>
                         <Button variant='primary' onClick={() => {
-                            state.callback(state.payload);
+                            if (state.payload?.id) state.callbacks.generic(state.payload.id);
+                            if (state.payload?.navigate && state.callbacks?.navigate) state.callbacks.navigate(state.payload.navigate);
                             resetModal();
                         }}>
                             Yes

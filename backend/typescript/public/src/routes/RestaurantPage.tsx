@@ -1,8 +1,8 @@
 import React, {Fragment, useEffect, useLayoutEffect, useRef, useState} from 'react'
 import { Button, Card, Row, Col, ListGroup, InputGroup, FormControl, ButtonProps } from 'react-bootstrap'
 import { connect, ConnectedProps } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-import { updateRestaurant, addRestaurant, filterRestaurants, getRestaurants } from '../actions/restaurant'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { updateRestaurant, addRestaurant, filterRestaurants, getRestaurants, deleteRestaurant } from '../actions/restaurant'
 import State from '../types/State'
 import { setAlert } from '../actions/alert'
 import { Restaurant } from '../types/Restaurant'
@@ -16,7 +16,7 @@ const mapStateToProps = (state: State) => ({
     user: state.user
 })
 
-const connector = connect(mapStateToProps, {getRestaurants, updateRestaurant, setAlert, setModal, addRestaurant, filterRestaurants});
+const connector = connect(mapStateToProps, {getRestaurants, updateRestaurant, setAlert, setModal, addRestaurant, filterRestaurants, deleteRestaurant});
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -50,7 +50,8 @@ interface FormData {
     items: Item[]
 }
 
-const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, updateRestaurant, setAlert, addRestaurant, filterRestaurants, setModal}) => {
+const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, updateRestaurant, setAlert, addRestaurant, filterRestaurants, setModal, deleteRestaurant}) => {
+    const navigate = useNavigate();
     const {restaurants, filtered} = restaurant
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -74,7 +75,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
             date: _restaurant.date
         }));
     }
-    const removeItem = ({id}: ConfirmModalPayload) => setFormData({...formData, items: items.filter(item => {
+    const removeItem = (id: string) => setFormData({...formData, items: items.filter(item => {
         if (item.id === id) return null;
         return item;
     })});
@@ -113,7 +114,25 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                         {
                             !pathname.includes('new') && (
                                 <div className='corner top-left'>
-                                    <Button variant='outine-secondary'>
+                                    <Button variant='outine-secondary' onClick={() => {
+                                        setModal({
+                                            type: 'confirm',
+                                            confirm: {
+                                                title: `Confirm Deletion CAN'T UNDO`,
+                                                text: `Are You Sure You Want To Delete ${_restaurant.name}`,
+                                                type: 'danger',
+                                                callbacks: {
+                                                    generic: deleteRestaurant,
+                                                    navigate: navigate
+                                                },
+                                                payload: {
+                                                    id: _restaurant._id,
+                                                    navigate: '/home'
+                                                },
+                                                show: true
+                                            }
+                                        });
+                                    }}>
                                         Delete <i className="fa-solid fa-trash"></i>
                                     </Button>
                                 </div>
@@ -180,7 +199,9 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                                                                             text: `Confirm Deletion Of ${item.name}`,
                                                                             type: 'warning',
                                                                             show: true,
-                                                                            callback: removeItem,
+                                                                            callbacks: {
+                                                                                generic: removeItem,
+                                                                            },
                                                                             payload: {
                                                                                 id: item.id
                                                                             }

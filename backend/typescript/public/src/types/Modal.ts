@@ -1,4 +1,5 @@
 import React from "react";
+import { NavigateFunction } from "react-router-dom";
 import { Item } from "../../../interfaces/Item";
 import { Restaurant } from "./Restaurant";
 
@@ -25,6 +26,7 @@ export interface ItemModal {
 
 export interface ConfirmModalPayload {
     id?: string,
+    navigate?: string
 }
 
 export interface ConfirmModal {
@@ -32,7 +34,10 @@ export interface ConfirmModal {
     title: string,
     text: string,
     type: 'warning' | 'danger',
-    callback: Function,
+    callbacks: {
+        navigate?: NavigateFunction,
+        generic: Function
+    },
     payload?: ConfirmModalPayload
 }
 
