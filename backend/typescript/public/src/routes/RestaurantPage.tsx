@@ -256,6 +256,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
                                             value={name}
                                             name='name'
                                             onChange={(e: any) => onchange(e)}
+                                            autoFocus
                                         />
                                     </InputGroup>
                                     <InputGroup>

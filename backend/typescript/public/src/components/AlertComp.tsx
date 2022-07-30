@@ -15,19 +15,23 @@ type Props = ConnectedProps<typeof connector>;
 const innerHTML = (html: string) => ({__html: html});
 
 const AlertComp: React.FC<Props> = ({alert, removeAlert}) => {
+    const handleClose = () => {
+        removeAlert();
+        console.log('remove alert');
+    };
     if (alert.show) {
-        if (alert.options.type === 'alert') setTimeout(removeAlert, 5000);
+        if (alert.options.type === 'alert') setTimeout(handleClose, 5000);
         return (
             <>
                 <div className='alert top-right'>
-                    {alert.options.type === 'alert' ? (
-                        <Alert variant={alert.options.variant} onClose={removeAlert} dismissible>
+                    {alert.options.type === 'alert' && alert.show ? (
+                        <Alert variant={alert.options.variant} onClose={handleClose} dismissible>
                             <Alert.Heading>{alert.title}</Alert.Heading>
                             <p>{alert.text}</p>
                         </Alert>
                     ) : (
-                        <Modal show={alert.show} onHide={removeAlert}>
-                            <Modal.Header closeButton onHide={removeAlert} style={{
+                        <Modal show={alert.show} onHide={handleClose}>
+                            <Modal.Header closeButton onHide={handleClose} style={{
                                 backgroundColor: alert.options.variant === 'error' ? 'red' : (alert.options.variant === 'success' ? 'green' : 'yellow')
                             }}>
                                 <Modal.Title>{alert.title}</Modal.Title>
@@ -46,7 +50,7 @@ const AlertComp: React.FC<Props> = ({alert, removeAlert}) => {
                                             <h3>{alert.text}</h3>
                                         )
                                     }
-                                    <Button variant='primary' onClick={removeAlert}>Ok</Button>
+                                    <Button variant='primary' onClick={handleClose}>Ok</Button>
                                 </div>
                             </Modal.Body>
                         </Modal>

@@ -37,9 +37,13 @@ const Home: React.FC<Props> = ({user, restaurant, order, filterOrders, filterRes
 							</Card.Header>
 							<Card.Body>
 								<ListGroup>
-									{order.filtered &&
+									{order.filtered ?
 										(
 											order.filtered.map((order, i) => <RecentOrders order={order} i={i}/>)
+										)
+										:
+										(
+											<>No Orders</>
 										)
 									}
 								</ListGroup>
@@ -48,7 +52,8 @@ const Home: React.FC<Props> = ({user, restaurant, order, filterOrders, filterRes
 					</Col>
 					<Col md={1} lg={4}>
 						<Card>
-							<Card.Header>
+							<Card.Header className='relative'>
+								<Link to={'/restaurant/new'} className='btn btn-outline-secondary corner top-right'>Add Restaurant</Link>
 								<Card.Title>Top Restaurants</Card.Title>
 							</Card.Header>
 							<Card.Body>
