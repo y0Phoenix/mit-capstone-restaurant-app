@@ -50,11 +50,16 @@ router.post('/:restaurant',async (req, res) => {
             }
         }), error: true});
         
+        const total = items.reduce((total, curr) => {
+            if (total?.price) return total.price + curr.price;
+            return total + curr.price;
+        });
+
         const order = new Order({
             user: user == 'guest' ? 'guest' : user._id,
             items,
             totalItems: items.length,
-            total: items.reduce((total, item) => total + item.price),
+            total,
             instructions,
             delivery,
             restaurant
@@ -85,6 +90,7 @@ router.post('/:restaurant',async (req, res) => {
             cancel_url: `http://localhost:3000/canceledpayment/${order.token}`
         });
         await order.save();
+        console.log(`order initialized for ${user.name}`);
 
         // once order is created send payment url to client
         res.json({data: session.url, error: false});

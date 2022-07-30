@@ -5,6 +5,7 @@ import user from './routes/user';
 import auth from './routes/auth';
 import restaurant from './routes/restaurant';
 import adminUser from './routes/adminUser';
+import order from './routes/order';
 import config from 'config';
 import stripe from 'stripe';
 import path from 'path';
@@ -36,6 +37,7 @@ app.use('/api/user', user);
 app.use('/api/auth', auth);
 app.use('/api/restaurant', restaurant);
 app.use('/api/admin', adminUser);
+app.use('/api/order', order);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 

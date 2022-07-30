@@ -71,6 +71,9 @@
 .gap-sm {gap: 5px;}
 .gap-md {gap: 10px;}
 .gap-lg {gap: 20px;}
+.padding-sm {padding: 5px;}
+.padding-md {padding: 10px;}
+.padding-lg {padding: 20px;}
 .restaurants {
   display: flex;
   justify-content: center;

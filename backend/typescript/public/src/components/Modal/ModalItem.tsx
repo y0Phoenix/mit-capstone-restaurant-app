@@ -47,6 +47,7 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                             value={name}
                             name='name'
                             onChange={(e: any) => onchange(e)}
+                            autoFocus
                         />
                     </InputGroup>
                     <br></br>

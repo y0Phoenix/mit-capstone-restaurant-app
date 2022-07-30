@@ -16,8 +16,8 @@ const ModalConfirm: React.FC<Props> = ({state, resetModal}) => {
                 <Modal.Title>{state.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className='flex-vertical space-between'>
-                    <Modal.Title>{state.text}</Modal.Title>
+                <div className='flex-vertical space-between gap-lg'>
+                    <h5>{state.text}</h5>
                     <div className='flex-horizontal space-between'>
                         <Button variant='primary' onClick={() => {
                             state.callback(state.payload);
