@@ -1,0 +1,72 @@
+import React, { useEffect, useState } from 'react'
+import { Button, FormControl, InputGroup, ListGroup, Modal } from 'react-bootstrap'
+import { DeliveryModal } from '../../types/Modal'
+import { UserState } from '../../types/User'
+import { Delivery } from '../../types/Order';
+import Alert from '../../../../backend/typescript/classes/Alert';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+
+interface Props {
+    user: UserState,
+    state: DeliveryModal
+    resetModal: () => void,
+    setAlert: (alert: Alert) => void,
+    initOrder: (user: UserState, delivery: Delivery, navigate: NavigateFunction, callback: () => void) => void
+};
+
+const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, initOrder}) => {
+    const [delivery, setDelivery] = useState<Delivery>({
+        address: '',
+        bool: false
+    });
+    const [instructions, setInstructions] = useState('');
+    const navigate = useNavigate();
+    const handleYes = () => setDelivery({...delivery, bool: true});
+    const handleNo = () => setDelivery({bool: false});
+    const handleClose = () => resetModal();
+    const handleSubmit = () => {
+        if (delivery.address == '')  return setAlert(new Alert({
+            title: 'Invalid Input',
+            text: 'Address Required',
+            options: {
+                type: 'modal',
+                variant: 'error'
+            }
+        }));
+        initOrder(user, delivery, navigate, handleClose);
+    }
+    useEffect(() => {
+        if (!delivery.address) {
+            initOrder(user, delivery, navigate, handleClose);
+        }
+    }, [delivery]);
+    return (
+        <>
+            <Modal show={state.show} onHide={handleClose}>
+                <Modal.Header closeButton onHide={handleClose}>
+                    <Modal.Title>
+                        Additional Info Needed
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    
+                    {delivery.bool &&
+                        <div className='flex-vertical gap-md'>
+                            <InputGroup>
+                                <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
+                                <FormControl 
+                                    placeholder='address...'
+                                    value={delivery.address}
+                                    onChange={(e) => setDelivery({...delivery, address: e.target.value})}
+                                />
+                            </InputGroup>
+                            <Button variant='primary' onClick={handleSubmit}>Proceed To Checkout</Button>
+                        </div>
+                    }
+                </Modal.Body>
+            </Modal>
+        </>
+    );
+}
+
+export default ModalDelivery;

@@ -15,11 +15,11 @@ import config from 'config';
  * @desc init place an order
  */
 router.post('/:restaurant',async (req, res) => {
-    let {items = [], user = null, instructions = '', delivery = {address: null, bool: false}} = req.body;
+    let {user = null, instructions = '', delivery = {address: null, bool: false}} = req.body;
     let restaurant: any = req.params.restaurant;
     try {
         // if user isn't guest check the user exists
-        if (user !== 'guest') user = await User.findById(user);
+        if (user.name !== 'guest') user = await User.findById(user);
         if (!user) return res.status(400).json({msgs:  new Alert({
             title: 'Server Error',
             text: `Oops An Error Occured O2`,
@@ -30,7 +30,7 @@ router.post('/:restaurant',async (req, res) => {
         }), isAuthenticted: false, error: true});
 
         // check items
-        if (items.length <= 0) return res.status(400).json({msgs:  new Alert({
+        if (user.cart.items.length <= 0) return res.status(400).json({msgs:  new Alert({
             title: 'Server Error',
             text: `Oops An Error Occured O3`,
             options: {
@@ -50,15 +50,15 @@ router.post('/:restaurant',async (req, res) => {
             }
         }), error: true});
         
-        const total = items.reduce((total, curr) => {
+        const total = user.cart.items.reduce((total, curr) => {
             if (total?.price) return total.price + curr.price;
             return total + curr.price;
         });
 
         const order = new Order({
             user: user == 'guest' ? 'guest' : user._id,
-            items,
-            totalItems: items.length,
+            items: user.cart.items,
+            totalItems: user.cart.items.length,
             total,
             instructions,
             delivery,
@@ -74,7 +74,7 @@ router.post('/:restaurant',async (req, res) => {
             const session = await Stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
                 mode: 'payment',
-                line_items: req.body.items.map(item => {
+                line_items: req.body.user.cart.items.map(item => {
                     const [dbitem] = restaurant.items.filter(_item => _item.name === item.name && _item.priceInCents === item.priceInCents);
                     return {
                         price_data: {
@@ -87,10 +87,10 @@ router.post('/:restaurant',async (req, res) => {
                         quantity: item.quantity
                     }
                 }),
-                // if session created successfully create order in db
                 success_url: `http://localhost:3000/paymentsuccess/${order.token}`,
                 cancel_url: `http://localhost:3000/canceledpayment/${order.token}`
             });
+            // if session created successfully create order in db
             await order.save();
             console.log(`order initialized for ${user.name}`);
     
