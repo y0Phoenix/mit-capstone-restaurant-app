@@ -11,7 +11,7 @@ interface Props {
     state: DeliveryModal
     resetModal: () => void,
     setAlert: (alert: Alert) => void,
-    initOrder: (user: UserState, delivery: Delivery, navigate: NavigateFunction, callback: () => void) => void
+    initOrder: (user: UserState, delivery: Delivery, instructions: string, navigate: NavigateFunction, callback: () => void) => void
 };
 
 const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, initOrder}) => {
@@ -33,11 +33,11 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
                 variant: 'error'
             }
         }));
-        initOrder(user, delivery, navigate, handleClose);
+        initOrder(user, delivery, instructions, navigate, handleClose);
     }
     useEffect(() => {
         if (!delivery.address) {
-            initOrder(user, delivery, navigate, handleClose);
+            initOrder(user, delivery, instructions, navigate, handleClose);
         }
     }, [delivery]);
     return (
@@ -48,13 +48,24 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
                         Additional Info Needed
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    
+                <Modal.Body className='flex-vertical gap-lg'>
+                    <InputGroup>
+                        <FormControl 
+                            as={'textarea'}
+                            placeholder='instructions...'
+                            value={instructions}
+                            onChange={(e) => setInstructions(e.target.value)}
+                        />
+                    </InputGroup>
+                    <div className='flex-horizontal gap-sm center'>
+                        <input type={'checkbox'} checked={delivery.bool} onChange={(e) => setDelivery({...delivery, bool: e.target.checked})}></input>
+                        <small>Delivery</small>
+                    </div>
                     {delivery.bool &&
                         <div className='flex-vertical gap-md'>
                             <InputGroup>
                                 <InputGroup.Text id='basic-addon1'>*</InputGroup.Text>
-                                <FormControl 
+                                <FormControl
                                     placeholder='address...'
                                     value={delivery.address}
                                     onChange={(e) => setDelivery({...delivery, address: e.target.value})}

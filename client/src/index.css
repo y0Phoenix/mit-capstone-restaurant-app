@@ -1,70 +1,99 @@
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+.main {
+  margin: auto;
+  text-align: center;
+  width: 100%;
+  position: relative;
 }
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
+.landing {
+  margin: auto;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: center;
+  padding: 75px;
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.landing-pic {
+  size: 50%;
 }
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.corner {
+  position: absolute;
+}
+.top-right {
+  right: 0;
+  top: 0;
+}
+.top-left {
+  left: 0;
+  top: 0
+}
+.link {
+  text-decoration: none;
+  color: black;
+}
+.light {
+  color: white;
+}
+.light:hover {
+  color: white;
+}
+.sidebar {
+  width: 65px;
+  height: 65px;
+  color: black;
+  font-size: 35px;
+  background-color: white;
+  border: 4px solid black;
+}
+.remember-me {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: row;
+  margin-bottom: 05px;
+}
+.home {
+  padding: 100px 200px;
+}
+.sidebar-body {
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-account {
+  justify-self: flex-end;
+}
+.flex-horizontal {
+  display: flex;
+}
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
+.space-between {justify-content: space-between;}
+.center {justify-content: center;}
+.gap-sm {gap: 5px;}
+.gap-md {gap: 10px;}
+.gap-lg {gap: 20px;}
+.padding-sm {padding: 5px;}
+.padding-md {padding: 10px;}
+.padding-lg {padding: 20px;}
+.restaurants {
+  display: flex;
+  justify-content: center;
+}
+.restaurants-container {
+  width: 1250px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.relative {position: relative;}
+.z-one {
+  z-index: 1;
+}
+.alert {
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  z-index: 100;
+}
+.pointer {
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
