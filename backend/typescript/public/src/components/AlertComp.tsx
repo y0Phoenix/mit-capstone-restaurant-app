@@ -17,7 +17,6 @@ const innerHTML = (html: string) => ({__html: html});
 const AlertComp: React.FC<Props> = ({alert, removeAlert}) => {
     const handleClose = () => {
         removeAlert();
-        console.log('remove alert');
     };
     if (alert.show) {
         if (alert.options.type === 'alert') setTimeout(handleClose, 5000);

@@ -10,14 +10,21 @@ const initialState : Modal = {
         name: '',
         price: 0,
         priceInCents: 0,
-        id: ''
+        id: '',
+        stateData: {
+            name: '',
+            desc: '',
+            items: []
+        }
     },
     confirm: {
         title: '',
         text: '',
-        type: '',
+        type: 'warning',
         show: false,
-        callback: () => {}
+        callbacks: {
+            generic: () => {}
+        }
     }
 }
 

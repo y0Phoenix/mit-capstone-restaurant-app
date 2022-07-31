@@ -20,7 +20,7 @@ export interface ItemModal {
     price: number,
     priceInCents: number,
     id: string,
-    setState: React.Dispatch<React.SetStateAction<FormData>>,
+    setState?: React.Dispatch<React.SetStateAction<FormData>>,
     stateData: FormData
 };
 

@@ -78,7 +78,7 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                                 priceInCents,
                                 id: uuid()
                             });
-                            state.setState({...state.stateData, items: items});
+                            if (state.setState) state.setState({...state.stateData, items: items});
                             resetModal();
                         }}>
                             Add Item
@@ -90,7 +90,7 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                                 priceInCents,
                                 id: uuid()
                             });
-                            state.setState({...state.stateData, items: items});
+                            if (state.setState) state.setState({...state.stateData, items: items});
                             setFormData({
                                 name: '',
                                 price: 0,
