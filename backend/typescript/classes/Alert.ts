@@ -3,7 +3,8 @@ export default class Alert {
     text: string;
     options: {
         variant: 'error' | 'success' | 'warning',
-        type: 'modal' | 'alert'
+        type: 'modal' | 'alert',
+        payments?: boolean
     };
     validator?: {
         bool: boolean,

@@ -25,7 +25,8 @@ router.post('/:restaurant',async (req, res) => {
             text: `Oops An Error Occured O2`,
             options: {
                 variant: 'error',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         }), isAuthenticted: false, error: true});
 
@@ -35,7 +36,8 @@ router.post('/:restaurant',async (req, res) => {
             text: `Oops An Error Occured O3`,
             options: {
                 variant: 'error',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         }), error: true});
 
@@ -46,20 +48,24 @@ router.post('/:restaurant',async (req, res) => {
             text: `Oops An Error Occured O4`,
             options: {
                 variant: 'error',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         }), error: true});
         
         const total = user.cart.items.length > 1 ? user.cart.items.reduce((total, curr) => {
-            console.log(total, curr);
             if (total?.price) return total.price + curr.price;
             return total + curr.price;
         }) : user.cart.items[0].price;
+        const totalItems = user.cart.items.length > 1 ? user.cart.items.reduce((total, curr) => {
+            if (total?.quantity) return total.quantity + curr.quantity;
+            return total + curr.quantity;
+        }) : user.cart.items[0].quantity;
 
         const order = new Order({
-            user: user.name == 'guest' ? 'guest' : user._id,
+            user: user.name == 'guest' ? 'guest' : user.email,
             items: user.cart.items,
-            totalItems: user.cart.items.length,
+            totalItems,
             total,
             instructions,
             delivery,
@@ -99,7 +105,8 @@ router.post('/:restaurant',async (req, res) => {
             text: 'Server Error O1',
             options: {
                 variant: 'error',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         })});
     } 
@@ -121,7 +128,8 @@ router.put('/:token/:canceled', async (req, res) => {
             text: 'Order Not Found Try Again Later',
             options: {
                 type: 'modal',
-                variant: 'error'
+                variant: 'error',
+                payments: true
             }
         }), error: true});
 
@@ -133,7 +141,8 @@ router.put('/:token/:canceled', async (req, res) => {
                 text: 'Payment Canceled',
                 options: {
                     variant: 'warning',
-                    type: 'modal'
+                    type: 'modal',
+                    payments: true
                 }
             }), error: false});
         }
@@ -148,18 +157,24 @@ router.put('/:token/:canceled', async (req, res) => {
                 text: 'Error While Processing Payment',
                 options: {
                     variant: 'error',
-                    type: 'modal'
+                    type: 'modal',
+                    payments: true
                 }
             }), error: false});
         }
         restaurant.sales = restaurant.sales + order.total;
+        // once order is validated reset the users cart
+        if (order.user !== 'guest') {
+            const user: any = await User.updateOne({email: order.user}, {cart: {items: [], total: 0, totalItems: 0, restaurant: ''}});
+        }
         
         res.json({msgs: new Alert({
             title: 'Payment Successfull',
             text: 'Your Order Will Be Ready In About 25-30 Minutes',
             options: {
                 variant: 'success',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         }), error: false});
         await restaurant.save();
@@ -171,7 +186,8 @@ router.put('/:token/:canceled', async (req, res) => {
             text: 'Server Error O2',
             options: {
                 variant: 'error',
-                type: 'modal'
+                type: 'modal',
+                payments: true
             }
         })});
     } 
