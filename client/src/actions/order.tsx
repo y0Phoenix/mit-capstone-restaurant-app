@@ -35,4 +35,19 @@ export const initOrder = (user: UserState, delivery: Delivery, instructions: str
         if(msgs) dispatch(setAlert(msgs));
         console.error(err);
     }
-}
+};
+
+export const finishOrder = (token: string, cancel: boolean) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
+    try {
+        // make req to API
+        const res = await axios.put(`/api/order/${token}/${JSON.stringify(cancel)}`);
+
+        // check res for msgs
+        const msgs = res.data.msgs;
+        if (msgs) dispatch(setAlert(msgs));
+    } catch (err: any) {
+        const msgs = err.response.data?.msgs;
+        if(msgs) dispatch(setAlert(msgs));
+        console.error(err);
+    }
+};

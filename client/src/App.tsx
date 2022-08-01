@@ -7,6 +7,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import Modal from './components/Modal/Modal'
+import PaymentSuccess from './routes/PaymentSuccess'
+import CanceledPayment from './routes/CanceledPayment'
 
 function App() {
   	return (
@@ -18,6 +20,8 @@ function App() {
 						<Modal />
 						<Routes>
 							<Route path='/' element={<Landing />}/>
+							<Route path='/paymentsuccess/:token' element={<PaymentSuccess />}/>
+							<Route path='/canceledpayment' element={<CanceledPayment />}/>
 						</Routes>
 					</div>
 				</Fragment>

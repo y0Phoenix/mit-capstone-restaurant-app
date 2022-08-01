@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import State from '../types/State';
 import { removeAlert } from '../actions/alert';
 import { Alert, Button, Modal } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const mapStateToProps = (state: State) => ({
     alert: state.alert
@@ -16,8 +17,10 @@ const innerHTML = (html: string) => ({__html: html});
 
 const AlertComp: React.FC<Props> = ({alert, removeAlert}) => {
     const handleClose = () => {
+        if (alert.title === 'Payment Successfull') navigate('/');
         removeAlert();
     };
+    const navigate = useNavigate();
     if (alert.show) {
         if (alert.options.type === 'alert') setTimeout(handleClose, 5000);
         return (

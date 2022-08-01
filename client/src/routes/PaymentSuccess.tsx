@@ -1,0 +1,22 @@
+import React, { useEffect } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { finishOrder } from '../actions/order';
+
+const connector = connect(null, {finishOrder});
+
+type Props = ConnectedProps<typeof connector>;
+
+const PaymentSuccess: React.FC<Props> = ({finishOrder}) => {
+    const {pathname} = useLocation();
+    useEffect(() => {
+        finishOrder(pathname.replace('/paymentsuccess/', ''), false);
+    }, [])
+    return (
+        <div className='flex-horizontal center'>
+            <h1>Wrapping Up Your Order Please Wait...</h1>
+        </div>
+  )
+}
+
+export default connector(PaymentSuccess);
