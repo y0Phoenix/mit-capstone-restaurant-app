@@ -9,6 +9,7 @@ import Navigation from './components/Navigation'
 import Modal from './components/Modal/Modal'
 import PaymentSuccess from './routes/PaymentSuccess'
 import CanceledPayment from './routes/CanceledPayment'
+import AlertComp from './components/AlertComp'
 
 function App() {
   	return (
@@ -16,12 +17,13 @@ function App() {
 			<BrowserRouter>
 				<Fragment>
 					<Navigation />
+					<AlertComp />
 					<div className='main'>
 						<Modal />
 						<Routes>
 							<Route path='/' element={<Landing />}/>
 							<Route path='/paymentsuccess/:token' element={<PaymentSuccess />}/>
-							<Route path='/canceledpayment' element={<CanceledPayment />}/>
+							<Route path='/canceledpayment/:token' element={<CanceledPayment />}/>
 						</Routes>
 					</div>
 				</Fragment>

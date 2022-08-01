@@ -23,7 +23,7 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
     const navigate = useNavigate();
     const handleClose = () => resetModal();
     const handleSubmit = () => {
-        if (delivery.address == '')  return setAlert(new Alert({
+        if (delivery.address == '' && delivery.bool)  return setAlert(new Alert({
             title: 'Invalid Input',
             text: 'Address Required',
             options: {
@@ -48,6 +48,7 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
                             placeholder='instructions...'
                             value={instructions}
                             onChange={(e) => setInstructions(e.target.value)}
+                            autoFocus
                         />
                     </InputGroup>
                     <div className='flex-horizontal gap-sm center'>

@@ -7,7 +7,7 @@ import Restaurant from '../schemas/Restaurant';
 import adminAuth from '../middleware/adminAuth';
 import Order from '../schemas/Order';
 import Alert from '../classes/Alert';
-import jwt from 'jsonwebtoken';
+import {v4 as uuid} from 'uuid';
 import config from 'config';
 
 /**
@@ -63,41 +63,35 @@ router.post('/:restaurant',async (req, res) => {
             total,
             instructions,
             delivery,
-            restaurant
-        });
-        jwt.sign({user: {id: user,}, type: 'paymentSuccess'}, config.get('jwtSecret'), {expiresIn: '1h'}, (err, token) => {
-            if (err) throw err;
-            order.token = token;
-            next();
+            restaurant,
+            token: uuid()
         });
         // if user exists initiate stripe payment session
-        const next = async () => {
-            const session = await Stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                mode: 'payment',
-                line_items: req.body.user.cart.items.map(item => {
-                    const [dbitem] = restaurant.items.filter(_item => _item.name === item.name && _item.priceInCents === item.priceInCents);
-                    return {
-                        price_data: {
-                            currency: 'usd',
-                            product_data: {
-                                name: dbitem.name
-                            },
-                            unit_amount: dbitem.priceInCents
+        const session = await Stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'payment',
+            line_items: req.body.user.cart.items.map(item => {
+                const [dbitem] = restaurant.items.filter(_item => _item.name === item.name && _item.priceInCents === item.priceInCents);
+                return {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: dbitem.name
                         },
-                        quantity: item.quantity
-                    }
-                }),
-                success_url: `http://127.0.0.1:5173/${order.token}`,
-                cancel_url: `http://127.0.0.1:5173/${order.token}`
-            });
-            // if session created successfully create order in db
-            await order.save();
-            console.log(`order initialized for ${user.name}`);
-    
-            // once order is created send payment url to client
-            res.json({data: session.url, error: false});
-        }
+                        unit_amount: dbitem.priceInCents
+                    },
+                    quantity: item.quantity
+                }
+            }),
+            success_url: `http://127.0.0.1:5173/paymentsuccess/${order.token}`,
+            cancel_url: `http://127.0.0.1:5173/canceledpayment/${order.token}`
+        });
+        // if session created successfully create order in db
+        await order.save();
+        console.log(`order initialized for ${user.name}`);
+
+        // once order is created send payment url to client
+        res.json({data: session.url, error: false});
     } catch (err) {
         console.error(err);
         res.status(500).json({msgs:  new Alert({
@@ -115,7 +109,7 @@ router.post('/:restaurant',async (req, res) => {
  * @POST
  * @desc finish placing order
  */
-router.put('/:token/:canceled', adminAuth, async (req, res) => {
+router.put('/:token/:canceled', async (req, res) => {
     try {
         const token = req.params.token;
         const canceled = JSON.parse(req.params.canceled);

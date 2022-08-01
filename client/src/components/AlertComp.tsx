@@ -18,6 +18,7 @@ const innerHTML = (html: string) => ({__html: html});
 const AlertComp: React.FC<Props> = ({alert, removeAlert}) => {
     const handleClose = () => {
         if (alert.title === 'Payment Successfull') navigate('/');
+        if (alert.title === 'Canceled') navigate('/');
         removeAlert();
     };
     const navigate = useNavigate();

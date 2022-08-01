@@ -13,7 +13,7 @@ const PaymentSuccess: React.FC<Props> = ({finishOrder}) => {
         finishOrder(pathname.replace('/paymentsuccess/', ''), false);
     }, [])
     return (
-        <div className='flex-horizontal center'>
+        <div className='landing'>
             <h1>Wrapping Up Your Order Please Wait...</h1>
         </div>
   )

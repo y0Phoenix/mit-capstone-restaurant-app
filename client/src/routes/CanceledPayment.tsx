@@ -8,11 +8,13 @@ const connector = connect(null, {finishOrder});
 type Props = ConnectedProps<typeof connector>;
 
 const CanceledPayment: React.FC<Props> = ({finishOrder}) => {
-  useEffect(() => {
-    finishOrder('null', false);
-}, []);
+	const {pathname} = useLocation()
+	useEffect(() => {
+		const token = pathname.replace('/canceledpayment/', '')
+		finishOrder(token, true);
+	}, []);
   return (
-	<div className='flex-horizontal center'>
+	<div className='landing'>
 		<h1>Wrapping Up Your Order Please Wait...</h1>
 	</div>
   )

@@ -40,6 +40,7 @@ export const initOrder = (user: UserState, delivery: Delivery, instructions: str
 export const finishOrder = (token: string, cancel: boolean) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
         // make req to API
+        console.log(`/api/order/${token}/${JSON.stringify(cancel)}`)
         const res = await axios.put(`/api/order/${token}/${JSON.stringify(cancel)}`);
 
         // check res for msgs
