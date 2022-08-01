@@ -20,7 +20,7 @@ import { setAlert } from './alert';
 export const loadUser = () => async (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
         // make req to API
-        const res = await axios.post('/api/auth');
+        const res = await axios.get('/api/auth');
         dispatch({
             type: LOAD_USER,
             payload: res.data

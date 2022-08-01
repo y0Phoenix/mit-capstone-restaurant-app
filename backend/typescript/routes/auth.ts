@@ -87,7 +87,7 @@ router.post('/', [
  * @post
  * @desc load user for client
  */
-router.post('/load', auth, async (req: any, res) => {
+router.get('/', auth, async (req: any, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
         res.json({data: user, error: false, isAuthenticated: true});

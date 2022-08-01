@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
-import pic from '../../pictures/logo_50.png';
+import pic from '../../../../../shared/logo_50.png';
 import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';

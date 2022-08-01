@@ -83,14 +83,14 @@ router.post('/', [
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 3600000}, async (err, token) => {
             if (err) throw err;
             user = await User.findById(user.id).select({password: 0});
-            res.json({msgs: { msg: new Alert({
+            res.json({msgs: new Alert({
                 title: 'Success',
                 text: 'User Created Successfully',
                 options: {
                     variant: 'success',
                     type: 'modal'
                 }
-            })}, token, data: user, isAuthenticated: true, error: false});
+            }), token, data: user, isAuthenticated: true, error: false});
         })
 
     } catch (err) {

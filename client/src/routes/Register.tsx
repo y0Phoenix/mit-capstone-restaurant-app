@@ -1,6 +1,6 @@
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
-import pic from '../../../../../shared/logo_50.png';
+import pic from '../../../shared/logo_50.png';
 import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';
@@ -18,7 +18,7 @@ import React, {useState} from 'react'
 
 const Register: React.FC<Props> = ({setAlert, register, isAuthenticated}) => {
   if (isAuthenticated) {
-    return <Navigate to={'/home'} />;
+    return <Navigate to={'/'} />;
   }
     const [formData, setFormData] = useState({
         email: '',

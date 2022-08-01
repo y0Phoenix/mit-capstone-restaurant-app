@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import store from './store'
@@ -10,8 +10,16 @@ import Modal from './components/Modal/Modal'
 import PaymentSuccess from './routes/PaymentSuccess'
 import CanceledPayment from './routes/CanceledPayment'
 import AlertComp from './components/AlertComp'
+import Register from './routes/Register'
+import { loadUser } from './actions/user'
+import setAuthToken from './utils/setAuthToken'
+
+if (localStorage.token) setAuthToken(localStorage.token);
 
 function App() {
+	useEffect(() => {
+		store.dispatch(loadUser());
+	}, [])
   	return (
 		<Provider store={store}>
 			<BrowserRouter>
@@ -22,6 +30,7 @@ function App() {
 						<Modal />
 						<Routes>
 							<Route path='/' element={<Landing />}/>
+							<Route path='/register' element={<Register />}/>
 							<Route path='/paymentsuccess/:token' element={<PaymentSuccess />}/>
 							<Route path='/canceledpayment/:token' element={<CanceledPayment />}/>
 						</Routes>
