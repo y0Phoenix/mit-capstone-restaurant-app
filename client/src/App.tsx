@@ -13,6 +13,7 @@ import AlertComp from './components/AlertComp'
 import Register from './routes/Register'
 import { loadUser } from './actions/user'
 import setAuthToken from './utils/setAuthToken'
+import Login from './routes/Login'
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -31,6 +32,7 @@ function App() {
 						<Routes>
 							<Route path='/' element={<Landing />}/>
 							<Route path='/register' element={<Register />}/>
+							<Route path='/login' element={<Login />}/>
 							<Route path='/paymentsuccess/:token' element={<PaymentSuccess />}/>
 							<Route path='/canceledpayment/:token' element={<CanceledPayment />}/>
 						</Routes>

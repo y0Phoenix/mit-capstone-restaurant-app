@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema({
         total: {
             type: Number,
         }
-    }
+    },
 });
 
 const User = mongoose.model('user', UserSchema);

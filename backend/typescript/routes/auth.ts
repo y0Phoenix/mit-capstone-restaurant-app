@@ -90,7 +90,7 @@ router.post('/', [
 router.get('/', auth, async (req: any, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
-        res.json({data: user, error: false, isAuthenticated: true});
+        res.json({data: user, error: false, isAuthenticated: true, token: req.header('x-auth-token')});
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ msgs: { msg: new Alert({
