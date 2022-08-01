@@ -114,13 +114,13 @@ router.post('/', [
 router.post('/update', auth, async (req: any, res) => {
     try {
         const {name, cart} = req.body;
-
+        
         req.user.name = name;
-
+        
         req.user.cart = cart;
-
-        req.user.save();
-
+        
+        await req.user.save();
+        
         res.json({msgs: new Alert({
             title: 'Success', 
             text: 'User Updated Successfully',
@@ -129,7 +129,8 @@ router.post('/update', auth, async (req: any, res) => {
                 type: 'alert'
             }}
         ), data: req.user, error: false});
-    } catch (err) {
+        console.log('updating user', name);
+        } catch (err) {
         console.error(err);
         res.status(500).json({msgs: new Alert({
             title: 'Server Error', 

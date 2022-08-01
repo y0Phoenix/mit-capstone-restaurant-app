@@ -43,6 +43,10 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 				proceedButton.current.disabled = true;
 				return
 			}
+			filterRestaurants({
+				id: user.cart.restaurant,
+				restaurantState: restaurant
+			});
 			proceedButton.current.disabled = false;
 		}
 	}, [user])
@@ -115,6 +119,9 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 								</p>
 								<Button variant='danger' onClick={() => {
 									resetRestaurantFilter();
+									user.cart.items = []
+									user.cart.restaurant = '';
+									updateUser(user);
 									setSelected('');
 								}}>
 									Deselect
@@ -141,31 +148,36 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 								</InputGroup>
 							</Card.Header>
 							<Card.Body className='flex-vertical gap-lg'>
-								<div className='flex-horizontal gap-md'>
-									<small>
-										Available Restaurants {restaurant.restaurants.length}
-									</small>
-									<small>
-										Filtered Restaurants {restaurant.filtered ? restaurant.filtered.length : 0}
-									</small>
-								</div>
+								{user.cart.restaurant === '' &&	<div className='flex-horizontal gap-md'>
+										<small>
+											Available Restaurants {restaurant.restaurants.length}
+										</small>
+										<small>
+											Filtered Restaurants {restaurant.filtered ? restaurant.filtered.length : 0}
+										</small>
+									</div>
+								}
 								<CardGroup>
-									{user.cart.restaurant !== '' && restaurant.filtered ? 
+									{user.cart.restaurant !== '' ? 
 										(
-											restaurant.filtered[0].items.map((item, i) => (
-												<Card key={i}>
-													{item.picture !== '' && <Card.Img src={item.picture}></Card.Img>}
-													<Card.Body>
-														<Card.Text>{item.name}</Card.Text>
-													</Card.Body>
-													<Card.Footer className='flex-verticall'>
-														<div>${item.price}</div>
-														<Button variant='primary' onClick={() => addItem(item)}>
-															Add To Cart
-														</Button>
-													</Card.Footer>
-												</Card>
-											))
+											<>
+												{restaurant.filtered &&
+													restaurant.filtered[0].items.map((item, i) => (
+														<Card key={i}>
+															{item.picture !== '' && <Card.Img src={item.picture}></Card.Img>}
+															<Card.Body>
+																<Card.Text>{item.name}</Card.Text>
+															</Card.Body>
+															<Card.Footer className='flex-verticall'>
+																<div>${item.price}</div>
+																<Button variant='primary' onClick={() => addItem(item)}>
+																	Add To Cart
+																</Button>
+															</Card.Footer>
+														</Card>
+													))
+												}
+											</>
 										)
 										:
 										(

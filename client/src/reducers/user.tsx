@@ -36,7 +36,7 @@ export default function (state = initialState, action: any) {
         case LOGIN_SUCCESS:
         case LOAD_USER:
             setAuthToken(payload.token);
-            state = {...state, name: payload.data.name, email: payload.data.email, _id: payload.data._id, avatar: payload.data.avatar, isAuthenticated: payload.isAuthenticated};
+            state = {...state, name: payload.data.name, email: payload.data.email, _id: payload.data._id, avatar: payload.data.avatar, isAuthenticated: payload.isAuthenticated, cart: payload.data.cart};
             return state;
         case USER_UPDATED:
             state = {...state, cart: payload.cart,};

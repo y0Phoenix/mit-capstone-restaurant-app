@@ -22,8 +22,9 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
         id: '',
         quantity: 0
     });
+    const [id, setId] = useState('');
     const {name, price, priceInCents} = formData;
-    const items = state.stateData?.items && [...state.stateData.items];
+    let items = state.stateData?.items && [...state.stateData.items];
     const onchange = (e: any) => setFormData({...formData, [e.target.name]: e.target.value});
     // change priceInCents when price changes
     useEffect(() => {
@@ -31,6 +32,7 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
     }, [price]);
     // change formData when editing item instead of new item
     useEffect(() => {
+        if (state.name) setId(state.id)
         setFormData({...formData, name: state.name, price: state.price, priceInCents: state.priceInCents});
     }, [state])
     return (
@@ -73,17 +75,25 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                     </InputGroup>
                     <div className={`flex-horizontal space-between`}>
                         <Button variant='primary' onClick={() => {
-                            items?.push({
+                            if (id === '') items?.push({
                                 name,
                                 price,
                                 priceInCents,
                                 id: uuid(),
                                 quantity: 0
                             });
+                            else {
+                                items = items.map((item: Item) => {
+                                    if (item.id == id) return {
+                                        ...item, price: price, name: name, priceInCents: priceInCents
+                                    }
+                                    return item
+                                })
+                            }
                             if (state.setState) state.setState({...state.stateData, items: items});
                             resetModal();
                         }}>
-                            Add Item
+                            {id === '' ? 'Add Item' : 'Update Item'}
                         </Button>
                         <Button variant='primary' type='submit' onClick={() => {
                             items?.push({

@@ -94,12 +94,9 @@ export const updateUser = (user: UserState) => async (dispatch: ThunkDispatch<St
         let res = undefined;
         if (bool) {
             res = await axios.post('/api/user/update', {
-                user,
+                name: user.name,
                 cart: user.cart
             });
-            // check res for msgs
-            const msgs = res.data?.msgs;
-            if (msgs) dispatch(setAlert(msgs));
         }
         dispatch({
             type: USER_UPDATED,

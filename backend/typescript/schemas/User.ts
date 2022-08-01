@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema({
         },
         total: {
             type: Number,
+        },
+        restaurant: {
+            type: String,
+            default: ''
         }
     },
 });
