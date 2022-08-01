@@ -6,6 +6,7 @@ import Landing from './routes/Landing'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navigation from './components/Navigation'
+import Modal from './components/Modal/Modal'
 
 function App() {
   	return (
@@ -14,6 +15,7 @@ function App() {
 				<Fragment>
 					<Navigation />
 					<div className='main'>
+						<Modal />
 						<Routes>
 							<Route path='/' element={<Landing />}/>
 						</Routes>

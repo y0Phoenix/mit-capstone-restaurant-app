@@ -3,10 +3,11 @@ import mongoose from "mongoose"
 export interface Item {
     name: string,
     instrutions?: string,
-    quantity?: number,
+    quantity: number,
     price: number,
     priceInCents: number,
-    id: string
+    id: string,
+    picture?: string
 }
 
 export const ItemSchema = new mongoose.Schema({
@@ -27,5 +28,9 @@ export const ItemSchema = new mongoose.Schema({
     },
     id: {
         type: String
+    },
+    picture: {
+        type: String,
+        default: ''
     }
 });

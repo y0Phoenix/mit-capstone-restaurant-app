@@ -99,3 +99,11 @@
 .pointer {
   cursor: pointer;
 }
+.restaurants-container {
+  width: 1250px;
+  height: 500px;
+}
+.cart-container {
+  width: 1250px;
+  height: 400px;
+}

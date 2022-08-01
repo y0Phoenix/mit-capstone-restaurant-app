@@ -19,7 +19,8 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
         name: '',
         price: 0,
         priceInCents: 0,
-        id: ''
+        id: '',
+        quantity: 0
     });
     const {name, price, priceInCents} = formData;
     const items = state.stateData?.items && [...state.stateData.items];
@@ -76,7 +77,8 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                                 name,
                                 price,
                                 priceInCents,
-                                id: uuid()
+                                id: uuid(),
+                                quantity: 0
                             });
                             if (state.setState) state.setState({...state.stateData, items: items});
                             resetModal();
@@ -88,14 +90,16 @@ const ModalItem: React.FC<Props> = ({resetModal, state}) => {
                                 name,
                                 price,
                                 priceInCents,
-                                id: uuid()
+                                id: uuid(),
+                                quantity: 0
                             });
                             if (state.setState) state.setState({...state.stateData, items: items});
                             setFormData({
                                 name: '',
                                 price: 0,
                                 priceInCents: 0,
-                                id: ''
+                                id: '',
+                                quantity: 0
                             })
                         }}>
                             Add Another

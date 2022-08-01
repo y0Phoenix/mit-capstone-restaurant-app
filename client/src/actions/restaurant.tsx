@@ -3,6 +3,7 @@ import {
     GET_RESTAURANT_FAIL,
     FILTER_RESTAURANTS,
     FILTER_RESTAURANTS_FAIL,
+    RESET_RESTAURANT_FILTER,
     FilterOptions
 } from './types';
 import axios from 'axios';
@@ -77,3 +78,9 @@ export const filterRestaurants = ({name, id, sales, restaurantState}: FilterOpti
         console.error(err);
     }
 };
+
+export const resetRestaurantFilter = () => (dispatch: ThunkDispatch<State, undefined, any>) => {
+    dispatch({
+        type: RESET_RESTAURANT_FILTER
+    });
+}

@@ -11,7 +11,7 @@ interface Props {
     state: DeliveryModal
     resetModal: () => void,
     setAlert: (alert: Alert) => void,
-    initOrder: (user: UserState, delivery: Delivery, instructions: string, navigate: NavigateFunction, callback: () => void) => void
+    initOrder: (user: UserState, delivery: Delivery, instructions: string, callback: () => void) => void
 };
 
 const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, initOrder}) => {
@@ -21,8 +21,6 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
     });
     const [instructions, setInstructions] = useState('');
     const navigate = useNavigate();
-    const handleYes = () => setDelivery({...delivery, bool: true});
-    const handleNo = () => setDelivery({bool: false});
     const handleClose = () => resetModal();
     const handleSubmit = () => {
         if (delivery.address == '')  return setAlert(new Alert({
@@ -33,13 +31,8 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
                 variant: 'error'
             }
         }));
-        initOrder(user, delivery, instructions, navigate, handleClose);
+        initOrder(user, delivery, instructions, handleClose);
     }
-    useEffect(() => {
-        if (!delivery.address) {
-            initOrder(user, delivery, instructions, navigate, handleClose);
-        }
-    }, [delivery]);
     return (
         <>
             <Modal show={state.show} onHide={handleClose}>
@@ -71,9 +64,9 @@ const ModalDelivery: React.FC<Props> = ({resetModal, user, state, setAlert, init
                                     onChange={(e) => setDelivery({...delivery, address: e.target.value})}
                                 />
                             </InputGroup>
-                            <Button variant='primary' onClick={handleSubmit}>Proceed To Checkout</Button>
                         </div>
                     }
+                    <Button variant='primary' onClick={handleSubmit}>Proceed To Checkout</Button>
                 </Modal.Body>
             </Modal>
         </>

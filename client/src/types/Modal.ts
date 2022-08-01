@@ -41,5 +41,5 @@ type Payload = Omit<Modal, 'delivery' | 'confirm'>;
 export interface SetModalPayload extends Payload {
     delivery?: DeliveryModal
     confirm?: ConfirmModal
-    type: 'item' | 'confirm'
+    type: 'delivery' | 'confirm'
 };

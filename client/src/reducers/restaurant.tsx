@@ -4,6 +4,7 @@ import {
     GET_RESTAURANT_FAIL,
     FILTER_RESTAURANTS,
     FILTER_RESTAURANTS_FAIL,
+    RESET_RESTAURANT_FILTER
 } from '../actions/types';
 import { Restaurant, RestaurantState } from '../types/Restaurant';
 
@@ -21,6 +22,9 @@ export default function (state = initialState, action: any) {
             return state;
         case FILTER_RESTAURANTS:
             state = {...state, filtered: payload};
+            return state;
+        case RESET_RESTAURANT_FILTER:
+            delete state.filtered;
             return state;
         case GET_RESTAURANT_FAIL:
         case FILTER_RESTAURANTS_FAIL:

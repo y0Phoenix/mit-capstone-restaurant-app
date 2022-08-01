@@ -113,9 +113,11 @@ router.post('/', [
  */
 router.post('/update', auth, async (req: any, res) => {
     try {
-        const {name} = req.body;
+        const {name, cart} = req.body;
 
         req.user.name = name;
+
+        req.user.cart = cart;
 
         req.user.save();
 
@@ -126,7 +128,7 @@ router.post('/update', auth, async (req: any, res) => {
                 variant: 'success',
                 type: 'alert'
             }}
-        ), error: false});
+        ), data: req.user, error: false});
     } catch (err) {
         console.error(err);
         res.status(500).json({msgs: new Alert({

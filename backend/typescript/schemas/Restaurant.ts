@@ -10,6 +10,7 @@ const RestaurantSchema = new mongoose.Schema({
     items: [ItemSchema],
     picture: {
         type: String,
+        default: ''
     },
     date: {
         type: Date,

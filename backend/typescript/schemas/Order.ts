@@ -3,7 +3,7 @@ import {ItemSchema} from '../interfaces/Item';
 
 const OrderSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true
     },
     items: [ItemSchema],

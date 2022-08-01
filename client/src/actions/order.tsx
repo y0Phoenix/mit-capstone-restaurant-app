@@ -12,7 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import State from '../types/State';
 import { setAlert } from './alert';
 
-export const initOrder = (user: UserState, delivery: Delivery, instructions: string, navigate: NavigateFunction, callback: () => void) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
+export const initOrder = (user: UserState, delivery: Delivery, instructions: string, callback: () => void) => async (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
         // make req to api
         const res = await axios.post(`/api/order/${user.cart.restaurant}`, {
@@ -26,7 +26,7 @@ export const initOrder = (user: UserState, delivery: Delivery, instructions: str
         if (msgs) dispatch(setAlert(msgs));
 
         // navigate to checkout page
-        navigate(res.data.data);
+        window.location.replace(res.data.data);
 
         // invoke callback
         callback();

@@ -50,13 +50,14 @@ router.post('/:restaurant',async (req, res) => {
             }
         }), error: true});
         
-        const total = user.cart.items.reduce((total, curr) => {
+        const total = user.cart.items.length > 1 ? user.cart.items.reduce((total, curr) => {
+            console.log(total, curr);
             if (total?.price) return total.price + curr.price;
             return total + curr.price;
-        });
+        }) : user.cart.items[0].price;
 
         const order = new Order({
-            user: user == 'guest' ? 'guest' : user._id,
+            user: user.name == 'guest' ? 'guest' : user._id,
             items: user.cart.items,
             totalItems: user.cart.items.length,
             total,
@@ -87,8 +88,8 @@ router.post('/:restaurant',async (req, res) => {
                         quantity: item.quantity
                     }
                 }),
-                success_url: `http://localhost:3000/paymentsuccess/${order.token}`,
-                cancel_url: `http://localhost:3000/canceledpayment/${order.token}`
+                success_url: `http://127.0.0.1:5173/${order.token}`,
+                cancel_url: `http://127.0.0.1:5173/${order.token}`
             });
             // if session created successfully create order in db
             await order.save();
