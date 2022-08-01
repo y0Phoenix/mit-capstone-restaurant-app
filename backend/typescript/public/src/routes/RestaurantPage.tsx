@@ -85,7 +85,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
         else {
             let _restaurant: Restaurant = new Restaurant({init: true});
             const state = {...restaurant, restaurants: [...restaurants, _restaurant]};
-            filterRestaurants({
+            !pathname.includes('new') && filterRestaurants({
                 name: _restaurant.name,
                 restaurantState: state
             });
@@ -102,7 +102,7 @@ const RestaurantPage: React.FC<Props> = ({restaurant, user, getRestaurants, upda
     }, [formData]);
     // on local restaurant variable change effect
     useEffect(() => {
-        if (filtered && filtered?.length > 0) {
+        if (filtered && filtered?.length > 0 && !pathname.includes('new')) {
             setRestaurant(filtered[0]);
             setFormData({...formData, name: pathname.includes('new') ? '' : filtered[0].name, desc: filtered[0].desc, items: filtered[0].items})
         }

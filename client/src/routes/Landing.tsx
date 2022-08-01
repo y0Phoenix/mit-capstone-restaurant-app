@@ -46,10 +46,13 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 			proceedButton.current.disabled = false;
 		}
 	}, [user])
-	const handleSearch = (name: string) => filterRestaurants({
-		name,
-		restaurantState: restaurant
-	});
+	const handleSearch = (name: string) => {
+		console.log('handle search', name);
+		filterRestaurants({
+			name,
+			restaurantState: restaurant
+		});
+	}
 	const addItem = (item: Item) => {
 		const i = user.cart.items.map(item => item.name).indexOf(item.name);
 		if (i > -1) {
@@ -133,7 +136,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 									</InputGroup.Text>
 									<FormControl 
 										placeholder='search...'
-										onChange={e => handleSearch(e.target.name)}
+										onChange={e => handleSearch(e.target.value)}
 									/>
 								</InputGroup>
 							</Card.Header>
@@ -166,25 +169,54 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 										)
 										:
 										(
-											restaurant.restaurants.map((rest, i) => (
-												<Card key={i}>
-													{rest.picture !== '' && <Card.Img src={rest.picture}></Card.Img>}
-													<Card.Body>
-														<Card.Text>{rest.name}</Card.Text>
-													</Card.Body>
-													<Card.Footer className='flex-vertical gap-md'>
-														<Button variant='primary' onClick={() => {
-															handleSearch(rest.name);
-															setSelected(rest._id);
-														}}>
-															Select
-														</Button>
-														<small>
-															{rest.desc}
-														</small>
-													</Card.Footer>
-												</Card>
-											))
+											restaurant.filtered ? 
+											(
+												<>
+													{restaurant.filtered.map((rest, i) => (
+														<Card key={i}>
+															{rest.picture !== '' && <Card.Img src={rest.picture}></Card.Img>}
+															<Card.Body>
+																<Card.Text>{rest.name}</Card.Text>
+															</Card.Body>
+															<Card.Footer className='flex-vertical gap-md'>
+																<Button variant='primary' onClick={() => {
+																	handleSearch(rest.name);
+																	setSelected(rest._id);
+																}}>
+																	Select
+																</Button>
+																<small>
+																	{rest.desc}
+																</small>
+															</Card.Footer>
+														</Card>
+													))}
+												</>
+											)
+											:
+											(
+												<>
+													{restaurant.restaurants.map((rest, i) => (
+														<Card key={i}>
+															{rest.picture !== '' && <Card.Img src={rest.picture}></Card.Img>}
+															<Card.Body>
+																<Card.Text>{rest.name}</Card.Text>
+															</Card.Body>
+															<Card.Footer className='flex-vertical gap-md'>
+																<Button variant='primary' onClick={() => {
+																	handleSearch(rest.name);
+																	setSelected(rest._id);
+																}}>
+																	Select
+																</Button>
+																<small>
+																	{rest.desc}
+																</small>
+															</Card.Footer>
+														</Card>
+													))}
+												</>
+											)
 										)
 									}
 								</CardGroup>
