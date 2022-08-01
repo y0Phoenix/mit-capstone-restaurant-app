@@ -24,7 +24,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 	const navigate = useNavigate();
 	const proceedButton = useRef<HTMLButtonElement>(null);
 	useEffect(() => {
-		if (!user.cart.restaurant) getRestaurants();
+		getRestaurants();
 	}, []);
 	useEffect(() => {
 		if (restaurant.filtered) {
@@ -43,20 +43,22 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 				proceedButton.current.disabled = true;
 				return
 			}
-			filterRestaurants({
+			if (!restaurant.filtered) filterRestaurants({
 				id: user.cart.restaurant,
-				restaurantState: restaurant
+				restaurantState: restaurant,
+				type: 'restaurant'
 			});
 			proceedButton.current.disabled = false;
 		}
-	}, [user])
-	const handleSearch = (name: string) => {
+	}, [user]);
+	const handleSearch = (name: string, type: 'restaurant' | 'item') => {
 		console.log('handle search', name);
 		filterRestaurants({
 			name,
-			restaurantState: restaurant
+			restaurantState: restaurant,
+			type
 		});
-	}
+	};
 	const addItem = (item: Item) => {
 		const i = user.cart.items.map(item => item.name).indexOf(item.name);
 		if (i > -1) {
@@ -111,11 +113,11 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 		<div className='landing'>
 			<Card>
 				<Card.Header>
-					<Card.Text as='div'>{restaurant.filtered?.length == 1 && restaurant.filtered && user.cart.restaurant ? 
+					<Card.Text as='div'>{user.cart.restaurant ? 
 						(
 							<div className='flex-horizontal gap-md'>
 								<p>
-									Ordering From {restaurant.filtered[0].name}
+									Ordering From {restaurant.filtered && restaurant.filtered[0].name}
 								</p>
 								<Button variant='danger' onClick={() => {
 									resetRestaurantFilter();
@@ -143,7 +145,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 									</InputGroup.Text>
 									<FormControl 
 										placeholder='search...'
-										onChange={e => handleSearch(e.target.value)}
+										onChange={e => handleSearch(e.target.value, user.cart.restaurant && restaurant.filtered ? 'item' : 'restaurant')}
 									/>
 								</InputGroup>
 							</Card.Header>
@@ -162,20 +164,22 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 										(
 											<>
 												{restaurant.filtered &&
-													restaurant.filtered[0].items.map((item, i) => (
-														<Card key={i}>
-															{item.picture !== '' && <Card.Img src={item.picture}></Card.Img>}
-															<Card.Body>
-																<Card.Text>{item.name}</Card.Text>
-															</Card.Body>
-															<Card.Footer className='flex-verticall'>
-																<div>${item.price}</div>
-																<Button variant='primary' onClick={() => addItem(item)}>
-																	Add To Cart
-																</Button>
-															</Card.Footer>
-														</Card>
-													))
+													(
+														restaurant.filtered[0].items.map((item, i) => (
+															<Card key={i}>
+																{item.picture !== '' && <Card.Img src={item.picture}></Card.Img>}
+																<Card.Body>
+																	<Card.Text>{item.name}</Card.Text>
+																</Card.Body>
+																<Card.Footer className='flex-verticall'>
+																	<div>${item.price}</div>
+																	<Button variant='primary' onClick={() => addItem(item)}>
+																		Add To Cart
+																	</Button>
+																</Card.Footer>
+															</Card>
+														))
+													)
 												}
 											</>
 										)
@@ -192,7 +196,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 															</Card.Body>
 															<Card.Footer className='flex-vertical gap-md'>
 																<Button variant='primary' onClick={() => {
-																	handleSearch(rest.name);
+																	handleSearch(rest.name, 'restaurant');
 																	setSelected(rest._id);
 																}}>
 																	Select
@@ -216,7 +220,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 															</Card.Body>
 															<Card.Footer className='flex-vertical gap-md'>
 																<Button variant='primary' onClick={() => {
-																	handleSearch(rest.name);
+																	handleSearch(rest.name, 'restaurant');
 																	setSelected(rest._id);
 																}}>
 																	Select

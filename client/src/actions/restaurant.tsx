@@ -39,29 +39,48 @@ export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefi
     }
 };
 
-export const filterRestaurants = ({name, id, sales, restaurantState}: FilterOptions) => (dispatch: ThunkDispatch<State, undefined, any>) => {
+export const filterRestaurants = ({name, id, sales, type, restaurantState}: FilterOptions) => (dispatch: ThunkDispatch<State, undefined, any>) => {
     try {
-        if (name) {
-            const regex = new RegExp(name, 'gi')
-            var rests = restaurantState?.restaurants.filter(rest => regex.test(rest.name) ? rest : null)
-        }
-        else if (id) {
-            var rests = restaurantState?.restaurants.filter(rest => rest._id === id ? rest : null)
-        }
-        else if (sales) {
-            var rests = restaurantState?.restaurants.sort((a, b) => {
-                if (a.sales > b.sales) return 1;
-                return -1
+        if (type === 'restaurant') {
+            if (name) {
+                const regex = new RegExp(name, 'gi')
+                var rests = restaurantState?.restaurants.filter(rest => regex.test(rest.name) ? rest : null)
+            }
+            else if (id) {
+                var rests = restaurantState?.restaurants.filter(rest => rest._id === id ? rest : null)
+            }
+            else if (sales) {
+                var rests = restaurantState?.restaurants.sort((a, b) => {
+                    if (a.sales > b.sales) return 1;
+                    return -1
+                });
+                rests?.splice(3);
+            }
+            else {
+                rests = restaurantState?.restaurants;
+            }
+            dispatch({
+                type: FILTER_RESTAURANTS,
+                payload: rests
             });
-            rests?.splice(3);
         }
-        else {
-            rests = restaurantState?.restaurants;
+        else if (type === 'item') {
+            if (name || name == '') {
+                const regex = new RegExp(name, 'gi');
+                if (restaurantState?.filtered) {
+                    const i = restaurantState?.restaurants.map(rest => rest.name).indexOf(restaurantState.filtered[0].name);
+                    const rest = restaurantState?.filtered?.map(rests => ({...rests, items: restaurantState.restaurants[i].items.filter((item => {
+                        const bool = regex.test(item.name);
+                        console.log(bool, item.name, name);
+                        return bool ? item : null
+                    }))}));
+                    return dispatch({
+                        type: FILTER_RESTAURANTS,
+                        payload: rest
+                    });
+                }
+            }
         }
-        dispatch({
-            type: FILTER_RESTAURANTS,
-            payload: rests
-        });
     } catch (err: any) {
         dispatch(setAlert(new Alert({
             title: 'Error',

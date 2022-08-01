@@ -31,6 +31,7 @@ export interface FilterOptions {
     name?: string,
     sales?: boolean,
     date?: boolean,
+    type: 'restaurant' | 'item'
     restaurantState?: RestaurantState,
     orderState?: OrderState
 };
