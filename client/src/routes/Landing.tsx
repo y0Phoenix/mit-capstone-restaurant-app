@@ -21,6 +21,7 @@ type Props = ConnectedProps<typeof connector>;
 
 const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants, resetRestaurantFilter, getRestaurants, updateUser}) => {
 	const [selectced, setSelected] = useState('');
+	const [total, setTotal] = useState(0);
 	const navigate = useNavigate();
 	const proceedButton = useRef<HTMLButtonElement>(null);
 	useEffect(() => {
@@ -41,13 +42,19 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 		if (proceedButton.current) {
 			if (user.cart.items.length <= 0) {
 				proceedButton.current.disabled = true;
+				setTotal(0);
 				return
 			}
-			if (!restaurant.filtered) filterRestaurants({
-				id: user.cart.restaurant,
-				restaurantState: restaurant,
-				type: 'restaurant'
-			});
+			if (!restaurant.filtered) {
+				filterRestaurants({
+					id: user.cart.restaurant,
+					restaurantState: restaurant,
+					type: 'restaurant'
+				});
+			}
+			let num = 0;
+			user.cart.items.forEach(item => num = (item.price * item.quantity) + num);
+			setTotal(num);
 			proceedButton.current.disabled = false;
 		}
 	}, [user]);
@@ -244,6 +251,7 @@ const Landing: React.FC<Props> = ({user, restaurant, setModal, filterRestaurants
 									{user.cart.restaurant !== '' && restaurant.filtered ? `From ${restaurant.filtered[0].name}` : 'Select A Restaurant Above'}
 								</div>
 								<div>Cart</div>
+								<div>Price {total}</div>
 								<div className='corner top-right' onClick={handleProceed}>
 									<Button variant='primary' disabled ref={proceedButton}>
 										Proceed To Next Page

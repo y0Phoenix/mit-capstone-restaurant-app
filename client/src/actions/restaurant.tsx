@@ -12,7 +12,6 @@ import State from '../types/State';
 import { Restaurant, RestaurantAction, RestaurantState } from '../types/Restaurant';
 import { setAlert } from './alert';
 import Alert from '../../../backend/typescript/classes/Alert';
-import moment from 'moment';
 import { NavigateFunction } from 'react-router-dom';
 
 export const getRestaurants = () => async (dispatch: ThunkDispatch<State, undefined, RestaurantAction>) => {

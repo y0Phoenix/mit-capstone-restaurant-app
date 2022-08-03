@@ -3,7 +3,6 @@ import { connect, ConnectedProps } from 'react-redux'
 import State from '../../types/State';
 import { setModal } from '../../actions/modal';
 import { filterRestaurants, getRestaurants } from '../../actions/restaurant';
-import moment from 'moment';
 import { Button, ListGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
  
