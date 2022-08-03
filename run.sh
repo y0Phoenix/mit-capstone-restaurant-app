@@ -1,7 +1,7 @@
 #!/bin/bash
 
 npm i --location=global typescript
-if [$TYPE = "FRONT_END"]
+if [$TYPE = FRONT_END]
 then
 	echo "Running Backend Script"
 	echo $TYPE
