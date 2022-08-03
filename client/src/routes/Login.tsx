@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
-import pic from '../../../shared/logo_50.png';
 import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';
@@ -37,7 +36,7 @@ const Login: FC<Props> = ({setAlert, login, isAuthenticated}) => {
   return (
     <div className='landing'>
       <Card style={{width: '425px', height: '750px'}}>
-        <Card.Img variant='top' src={pic}></Card.Img>
+        <Card.Img variant='top' src='https://github.com/y0Phoenix/mit-capstone-restaurant-app/blob/master/shared/logo_50.png?raw=true'></Card.Img>
         <Card.Body>
           <Card.Title>Login To Your Admin Dashboard</Card.Title>
           <br></br>

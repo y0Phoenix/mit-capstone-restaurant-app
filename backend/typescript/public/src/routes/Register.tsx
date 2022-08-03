@@ -1,6 +1,5 @@
 import { Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
-import pic from '../../../../../shared/logo_50.png';
 import { Link, Navigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
 import { setAlert } from '../actions/alert';
@@ -51,7 +50,7 @@ const Register: React.FC<Props> = ({setAlert, register, isAuthenticated}) => {
     return (
         <div className='landing'>
             <Card style={{width: '425px', height: '835px'}}>
-        <Card.Img variant='top' src={pic}></Card.Img>
+        <Card.Img variant='top' src='https://github.com/y0Phoenix/mit-capstone-restaurant-app/blob/master/shared/logo_50.png?raw=true'></Card.Img>
         <Card.Body>
           <Card.Title>Register New User For Your Admin Dashboard</Card.Title>
           <br></br>
