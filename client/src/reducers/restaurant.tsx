@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import {
     GET_RESTAURANT,
     GET_RESTAURANT_FAIL,

@@ -1,5 +1,3 @@
-import { AnyMxRecord } from 'dns';
-import { type } from 'os';
 import React, { FC, ReactNode } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
 import {Navigate, Outlet, Route, useLocation } from 'react-router-dom';
