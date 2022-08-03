@@ -19,5 +19,5 @@ else
 	echo "Running Frontend Scripts"
 	echo $TYPE
 	echo "npm i --prefix /app/client && npm i --save-dev @types/uuid /app/client && npm run build --prefix /app/client"
-	npm i --prefix /app/client && npm i --save-dev @types/uuid /app/client && npm run build --prefix /app/client
+	npm i --prefix /app/client && npm i --save-dev @types/uuid --prefix /app/client && npm run build --prefix /app/client
 fi
